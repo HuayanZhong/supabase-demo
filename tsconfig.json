@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
+    "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
