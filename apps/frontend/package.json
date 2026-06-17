@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "lint": "oxlint",
+    "format": "oxfmt --check"
+  },
+  "dependencies": {
+    "nuxt": "catalog:frontend",
+    "vue": "catalog:frontend",
+    "vue-router": "catalog:frontend"
+  },
+  "devDependencies": {
+    "@supabase/lint-config": "workspace:*",
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
+  }
+}

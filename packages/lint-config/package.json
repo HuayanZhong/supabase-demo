@@ -1,0 +1,17 @@
+{
+  "name": "@supabase/lint-config",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    "./base": "./src/base.ts",
+    "./backend": "./src/backend.ts",
+    "./frontend": "./src/frontend.ts"
+  },
+  "devDependencies": {
+    "oxlint": "catalog:dev"
+  }
+}

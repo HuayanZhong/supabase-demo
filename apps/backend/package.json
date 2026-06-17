@@ -1,0 +1,38 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "private": true,
+  "description": "",
+  "license": "UNLICENSED",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "build": "nest build",
+    "dev": "nest start --watch",
+    "dev:debug": "nest start --debug --watch",
+    "prod": "node dist/main",
+    "lint": "oxlint",
+    "format": "oxfmt --check"
+  },
+  "dependencies": {
+    "@nestjs/common": "catalog:backend",
+    "@nestjs/core": "catalog:backend",
+    "@nestjs/platform-express": "catalog:backend",
+    "reflect-metadata": "catalog:backend",
+    "rxjs": "catalog:backend"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@supabase/lint-config": "workspace:*",
+    "@types/express": "^5.0.0",
+    "@types/node": "^25.9.3",
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "source-map-support": "^0.5.21",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "catalog:dev"
+  }
+}

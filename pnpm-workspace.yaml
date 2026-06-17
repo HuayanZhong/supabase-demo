@@ -1,0 +1,30 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  unrs-resolver: true
+
+# 定义依赖包版本
+catalogs:
+  # 公共依赖包版本
+  dev:
+    oxfmt: ^0.55.0
+    oxlint: ^1.70.0
+    typescript: ^5.9.3
+
+  # 后端依赖包版本
+  backend:
+    "@nestjs/common": ^11.1.27
+    "@nestjs/core": ^11.1.27
+    "@nestjs/platform-express": ^11.1.27
+    reflect-metadata: ^0.2.2
+    rxjs: ^7.8.2
+
+  # 前端依赖包版本
+  frontend:
+    nuxt: ^4.4.8
+    vue: ^3.5.38
+    vue-router: ^5.1.0
