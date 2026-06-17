@@ -14,7 +14,8 @@
     "lint-staged": "^17.0.7",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
-    "turbo": "^2.9.18"
+    "turbo": "^2.9.18",
+    "typescript": "catalog:dev"
   },
   "devEngines": {
     "packageManager": {

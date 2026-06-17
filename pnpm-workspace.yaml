@@ -13,7 +13,7 @@ catalogs:
   dev:
     oxfmt: ^0.55.0
     oxlint: ^1.70.0
-    typescript: ^5.9.3
+    typescript: ^6.0.3
 
   # 后端依赖包版本
   backend:
