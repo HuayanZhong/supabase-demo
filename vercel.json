@@ -1,0 +1,7 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm turbo build --filter=frontend",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": "nuxtjs",
+  "outputDirectory": "apps/frontend/.output"
+}
