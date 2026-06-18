@@ -8,8 +8,9 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev",
+    "build": "nuxt build",
     "lint": "oxlint",
-    "format": "oxfmt --check"
+    "check-types": "nuxt typecheck"
   },
   "dependencies": {
     "nuxt": "catalog:frontend",

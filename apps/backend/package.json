@@ -11,7 +11,7 @@
     "dev:debug": "nest start --debug --watch",
     "prod": "node dist/main",
     "lint": "oxlint",
-    "format": "oxfmt --check"
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@nestjs/common": "catalog:backend",

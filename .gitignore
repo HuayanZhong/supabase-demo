@@ -20,3 +20,6 @@ logs
 .env
 .env.*
 !.env.example
+
+# Turbo 缓存
+.turbo
