@@ -1,6 +1,5 @@
 {
   "mcpServers": {
-    // Supabase MCP 服务器
     "supabase": {
       "url": "https://mcp.supabase.com/mcp?project_ref=zonivijpskgonqmtdbyj"
     }
