@@ -21,11 +21,5 @@
     "turbo": "^2.9.18",
     "typescript": "catalog:dev"
   },
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.4.0",
-      "onFail": "download"
-    }
-  }
+  "packageManager": "pnpm@11.4.0"
 }
