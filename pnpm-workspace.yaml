@@ -17,11 +17,16 @@ catalogs:
 
   # 后端依赖包版本
   backend:
+    "@mikro-orm/cli": ^7.1.4
+    "@mikro-orm/core": ^7.1.4
+    "@mikro-orm/nestjs": ^7.0.2
+    "@mikro-orm/postgresql": ^7.1.4
     "@nestjs/common": ^11.1.27
     "@nestjs/core": ^11.1.27
     "@nestjs/platform-express": ^11.1.27
     reflect-metadata: ^0.2.2
     rxjs: ^7.8.2
+    tsx: ^4.22.4
 
   # 前端依赖包版本
   frontend:

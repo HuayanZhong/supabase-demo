@@ -14,6 +14,9 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@mikro-orm/core": "catalog:backend",
+    "@mikro-orm/nestjs": "catalog:backend",
+    "@mikro-orm/postgresql": "catalog:backend",
     "@nestjs/common": "catalog:backend",
     "@nestjs/core": "catalog:backend",
     "@nestjs/platform-express": "catalog:backend",
@@ -21,6 +24,7 @@
     "rxjs": "catalog:backend"
   },
   "devDependencies": {
+    "@mikro-orm/cli": "catalog:backend",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@supabase/lint-config": "workspace:*",
@@ -32,6 +36,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "catalog:backend",
     "typescript": "catalog:dev"
   },
   "packageManager": "pnpm@11.4.0"
