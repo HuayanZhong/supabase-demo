@@ -1,5 +1,8 @@
 import { defineConfig } from "@mikro-orm/postgresql";
 import { Migrator } from "@mikro-orm/migrations";
+import { config } from "dotenv";
+
+config({ path: ".env" });
 
 export default defineConfig({
   // 数据库名称
