@@ -22,5 +22,12 @@
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
     "typescript": "catalog:dev"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.4.0",
+      "onFail": "download"
+    }
   }
 }
