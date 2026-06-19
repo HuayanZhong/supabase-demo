@@ -1,5 +1,16 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
-  // 我的 Nuxt 配置
+  modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image"],
+
+  // 全局样式
+  css: ["~/assets/css/main.css"],
+
+  // 禁用 Google Fonts（国内无法访问）
+  fonts: {
+    providers: {
+      google: false,
+      googleicons: false,
+    },
+  },
 });

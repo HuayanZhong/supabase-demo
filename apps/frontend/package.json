@@ -13,7 +13,11 @@
     "check-types": "nuxt typecheck"
   },
   "dependencies": {
+    "@nuxt/fonts": "catalog:frontend",
+    "@nuxt/image": "catalog:frontend",
+    "@nuxt/ui": "catalog:frontend",
     "nuxt": "catalog:frontend",
+    "tailwindcss": "catalog:frontend",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend"
   },

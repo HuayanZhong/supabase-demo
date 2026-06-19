@@ -23,3 +23,6 @@ logs
 
 # Turbo 缓存
 .turbo
+
+# 数据文件
+.data
