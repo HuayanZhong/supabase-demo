@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@mikro-orm/core": "catalog:backend",
+    "@mikro-orm/migrations": "catalog:backend",
     "@mikro-orm/nestjs": "catalog:backend",
     "@mikro-orm/postgresql": "catalog:backend",
     "@nestjs/common": "catalog:backend",

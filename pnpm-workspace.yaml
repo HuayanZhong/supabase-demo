@@ -19,6 +19,7 @@ catalogs:
   backend:
     "@mikro-orm/cli": ^7.1.4
     "@mikro-orm/core": ^7.1.4
+    "@mikro-orm/migrations": ^7.1.4
     "@mikro-orm/nestjs": ^7.0.2
     "@mikro-orm/postgresql": ^7.1.4
     "@nestjs/common": ^11.1.27

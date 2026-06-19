@@ -211,6 +211,9 @@ catalogs:
     '@mikro-orm/core':
       specifier: ^7.1.4
       version: 7.1.4
+    '@mikro-orm/migrations':
+      specifier: ^7.1.4
+      version: 7.1.4
     '@mikro-orm/nestjs':
       specifier: ^7.0.2
       version: 7.0.2
@@ -284,6 +287,9 @@ importers:
       '@mikro-orm/core':
         specifier: catalog:backend
         version: 7.1.4
+      '@mikro-orm/migrations':
+        specifier: catalog:backend
+        version: 7.1.4(@mikro-orm/core@7.1.4)
       '@mikro-orm/nestjs':
         specifier: catalog:backend
         version: 7.0.2(@mikro-orm/core@7.1.4)(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.27)(reflect-metadata@0.2.2)
@@ -1128,6 +1134,12 @@ packages:
     peerDependenciesMeta:
       dataloader:
         optional: true
+
+  '@mikro-orm/migrations@7.1.4':
+    resolution: {integrity: sha512-M9rsHpuuaWavoXb0yitgwb+Dy2wzIEzFh5cdJ1NHjPVwyWrTiTTcKmZUiytvHInzLvusuTomRKNRiNUENqnFvQ==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.1.4
 
   '@mikro-orm/nestjs@7.0.2':
     resolution: {integrity: sha512-0iEr+YzhXQ8cZaAKzfJNijHHAL1Fg/PrauaMiwlZpaxOy0aMAPCQEwaSuxsz43X6XShrCv/TlE6kRn/QPIMzZA==}
@@ -6139,6 +6151,11 @@ snapshots:
       - dataloader
 
   '@mikro-orm/core@7.1.4': {}
+
+  '@mikro-orm/migrations@7.1.4(@mikro-orm/core@7.1.4)':
+    dependencies:
+      '@mikro-orm/core': 7.1.4
+      '@mikro-orm/sql': 7.1.4(@mikro-orm/core@7.1.4)
 
   '@mikro-orm/nestjs@7.0.2(@mikro-orm/core@7.1.4)(@nestjs/common@11.1.27(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.27)(reflect-metadata@0.2.2)':
     dependencies:
