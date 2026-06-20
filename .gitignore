@@ -26,3 +26,6 @@ logs
 
 # 数据文件
 .data
+
+# 图谱输出
+graphify-out
