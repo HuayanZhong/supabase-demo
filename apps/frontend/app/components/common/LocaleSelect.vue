@@ -3,7 +3,7 @@ import { zh_cn, en, ja, ko } from "@nuxt/ui/locale";
 
 const { locale, setLocale } = useI18n();
 
-const availableLocales = [zh_cn, en, ja, ko];
+const availableLocales = [extendLocale(zh_cn, { code: "zh_cn" }), en, ja, ko];
 
 function onLocaleChange(code: string) {
   setLocale(code as "zh_cn" | "en" | "ja" | "ko");
