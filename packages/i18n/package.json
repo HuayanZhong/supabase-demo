@@ -8,7 +8,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./locales/zh_cn.json": "./locales/zh_cn.json",
+    "./locales/zh-CN.json": "./locales/zh-CN.json",
     "./locales/en.json": "./locales/en.json",
     "./locales/ja.json": "./locales/ja.json",
     "./locales/ko.json": "./locales/ko.json"

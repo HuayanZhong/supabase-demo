@@ -3,15 +3,17 @@ import { zh_cn, en, ja, ko } from "@nuxt/ui/locale";
 
 const { locale, setLocale } = useI18n();
 
+const availableLocales = [zh_cn, en, ja, ko];
+
 function onLocaleChange(code: string) {
-  setLocale(code as "zh_cn" | "en" | "ja" | "ko");
+  setLocale(code as "zh-CN" | "en" | "ja" | "ko");
 }
 </script>
 
 <template>
   <ULocaleSelect
     :model-value="locale"
-    :locales="[zh_cn, en, ja, ko]"
+    :locales="availableLocales"
     @update:model-value="onLocaleChange"
   />
 </template>
