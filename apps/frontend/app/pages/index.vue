@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import * as z from "zod";
 import type { FormSubmitEvent, AuthFormField } from "@nuxt/ui";
+import * as locales from "@nuxt/ui/locale";
+
+const locale = ref("zh");
 
 const toast = useToast();
 
@@ -56,6 +59,7 @@ function onSubmit(payload: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
+  <ULocaleSelect v-model="locale" :locales="Object.values(locales)" class="w-48" />
   <div class="flex flex-col items-center justify-center gap-4 p-4">
     <UPageCard class="w-full max-w-md">
       <UAuthForm

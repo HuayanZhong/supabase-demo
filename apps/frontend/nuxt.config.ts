@@ -13,4 +13,12 @@ export default defineNuxtConfig({
       googleicons: false,
     },
   },
+
+  i18n: {
+    defaultLocale: "zh",
+    locales: [
+      { code: "zh", name: "Chinese" },
+      { code: "en", name: "English" },
+    ],
+  },
 });
