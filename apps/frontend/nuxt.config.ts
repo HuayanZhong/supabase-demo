@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     },
   },
 
+  // 国际化配置
   i18n: {
     locales: [
       { code: "zh-CN", name: "简体中文", file: "zh-CN.json" },
@@ -23,5 +24,13 @@ export default defineNuxtConfig({
       { code: "ko", name: "한국어", file: "ko.json" },
     ],
     langDir,
+  },
+
+  // 运行时配置
+  runtimeConfig: {
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabasePublishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
+    },
   },
 });

@@ -18,6 +18,7 @@
     "@nuxt/ui": "catalog:frontend",
     "@nuxtjs/i18n": "catalog:frontend",
     "@supabase/i18n": "workspace:*",
+    "@supabase/supabase-js": "catalog:frontend",
     "nuxt": "catalog:frontend",
     "tailwindcss": "catalog:frontend",
     "vue": "catalog:frontend",
