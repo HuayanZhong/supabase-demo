@@ -1,7 +1,7 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
-  modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image"],
+  modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image", "@nuxtjs/i18n"],
 
   // 全局样式
   css: ["~/assets/css/main.css"],
