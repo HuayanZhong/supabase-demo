@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { zh_cn, en } from "@nuxt/ui/locale";
+import { zh_cn, en, ja } from "@nuxt/ui/locale";
 
 const { locale, setLocale } = useI18n();
 
-const availableLocales = [zh_cn, en];
+const availableLocales = [zh_cn, en, ja];
 
 function onLocaleChange(code: string) {
-  setLocale(code as "zh_cn" | "en");
+  setLocale(code as "zh_cn" | "en" | "ja");
 }
 </script>
 
