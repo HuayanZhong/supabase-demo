@@ -1,7 +1,9 @@
+# 定义工作空间中的包
 packages:
   - "apps/*"
   - "packages/*"
 
+# 允许构建的依赖包
 allowBuilds:
   "@parcel/watcher": true
   esbuild: true

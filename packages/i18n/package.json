@@ -1,0 +1,15 @@
+{
+  "name": "@supabase/i18n",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "lint": "oxlint"
+  },
+  "devDependencies": {
+    "oxlint": "catalog:dev"
+  }
+}
