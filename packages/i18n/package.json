@@ -7,7 +7,7 @@
   "author": "",
   "type": "module",
   "scripts": {
-    "lint": "oxlint"
+    "lint": "echo No source files to lint"
   },
   "devDependencies": {
     "oxlint": "catalog:dev"
