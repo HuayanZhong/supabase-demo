@@ -19,7 +19,8 @@
     "nuxt": "catalog:frontend",
     "tailwindcss": "catalog:frontend",
     "vue": "catalog:frontend",
-    "vue-router": "catalog:frontend"
+    "vue-router": "catalog:frontend",
+    "zod": "catalog:dev"
   },
   "devDependencies": {
     "@supabase/lint-config": "workspace:*",

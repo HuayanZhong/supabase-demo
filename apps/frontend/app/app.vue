@@ -1,3 +1,5 @@
 <template>
-  <h1>Hello Nuxt!</h1>
+  <UApp>
+    <NuxtPage />
+  </UApp>
 </template>

@@ -248,6 +248,9 @@ catalogs:
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
+    zod:
+      specifier: ^4.4.3
+      version: 4.4.3
   frontend:
     '@nuxt/fonts':
       specifier: ^0.14.0
@@ -380,7 +383,7 @@ importers:
         version: 2.0.0(db0@0.3.4)(ioredis@5.11.1)(magicast@0.5.3)(srvx@0.11.16)
       '@nuxt/ui':
         specifier: catalog:frontend
-        version: 4.9.0(5f1b1e167069df2fbe4c0d8571fcf097)
+        version: 4.9.0(ef439309c733cc6f55dfcb7d0dc9a947)
       nuxt:
         specifier: catalog:frontend
         version: 4.4.8(@babel/plugin-syntax-jsx@7.29.7(@babel/core@7.29.7))(@babel/plugin-syntax-typescript@7.29.7(@babel/core@7.29.7))(@parcel/watcher@2.5.6)(@types/node@25.9.3)(@vue/compiler-sfc@3.5.38)(cac@6.7.14)(db0@0.3.4)(ioredis@5.11.1)(lightningcss@1.32.0)(magicast@0.5.3)(oxlint@1.70.0)(rollup-plugin-visualizer@7.0.1(rollup@4.62.0))(rollup@4.62.0)(srvx@0.11.16)(terser@5.48.0)(tsx@4.22.4)(typescript@6.0.3)(vite@7.3.5(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.4)(yaml@2.9.0))(yaml@2.9.0)
@@ -393,6 +396,9 @@ importers:
       vue-router:
         specifier: catalog:frontend
         version: 5.1.0(@vue/compiler-sfc@3.5.38)(vite@7.3.5(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.4)(yaml@2.9.0))(vue@3.5.38(typescript@6.0.3))
+      zod:
+        specifier: catalog:dev
+        version: 4.4.3
     devDependencies:
       '@supabase/lint-config':
         specifier: workspace:*
@@ -6532,6 +6538,9 @@ packages:
     resolution: {integrity: sha512-zK7YHHz4ZXpW89AHXUPbQVGKI7uvkd3hzusTdotCg1UxyaVtg0zFJSTfW/Dq5f7OBBVnq6cZIaC8Ti4hb6dtCA==}
     engines: {node: '>= 14'}
 
+  zod@4.4.3:
+    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -7820,7 +7829,7 @@ snapshots:
       rc9: 3.0.1
       std-env: 4.1.0
 
-  '@nuxt/ui@4.9.0(5f1b1e167069df2fbe4c0d8571fcf097)':
+  '@nuxt/ui@4.9.0(ef439309c733cc6f55dfcb7d0dc9a947)':
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@iconify/vue': 5.0.1(vue@3.5.38(typescript@6.0.3))
@@ -7890,6 +7899,7 @@ snapshots:
       '@internationalized/date': 3.12.2
       '@internationalized/number': 3.6.7
       vue-router: 5.1.0(@vue/compiler-sfc@3.5.38)(vite@7.3.5(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.4)(yaml@2.9.0))(vue@3.5.38(typescript@6.0.3))
+      zod: 4.4.3
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -12870,3 +12880,5 @@ snapshots:
       archiver-utils: 5.0.2
       compress-commons: 6.0.2
       readable-stream: 4.7.0
+
+  zod@4.4.3: {}
