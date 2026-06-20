@@ -7,7 +7,7 @@
   "author": "",
   "type": "module",
   "exports": {
-    "./src/index.ts": "./src/index.ts",
+    ".": "./src/index.ts",
     "./locales/zh.json": "./locales/zh.json",
     "./locales/en.json": "./locales/en.json"
   },

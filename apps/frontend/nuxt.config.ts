@@ -1,5 +1,5 @@
 import { defineNuxtConfig } from "nuxt/config";
-import { zh, en } from "@supabase/i18n/src/index.ts";
+import { langDir } from "@supabase/i18n";
 
 export default defineNuxtConfig({
   modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image", "@nuxtjs/i18n"],
@@ -18,8 +18,9 @@ export default defineNuxtConfig({
   i18n: {
     defaultLocale: "zh",
     locales: [
-      { code: "zh", name: "中文", files: [zh] },
-      { code: "en", name: "English", files: [en] },
+      { code: "zh", name: "中文", file: "zh.json" },
+      { code: "en", name: "English", file: "en.json" },
     ],
+    langDir,
   },
 });
