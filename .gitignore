@@ -1,0 +1,31 @@
+# Nuxt 开发/构建输出
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node 依赖包
+node_modules
+
+# 日志文件
+logs
+*.log
+
+# 其他杂项
+.DS_Store
+
+# 本地环境文件
+.env
+.env.*
+!.env.example
+
+# Turbo 缓存
+.turbo
+
+# 数据文件
+.data
+
+# 图谱输出
+graphify-out

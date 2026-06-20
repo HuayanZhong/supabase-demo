@@ -1,0 +1,32 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "lint": "oxlint",
+    "check-types": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@nuxt/fonts": "catalog:frontend",
+    "@nuxt/image": "catalog:frontend",
+    "@nuxt/ui": "catalog:frontend",
+    "nuxt": "catalog:frontend",
+    "tailwindcss": "catalog:frontend",
+    "vue": "catalog:frontend",
+    "vue-router": "catalog:frontend",
+    "zod": "catalog:dev"
+  },
+  "devDependencies": {
+    "@supabase/lint-config": "workspace:*",
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
+  },
+  "packageManager": "pnpm@11.4.0"
+}

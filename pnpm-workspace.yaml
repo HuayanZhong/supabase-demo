@@ -1,0 +1,45 @@
+# 定义工作空间中的包
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# 允许构建的依赖包
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true
+  vue-demi: true
+
+# 定义依赖包版本
+catalogs:
+  # 公共依赖包版本
+  dev:
+    oxfmt: ^0.55.0
+    oxlint: ^1.70.0
+    typescript: ^6.0.3
+    zod: ^4.4.3
+
+  # 后端依赖包版本
+  backend:
+    "@mikro-orm/cli": ^7.1.4
+    "@mikro-orm/core": ^7.1.4
+    "@mikro-orm/migrations": ^7.1.4
+    "@mikro-orm/nestjs": ^7.0.2
+    "@mikro-orm/postgresql": ^7.1.4
+    "@nestjs/common": ^11.1.27
+    "@nestjs/core": ^11.1.27
+    "@nestjs/platform-express": ^11.1.27
+    reflect-metadata: ^0.2.2
+    rxjs: ^7.8.2
+    tsx: ^4.22.4
+
+  # 前端依赖包版本
+  frontend:
+    "@nuxt/fonts": ^0.14.0
+    "@nuxt/image": ^2.0.0
+    "@nuxt/ui": ^4.9.0
+    nuxt: ^4.4.8
+    tailwindcss: ^4.3.1
+    vue: ^3.5.38
+    vue-router: ^5.1.0

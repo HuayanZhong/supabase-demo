@@ -1,0 +1,25 @@
+{
+  "name": "supabase-demo",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "check-types": "turbo check-types"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "turbo": "^2.9.18",
+    "typescript": "catalog:dev"
+  },
+  "packageManager": "pnpm@11.4.0"
+}
