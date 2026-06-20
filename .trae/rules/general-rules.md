@@ -26,7 +26,7 @@ Monorepo 项目，使用 pnpm workspace + turborepo：
 
 ## 文档查询
 
-当遇到以下情况时，**必须先通过 tavily MCP 查询最新文档**，不能仅依赖训练数据或记忆：
+当遇到以下情况时，**必须先查询最新文档**，不能仅依赖训练数据或记忆：
 
 - 不确定某个 API、组件、配置字段的参数或行为
 - 库版本较新，训练数据可能已过时（项目依赖版本见 `pnpm-workspace.yaml` catalogs）
@@ -35,11 +35,36 @@ Monorepo 项目，使用 pnpm workspace + turborepo：
 
 ### 查询方式
 
-优先使用以下 tavily MCP 工具：
+#### 1. 专用 MCP 优先
+
+涉及 Supabase 或 Nuxt UI 的问题，**必须先使用对应的专用 MCP 工具**，而非通用搜索：
+
+**Supabase 相关**（`mcp_supabase`）— 数据库、Auth、Edge Functions、项目配置等问题：
+
+- `search_docs` — 搜索 Supabase 官方文档，查 API 用法、配置项、最佳实践
+- `list_tables` — 查看当前项目的数据库表结构
+- `list_extensions` — 查看已启用的 Postgres 扩展
+- `list_migrations` — 查看迁移历史
+- `execute_sql` — 执行 SQL 查询验证想法
+- `get_advisors` — 获取安全/性能建议
+
+**Nuxt UI 相关**（`mcp_nuxt-ui`）— 组件、composable、模板、图标等问题：
+
+- `search-components` — 按名称/功能搜索组件，获取用法、API、示例链接
+- `get-component` — 获取组件的完整文档（props、slots、events）
+- `get-component-metadata` — 获取组件的 props/slots/events 结构化元数据
+- `search-documentation` — 搜索 Nuxt UI 文档
+- `get-documentation-page` — 获取指定文档页面的完整内容
+- `search-icons` — 搜索可用图标
+- `get-example` — 获取组件示例代码
+
+#### 2. tavily 作为补充
+
+当专用 MCP 无法满足需求时（如查询非 Supabase/Nuxt UI 的库、跨库问题、或通用技术问题），使用 tavily MCP：
 
 1. **`tavily_search`** — 通用搜索，适用于查 API 用法、配置项、错误排查等
    - 参数：`query`（必填）、`search_depth`（`basic`/`advanced`）、`max_results`、`include_domains`
-   - 查询时在 query 中加上库名 + 版本号以提高准确性，例如：`"nuxt ui 4 ULocaleSelect locale code format"`
+   - 查询时在 query 中加上库名 + 版本号以提高准确性，例如：`"nuxt i18n 9 locale code format"`
    - 优先查官方文档域名：`ui.nuxt.com`、`i18n.nuxtjs.org`、`nuxt.com`、`ui4.nuxt.com`
 
 2. **`tavily_extract`** — 从已知 URL 提取页面正文，适用于精读某个文档页面
