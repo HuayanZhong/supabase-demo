@@ -1,12 +1,22 @@
 <script setup lang="ts">
-const { locales, setLocale } = useI18n();
+import { zh_cn, en } from "@nuxt/ui/locale";
+
+const { locale, setLocale } = useI18n();
+
+const availableLocales = [zh_cn, en];
+
+function onLocaleChange(code: string) {
+  setLocale(code as "zh_cn" | "en");
+}
 </script>
 
 <template>
   <div>
-    <button v-for="locale in locales" @click="setLocale(locale.code)">
-      {{ locale.name }}
-    </button>
+    <ULocaleSelect
+      :model-value="locale"
+      :locales="availableLocales"
+      @update:model-value="onLocaleChange"
+    />
     <USeparator />
     <h1>{{ $t("welcome") }}</h1>
   </div>
