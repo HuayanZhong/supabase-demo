@@ -1,0 +1,46 @@
+name: CI Packages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+  pull_request:
+    branches: [main]
+    paths:
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter "@supabase/*" lint
+
+      - name: Check format
+        run: pnpm --filter "@supabase/*" format
+
+      - name: Type check
+        run: pnpm --filter "@supabase/*" check-types

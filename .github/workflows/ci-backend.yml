@@ -1,0 +1,51 @@
+name: CI Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/backend/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apps/backend/**"
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "turbo.json"
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm --filter backend lint
+
+      - name: Check format
+        run: pnpm --filter backend format
+
+      - name: Type check
+        run: pnpm --filter backend check-types
+
+      - name: Build
+        run: pnpm --filter backend build
