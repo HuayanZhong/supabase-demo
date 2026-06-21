@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
       supabasePublishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
+      baseUrl: `http://localhost:${process.env.PORT}`,
     },
   },
 });
