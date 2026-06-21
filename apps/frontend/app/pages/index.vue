@@ -1,52 +1,17 @@
 <script setup lang="ts">
-import type { AuthFormField } from "@nuxt/ui";
+import { BusinessAuthLogin, LazyBusinessAuthRegister } from "#components";
 
-const fields = ref<AuthFormField[]>([
-  {
-    name: "email",
-    type: "email",
-    label: $t("Email"),
-    required: true,
-    placeholder: $t("InputPlaceholder Email"),
-  },
-  {
-    name: "password",
-    type: "password",
-    label: $t("Password"),
-    required: true,
-    placeholder: $t("InputPlaceholder Password"),
-  },
-]);
+// 默认显示登录
+const current = ref<"login" | "register">("login");
+
+// 动态切换组件
+const currentComponent = computed(() => {
+  return current.value === "login" ? BusinessAuthLogin : LazyBusinessAuthRegister;
+});
 </script>
 
 <template>
   <div class="flex justify-center items-center h-screen w-screen">
-    <UCard class="max-w-md">
-      <UAuthForm
-        :title="$t('Login')"
-        :description="$t('Description')"
-        icon="i-lucide-user"
-        :fields="fields"
-        :submit="{
-          label: $t('Submit'),
-          color: 'primary',
-          variant: 'subtle',
-        }"
-      >
-        <template #footer>
-          <USeparator :label="$t('Quick login')" class="my-2" />
-          <div class="space-y-3">
-            <UButton :label="$t('QQ')" color="neutral" variant="subtle" block />
-            <UButton :label="$t('Wechat')" color="neutral" variant="subtle" block />
-          </div>
-          <div class="w-full flex justify-end items-center mt-4">
-            <p>
-              {{ $t("Register Description") }}
-            </p>
-            <UButton variant="link">{{ $t("Register") }}</UButton>
-          </div>
-        </template>
-      </UAuthForm>
-    </UCard>
+    <component :is="currentComponent" v-model="current" />
   </div>
 </template>
