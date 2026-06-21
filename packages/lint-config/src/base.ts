@@ -8,7 +8,7 @@ const baseConfig = defineConfig({
     perf: "warn",
   },
   rules: {
-    "no-console": "warn",
+    "no-console": "off",
     "no-debugger": "error",
     "no-unused-vars": "off",
     "typescript/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
