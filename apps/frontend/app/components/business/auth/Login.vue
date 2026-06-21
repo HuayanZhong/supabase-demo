@@ -23,7 +23,7 @@ const fields = ref<AuthFormField[]>([
 </script>
 
 <template>
-  <UCard class="max-w-md">
+  <UCard class="min-w-72 max-w-md">
     <UAuthForm
       :title="$t('Login')"
       :description="$t('Description')"
