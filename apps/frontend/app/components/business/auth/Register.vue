@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
-import { z } from "zod";
+import type { AuthSchema } from "@supabase/types";
 
 // 定义切换状态
 const current = defineModel<"login" | "register">();
@@ -22,15 +22,12 @@ const fields = ref<AuthFormField[]>([
   },
 ]);
 
-const schema = z.object({
-  email: z.email("Invalid email"),
-  password: z.string("Password is required").min(8, "Must be at least 8 characters"),
-});
-
-type Schema = z.output<typeof schema>;
-
-const handleSubmit = async ({ data }: FormSubmitEvent<Schema>) => {
-  console.log(data);
+const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
+  const res = await $fetch("/api/auth/register", {
+    method: "POST",
+    body: data,
+  });
+  console.log(res);
 };
 </script>
 
