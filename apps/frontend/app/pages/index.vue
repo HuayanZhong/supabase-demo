@@ -19,14 +19,8 @@ const fields = ref<AuthFormField[]>([
         <template #footer>
           <USeparator label="or" class="my-2" />
           <div class="space-y-3">
-            <UButton label="QQ" icon="i-simple-icons-qq" color="neutral" variant="subtle" block />
-            <UButton
-              label="微信"
-              icon="i-simple-icons-wechatpay"
-              color="neutral"
-              variant="subtle"
-              block
-            />
+            <UButton label="QQ" color="neutral" variant="subtle" block />
+            <UButton label="微信" color="neutral" variant="subtle" block />
           </div>
         </template>
       </UAuthForm>
