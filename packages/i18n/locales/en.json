@@ -1,3 +1,12 @@
 {
-  "welcome": "Welcome"
+  "Email": "Email",
+  "Password": "Password",
+  "Submit": "Submit",
+  "Login": "Login",
+  "Description": "Enter your credentials to access your account",
+  "InputPlaceholder Email": "Enter your email",
+  "InputPlaceholder Password": "Enter your password",
+  "Quick login": "Quick login",
+  "QQ": "QQ",
+  "Wechat": "Wechat"
 }

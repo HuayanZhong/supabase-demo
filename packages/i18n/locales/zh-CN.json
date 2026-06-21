@@ -1,3 +1,12 @@
 {
-  "welcome": "欢迎来到 Supabase Demo"
+  "Email": "邮箱",
+  "Password": "密码",
+  "Submit": "登录",
+  "Login": "登录",
+  "Description": "请输入您的邮箱和密码以登录您的账户",
+  "InputPlaceholder Email": "请输入您的邮箱",
+  "InputPlaceholder Password": "请输入您的密码",
+  "Quick login": "快速登录",
+  "QQ": "QQ",
+  "Wechat": "微信"
 }

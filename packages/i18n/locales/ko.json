@@ -1,3 +1,12 @@
 {
-  "welcome": "환영합니다!"
+  "Email": "이메일",
+  "Password": "비밀번호",
+  "Submit": "로그인",
+  "Login": "로그인",
+  "Description": "계정에 로그인하려면 이메일과 비밀번호를 입력해 주세요",
+  "InputPlaceholder Email": "이메일을 입력해 주세요",
+  "InputPlaceholder Password": "비밀번호를 입력하세요",
+  "Quick login": "빠른 로그인",
+  "QQ": "QQ",
+  "Wechat": "위챗"
 }

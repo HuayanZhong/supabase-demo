@@ -1,3 +1,12 @@
 {
-  "welcome": "ようこそ！"
+  "Email": "メールアドレス",
+  "Password": "パスワード",
+  "Submit": "ログイン",
+  "Login": "ログイン",
+  "Description": "メールアドレスとパスワードを入力してアカウントにログインしてください",
+  "InputPlaceholder Email": "メールアドレスを入力してください",
+  "InputPlaceholder Password": "パスワードを入力してください",
+  "Quick login": "迅速ログイン",
+  "QQ": "QQ",
+  "Wechat": "微信"
 }
