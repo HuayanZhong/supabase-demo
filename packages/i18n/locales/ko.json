@@ -8,5 +8,7 @@
   "InputPlaceholder Password": "비밀번호를 입력하세요",
   "Quick login": "빠른 로그인",
   "QQ": "QQ",
-  "Wechat": "위챗"
+  "Wechat": "위챗",
+  "Register": "등록",
+  "Register Description": "아직 계정이 없으신가요?"
 }

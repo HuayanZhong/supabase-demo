@@ -39,6 +39,12 @@ const fields = ref<AuthFormField[]>([
             <UButton :label="$t('QQ')" color="neutral" variant="subtle" block />
             <UButton :label="$t('Wechat')" color="neutral" variant="subtle" block />
           </div>
+          <div class="w-full flex justify-end items-center mt-4">
+            <p>
+              {{ $t("Register Description") }}
+            </p>
+            <UButton variant="link">{{ $t("Register") }}</UButton>
+          </div>
         </template>
       </UAuthForm>
     </UCard>
