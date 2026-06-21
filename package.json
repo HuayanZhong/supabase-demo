@@ -12,6 +12,7 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "format": "turbo format",
+    "format:fix": "turbo format:fix",
     "check-types": "turbo check-types"
   },
   "devDependencies": {

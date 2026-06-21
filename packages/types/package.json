@@ -12,7 +12,8 @@
   },
   "scripts": {
     "lint": "oxlint",
-    "format": "oxfmt .",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
