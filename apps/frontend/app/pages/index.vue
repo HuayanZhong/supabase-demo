@@ -12,6 +12,10 @@ const currentComponent = computed(() => {
 
 <template>
   <div class="flex justify-center items-center h-screen w-screen">
+    <div class="fixed top-4 right-4 flex items-center gap-x-2">
+      <UColorModeButton />
+      <CommonLocaleSelect />
+    </div>
     <component :is="currentComponent" v-model="current" />
   </div>
 </template>
