@@ -10,5 +10,8 @@
   "QQ": "QQ",
   "Wechat": "Wechat",
   "Register": "Register",
-  "Register Description": "Don't have an account yet?"
+  "Register Description": "Don't have an account yet?",
+  "Register Submit": "Sign up",
+  "Register Form Description": "Enter your email and password to create an account",
+  "Login Description": "Already have an account?"
 }

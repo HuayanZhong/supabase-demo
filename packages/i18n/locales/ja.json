@@ -10,5 +10,8 @@
   "QQ": "QQ",
   "Wechat": "微信",
   "Register": "登録",
-  "Register Description": "まだアカウントがありませんか？"
+  "Register Description": "まだアカウントがありませんか？",
+  "Register Submit": "登録する",
+  "Register Form Description": "メールアドレスとパスワードを入力してアカウントを作成してください",
+  "Login Description": "すでにアカウントをお持ちですか？"
 }

@@ -10,5 +10,8 @@
   "QQ": "QQ",
   "Wechat": "위챗",
   "Register": "등록",
-  "Register Description": "아직 계정이 없으신가요?"
+  "Register Description": "아직 계정이 없으신가요?",
+  "Register Submit": "회원가입",
+  "Register Form Description": "이메일과 비밀번호를 입력하여 계정을 생성하세요",
+  "Login Description": "이미 계정이 있으신가요?"
 }
