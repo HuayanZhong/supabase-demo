@@ -440,6 +440,12 @@ importers:
         specifier: catalog:dev
         version: 1.70.0
 
+  packages/types:
+    dependencies:
+      zod:
+        specifier: catalog:dev
+        version: 4.4.3
+
 packages:
 
   '@alloc/quick-lru@5.2.0':

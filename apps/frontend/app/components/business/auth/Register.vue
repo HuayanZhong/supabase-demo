@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { AuthFormField } from "@nuxt/ui";
+import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
+import { z } from "zod";
 
 // 定义切换状态
 const current = defineModel<"login" | "register">();
@@ -20,6 +21,17 @@ const fields = ref<AuthFormField[]>([
     placeholder: $t("InputPlaceholder Password"),
   },
 ]);
+
+const schema = z.object({
+  email: z.email("Invalid email"),
+  password: z.string("Password is required").min(8, "Must be at least 8 characters"),
+});
+
+type Schema = z.output<typeof schema>;
+
+const handleSubmit = async ({ data }: FormSubmitEvent<Schema>) => {
+  console.log(data);
+};
 </script>
 
 <template>
@@ -34,6 +46,7 @@ const fields = ref<AuthFormField[]>([
         color: 'primary',
         variant: 'subtle',
       }"
+      @submit="handleSubmit"
     >
       <template #footer>
         <USeparator :label="$t('Quick login')" class="my-2" />

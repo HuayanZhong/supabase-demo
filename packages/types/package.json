@@ -1,0 +1,19 @@
+{
+  "name": "@supabase/types",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./auth": "./src/auth/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint"
+  },
+  "dependencies": {
+    "zod": "catalog:dev"
+  }
+}
