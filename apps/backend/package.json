@@ -11,6 +11,7 @@
     "dev:debug": "nest start --debug --watch",
     "prod": "node dist/main",
     "lint": "oxlint",
+    "format": "oxfmt .",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
@@ -31,7 +32,7 @@
     "@nestjs/schematics": "^11.0.0",
     "@supabase/lint-config": "workspace:*",
     "@types/express": "^5.0.0",
-    "@types/node": "^25.9.3",
+    "@types/node": "catalog:dev",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
     "source-map-support": "^0.5.21",

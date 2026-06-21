@@ -12,9 +12,13 @@
     "./frontend": "./src/frontend.ts"
   },
   "scripts": {
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "format": "oxfmt .",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "oxlint": "catalog:dev"
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
   }
 }

@@ -10,6 +10,7 @@
     "dev": "nuxt dev",
     "build": "nuxt build",
     "lint": "oxlint",
+    "format": "oxfmt .",
     "check-types": "nuxt typecheck"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "tailwindcss": "catalog:frontend",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend",
+    "vue-tsc": "catalog:frontend",
     "zod": "catalog:dev"
   },
   "devDependencies": {

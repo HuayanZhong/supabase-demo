@@ -11,9 +11,16 @@
     "./auth": "./src/auth/index.ts"
   },
   "scripts": {
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "format": "oxfmt .",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "zod": "catalog:dev"
+  },
+  "devDependencies": {
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
   }
 }

@@ -14,9 +14,14 @@
     "./locales/ko.json": "./locales/ko.json"
   },
   "scripts": {
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "format": "oxfmt .",
+    "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "oxlint": "catalog:dev"
+    "@types/node": "catalog:dev",
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
   }
 }

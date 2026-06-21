@@ -15,6 +15,7 @@ allowBuilds:
 catalogs:
   # 公共依赖包版本
   dev:
+    "@types/node": ^25.9.3
     oxfmt: ^0.55.0
     oxlint: ^1.70.0
     typescript: ^6.0.3
@@ -45,3 +46,4 @@ catalogs:
     tailwindcss: ^4.3.1
     vue: ^3.5.38
     vue-router: ^5.1.0
+    vue-tsc: ^3.3.5
