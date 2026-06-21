@@ -2,8 +2,14 @@
 import type { AuthFormField } from "@nuxt/ui";
 
 const fields = ref<AuthFormField[]>([
-  { name: "email", type: "email", label: "Email", required: true },
-  { name: "password", type: "password", label: "Password", required: true },
+  { name: "email", type: "email", label: "Email", required: true, placeholder: "Enter your email" },
+  {
+    name: "password",
+    type: "password",
+    label: "Password",
+    required: true,
+    placeholder: "Enter your password",
+  },
 ]);
 </script>
 
@@ -15,9 +21,14 @@ const fields = ref<AuthFormField[]>([
         description="Enter your credentials to access your account."
         icon="i-lucide-user"
         :fields="fields"
+        :submit="{
+          label: 'Submit',
+          color: 'primary',
+          variant: 'subtle',
+        }"
       >
         <template #footer>
-          <USeparator label="or" class="my-2" />
+          <USeparator label="Quick login" class="my-2" />
           <div class="space-y-3">
             <UButton label="QQ" color="neutral" variant="subtle" block />
             <UButton label="微信" color="neutral" variant="subtle" block />
