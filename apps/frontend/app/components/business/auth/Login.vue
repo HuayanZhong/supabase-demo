@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { AuthFormField } from "@nuxt/ui";
+import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
+import type { AuthSchema } from "@supabase/types";
 
 // 定义切换状态
 const current = defineModel<"login" | "register">();
@@ -20,6 +21,16 @@ const fields = ref<AuthFormField[]>([
     placeholder: $t("InputPlaceholder Password"),
   },
 ]);
+
+// 点击登录
+async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
+  console.log(data);
+  const res = await $fetch("/api/auth/login", {
+    method: "POST",
+    body: data,
+  });
+  console.log(res);
+}
 </script>
 
 <template>
@@ -34,6 +45,7 @@ const fields = ref<AuthFormField[]>([
         color: 'primary',
         variant: 'subtle',
       }"
+      @submit="handleSubmit"
     >
       <template #footer>
         <USeparator :label="$t('Quick login')" class="my-2" />

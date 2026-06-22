@@ -29,8 +29,8 @@ export default defineNuxtConfig({
   // 运行时配置
   runtimeConfig: {
     public: {
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabasePublishableKey: process.env.SUPABASE_PUBLISHABLE_KEY,
+      supabaseUrl: "",
+      supabasePublishableKey: "",
       baseUrl: `http://localhost:${process.env.PORT}`,
     },
   },
