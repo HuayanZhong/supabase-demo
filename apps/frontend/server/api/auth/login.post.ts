@@ -9,5 +9,14 @@ export default defineEventHandler(async (event) => {
     password,
   });
 
-  return { data, error };
+  if (error) {
+    return { error: error.message };
+  }
+
+  return {
+    user: {
+      id: data.user?.id,
+      email: data.user?.email,
+    },
+  };
 });

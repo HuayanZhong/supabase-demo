@@ -15,13 +15,13 @@ export function useCreateServerSupabase(event: any) {
         }));
       },
       setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => {
+        for (const { name, value, options } of cookiesToSet) {
           // 生产环境强制安全选项
           const secureOptions = isProduction
             ? { ...options, httpOnly: true, secure: true, sameSite: "strict" as const }
             : options;
           appendHeader(event, "Set-Cookie", serializeCookieHeader(name, value, secureOptions));
-        });
+        }
       },
     },
   });
