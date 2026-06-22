@@ -1,8 +1,8 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
-// 创建supabase客户端
+// 创建supabase 浏览器客户端
 export function useCreateSupabase() {
-  return createClient(
+  return createBrowserClient(
     useRuntimeConfig().public.supabaseUrl,
     useRuntimeConfig().public.supabasePublishableKey,
   );

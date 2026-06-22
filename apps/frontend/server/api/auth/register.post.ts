@@ -1,9 +1,10 @@
-import { useCreateSupabase } from "~/composables/useCreateSupabase";
+import { useCreateServerSupabase } from "#server/utils/useCreateServerSupabase";
 
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
 
-  const { data, error } = await useCreateSupabase().auth.signUp({
+  const supabase = useCreateServerSupabase(event);
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {

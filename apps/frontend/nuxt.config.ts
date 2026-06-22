@@ -26,6 +26,15 @@ export default defineNuxtConfig({
     langDir,
   },
 
+  // TypeScript 配置：允许 .ts 扩展名导入（monorepo 中 workspace 包直接引用源码）
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        allowImportingTsExtensions: true,
+      },
+    },
+  },
+
   // 运行时配置
   runtimeConfig: {
     public: {
