@@ -5,29 +5,64 @@ import type { AuthSchema } from "@supabase/types";
 // 定义切换状态
 const current = defineModel<"login" | "register">();
 
+const { t } = useI18n();
+const toast = useToast();
+const loading = ref(false);
+
 const fields = ref<AuthFormField[]>([
   {
     name: "email",
     type: "email",
-    label: $t("Email"),
+    label: t("Email"),
     required: true,
-    placeholder: $t("InputPlaceholder Email"),
+    placeholder: t("InputPlaceholder Email"),
   },
   {
     name: "password",
     type: "password",
-    label: $t("Password"),
+    label: t("Password"),
     required: true,
-    placeholder: $t("InputPlaceholder Password"),
+    placeholder: t("InputPlaceholder Password"),
   },
 ]);
 
 const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
-  const res = await $fetch("/api/auth/register", {
-    method: "POST",
-    body: data,
-  });
-  console.log(res);
+  loading.value = true;
+
+  try {
+    const res = await $fetch("/api/auth/register", {
+      method: "POST",
+      body: data,
+    });
+
+    // 检查返回结果
+    if ("error" in res && res.error) {
+      toast.add({
+        title: t("Register Failed"),
+        description: res.error.message || t("Registration failed"),
+        color: "error",
+      });
+      return;
+    }
+
+    // 注册成功
+    toast.add({
+      title: t("Register Success"),
+      description: t("Please check your email to verify your account"),
+      color: "success",
+    });
+
+    // 切换到登录页面
+    current.value = "login";
+  } catch (error) {
+    toast.add({
+      title: t("Error"),
+      description: t("Network error, please try again"),
+      color: "error",
+    });
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
 

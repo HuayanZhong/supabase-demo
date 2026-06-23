@@ -8,8 +8,15 @@ export default defineEventHandler(async (event) => {
     email,
     password,
   });
+
+  if (error) {
+    return { error: { message: error.message } };
+  }
+
   return {
-    error,
-    data,
+    user: {
+      id: data.user?.id,
+      email: data.user?.email,
+    },
   };
 });

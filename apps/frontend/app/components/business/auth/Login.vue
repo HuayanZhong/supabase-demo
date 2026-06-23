@@ -5,31 +5,65 @@ import type { AuthSchema } from "@supabase/types";
 // 定义切换状态
 const current = defineModel<"login" | "register">();
 
+const { t } = useI18n();
+const toast = useToast();
+const loading = ref(false);
+
 const fields = ref<AuthFormField[]>([
   {
     name: "email",
     type: "email",
-    label: $t("Email"),
+    label: t("Email"),
     required: true,
-    placeholder: $t("InputPlaceholder Email"),
+    placeholder: t("InputPlaceholder Email"),
   },
   {
     name: "password",
     type: "password",
-    label: $t("Password"),
+    label: t("Password"),
     required: true,
-    placeholder: $t("InputPlaceholder Password"),
+    placeholder: t("InputPlaceholder Password"),
   },
 ]);
 
 // 点击登录
 async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
-  console.log(data);
-  const res = await $fetch("/api/auth/login", {
-    method: "POST",
-    body: data,
-  });
-  console.log(res);
+  loading.value = true;
+
+  try {
+    const res = await $fetch("/api/auth/login", {
+      method: "POST",
+      body: data,
+    });
+
+    // 检查返回结果
+    if ("error" in res && res.error) {
+      toast.add({
+        title: t("Login Failed"),
+        description: res.error.message || t("Invalid credentials"),
+        color: "error",
+      });
+      return;
+    }
+
+    // 登录成功
+    toast.add({
+      title: t("Login Success"),
+      description: t("Welcome back"),
+      color: "success",
+    });
+
+    // 跳转到首页或其他页面
+    await navigateTo("/");
+  } catch (error) {
+    toast.add({
+      title: t("Error"),
+      description: t("Network error, please try again"),
+      color: "error",
+    });
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 
