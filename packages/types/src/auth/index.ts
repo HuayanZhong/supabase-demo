@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-const schema = z.object({
-  email: z.email("Invalid email"),
-  password: z.string("Password is required").min(8, "Must be at least 8 characters"),
+export const authSchema = z.object({
+  email: z.email({ message: "Invalid email" }),
+  password: z.string().min(1, "Password is required").min(8, "Must be at least 8 characters"),
 });
 
-export type AuthSchema = z.output<typeof schema>;
+export type AuthSchema = z.infer<typeof authSchema>;

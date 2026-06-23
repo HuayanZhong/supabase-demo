@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import * as z from "zod";
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
-import type { AuthSchema } from "@supabase/types";
+import { authSchema, type AuthSchema } from "@supabase/types";
 
 // 定义切换状态
 const current = defineModel<"login" | "register">();
@@ -27,12 +26,7 @@ const fields = computed<AuthFormField[]>(() => [
   },
 ]);
 
-const schema = computed(() =>
-  z.object({
-    email: z.string(t("Validation Email Required")).email(t("Validation Email Invalid")),
-    password: z.string(t("Validation Password Required")).min(8, t("Validation Password Min")),
-  }),
-);
+const schema = computed(() => authSchema);
 
 // 点击登录
 async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {

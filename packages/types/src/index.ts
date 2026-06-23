@@ -1,1 +1,1 @@
-export { type AuthSchema } from "./auth/index.ts";
+export { authSchema, type AuthSchema } from "./auth/index.ts";
