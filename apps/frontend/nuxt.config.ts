@@ -43,4 +43,12 @@ export default defineNuxtConfig({
       baseUrl: `http://localhost:${process.env.PORT}`,
     },
   },
+
+  devServer: {
+    port: 3000,
+  },
+
+  routeRules: {
+    "/home": { appLayout: "dashboard" },
+  },
 });
