@@ -56,7 +56,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
     });
 
     // 跳转到首页或其他页面
-    await navigateTo("/");
+    await navigateTo("/home");
   } catch (error) {
     toast.add({
       title: t("Error"),
