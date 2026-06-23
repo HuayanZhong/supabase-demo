@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import * as z from "zod";
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 import type { AuthSchema } from "@supabase/types";
 
@@ -16,11 +17,6 @@ const fields = computed<AuthFormField[]>(() => [
     label: t("Email"),
     required: true,
     placeholder: t("InputPlaceholder Email"),
-    validation: (value: string) => {
-      if (!value) return t("Validation Email Required");
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t("Validation Email Invalid");
-      return true;
-    },
   },
   {
     name: "password",
@@ -28,13 +24,15 @@ const fields = computed<AuthFormField[]>(() => [
     label: t("Password"),
     required: true,
     placeholder: t("InputPlaceholder Password"),
-    validation: (value: string) => {
-      if (!value) return t("Validation Password Required");
-      if (value.length < 8) return t("Validation Password Min");
-      return true;
-    },
   },
 ]);
+
+const schema = computed(() =>
+  z.object({
+    email: z.string(t("Validation Email Required")).email(t("Validation Email Invalid")),
+    password: z.string(t("Validation Password Required")).min(8, t("Validation Password Min")),
+  }),
+);
 
 const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
   loading.value = true;
@@ -82,6 +80,7 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
       :title="$t('Register')"
       :description="$t('Register Form Description')"
       icon="i-lucide-user-plus"
+      :schema="schema"
       :fields="fields"
       :submit="{
         label: $t('Register Submit'),
