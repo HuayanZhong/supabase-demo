@@ -13,5 +13,19 @@
   "Register Description": "Don't have an account yet?",
   "Register Submit": "Sign up",
   "Register Form Description": "Enter your email and password to create an account",
-  "Login Description": "Already have an account?"
+  "Login Description": "Already have an account?",
+  "Validation Email Required": "Email is required",
+  "Validation Email Invalid": "Please enter a valid email address",
+  "Validation Password Required": "Password is required",
+  "Validation Password Min": "Password must be at least 8 characters",
+  "Login Failed": "Login Failed",
+  "Login Success": "Login Success",
+  "Welcome back": "Welcome back",
+  "Invalid credentials": "Invalid email or password",
+  "Register Failed": "Registration Failed",
+  "Register Success": "Registration Successful",
+  "Please check your email to verify your account": "Please check your email to verify your account",
+  "Registration failed": "Registration failed, please try again",
+  "Error": "Error",
+  "Network error, please try again": "Network error, please try again"
 }

@@ -9,13 +9,18 @@ const { t } = useI18n();
 const toast = useToast();
 const loading = ref(false);
 
-const fields = ref<AuthFormField[]>([
+const fields = computed<AuthFormField[]>(() => [
   {
     name: "email",
     type: "email",
     label: t("Email"),
     required: true,
     placeholder: t("InputPlaceholder Email"),
+    validation: (value: string) => {
+      if (!value) return t("Validation Email Required");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return t("Validation Email Invalid");
+      return true;
+    },
   },
   {
     name: "password",
@@ -23,6 +28,11 @@ const fields = ref<AuthFormField[]>([
     label: t("Password"),
     required: true,
     placeholder: t("InputPlaceholder Password"),
+    validation: (value: string) => {
+      if (!value) return t("Validation Password Required");
+      if (value.length < 8) return t("Validation Password Min");
+      return true;
+    },
   },
 ]);
 

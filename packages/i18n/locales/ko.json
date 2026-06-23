@@ -12,6 +12,20 @@
   "Register": "등록",
   "Register Description": "아직 계정이 없으신가요?",
   "Register Submit": "회원가입",
-  "Register Form Description": "이메일과 비밀번호를 입력하여 계정을 생성하세요",
-  "Login Description": "이미 계정이 있으신가요?"
+  "Register Form Description": "계정을 만들려면 이메일과 비밀번호를 입력하세요",
+  "Login Description": "이미 계정이 있으신가요?",
+  "Validation Email Required": "이메일을 입력해 주세요",
+  "Validation Email Invalid": "유효한 이메일 주소를 입력해 주세요",
+  "Validation Password Required": "비밀번호를 입력하세요",
+  "Validation Password Min": "비밀번호는 최소 8자 이상이어야 합니다",
+  "Login Failed": "로그인 실패",
+  "Login Success": "로그인 성공",
+  "Welcome back": "다시 오셨군요",
+  "Invalid credentials": "이메일 또는 비밀번호가 올바르지 않습니다",
+  "Register Failed": "등록 실패",
+  "Register Success": "등록 성공",
+  "Please check your email to verify your account": "계정을 확인하려면 이메일을 확인해 주세요",
+  "Registration failed": "등록에 실패했습니다. 다시 시도해 주세요",
+  "Error": "오류",
+  "Network error, please try again": "네트워크 오류가 발생했습니다. 다시 시도해 주세요"
 }
