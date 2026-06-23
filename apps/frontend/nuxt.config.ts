@@ -48,6 +48,7 @@ export default defineNuxtConfig({
     port: 3000,
   },
 
+  // 路由规则：为特定路由设置布局
   routeRules: {
     "/home": { appLayout: "dashboard" },
   },
