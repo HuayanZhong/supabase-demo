@@ -88,6 +88,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
         label: $t('Submit'),
         color: 'primary',
         variant: 'subtle',
+        loading: loading,
       }"
       @submit="handleSubmit"
     >

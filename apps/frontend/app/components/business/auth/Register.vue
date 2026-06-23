@@ -87,6 +87,7 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
         label: $t('Register Submit'),
         color: 'primary',
         variant: 'subtle',
+        loading: loading,
       }"
       @submit="handleSubmit"
     >
