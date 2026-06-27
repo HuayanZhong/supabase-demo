@@ -11,8 +11,16 @@ scene: frontend_styles
 ## 项目约束
 
 - 全局样式只允许在 `app/assets/css/main.css` 中定义，不新增其他全局样式文件
-- 全局样式仅用于引入 Tailwind、Nuxt UI 和定义全局 CSS 变量（如 `--font-sans`）
-- Google Fonts 已禁用（国内无法访问），字体通过 `@nuxt/fonts` 配置，不在 CSS 中 `@import` 外部字体
+- 全局样式用于引入 Tailwind、Nuxt UI、Fontsource 字体和定义全局 CSS 变量
+- **字体方案**：通过 Fontsource npm 包自托管，零外部 CDN 依赖
+  - 无衬线字体：`@fontsource-variable/public-sans` → CSS font-family 为 `"Public Sans Variable"`
+  - 等宽字体：`@fontsource/jetbrains-mono` → CSS font-family 为 `"JetBrains Mono"`
+  - 在 `main.css` 中 `@import` 字体 CSS，在 `@theme` 中设置 `--font-sans` / `--font-mono`
+- **颜色方案**：使用 Nuxt UI v4 语义色，在 `app/app.config.ts` 中配置
+  - `primary: "teal"` — 品牌色、CTA、激活态
+  - `neutral: "stone"` — 文字、边框、背景、禁用态
+  - 组件中始终使用 `color="primary"` / `color="neutral"` 等语义色，不硬编码色值
+- Google Fonts 已禁用（国内无法访问）
 - 国旗等特殊图标优先使用 Iconify 图标集（如 `flag:cn-1x1`），不依赖 Unicode emoji（Windows 不渲染旗标 emoji）
 - 不要在 JS 中硬编码颜色值，始终使用语义色或 CSS 变量
 
