@@ -3,7 +3,7 @@ const route = useRoute();
 
 // 侧边栏导航链接
 const navLinks = [
-  { label: "首页", to: "/dashboard", icon: "i-lucide-home" },
+  { label: "首页", to: "/dashboard/home", icon: "i-lucide-home" },
   { label: "项目空间", to: "/dashboard/projects", icon: "i-lucide-folder-kanban" },
 ];
 

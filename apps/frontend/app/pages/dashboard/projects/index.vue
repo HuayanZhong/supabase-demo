@@ -1,8 +1,5 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: "dashboard",
-  middleware: "auth",
-});
+// 布局和中间件已在父路由 pages/dashboard.vue 中统一声明
 </script>
 
 <template>
