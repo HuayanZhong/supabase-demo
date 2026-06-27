@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { BusinessAuthLogin, LazyBusinessAuthRegister } from "#components";
 
+// 当前显示的登录/注册组件单
 const current = ref<"login" | "register">("login");
 
+// 动态切换登录/注册组件单
 const currentComponent = computed(() => {
   return current.value === "login" ? BusinessAuthLogin : LazyBusinessAuthRegister;
 });

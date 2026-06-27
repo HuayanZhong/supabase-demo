@@ -8,6 +8,7 @@ const { t } = useI18n();
 const toast = useToast();
 const loading = ref(false);
 
+// 登录表单字段
 const fields = computed<AuthFormField[]>(() => [
   {
     name: "email",
@@ -25,6 +26,7 @@ const fields = computed<AuthFormField[]>(() => [
   },
 ]);
 
+// 登录表单验证规则
 const schema = computed(() => authSchema);
 
 // 发送登录请求
