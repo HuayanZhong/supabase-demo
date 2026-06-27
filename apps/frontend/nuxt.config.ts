@@ -51,6 +51,6 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    "/dashboard/**": { appLayout: "dashboard" },
+    "/dashboard/**": { appLayout: "dashboard", appMiddleware: ["auth"] },
   },
 });
