@@ -49,4 +49,8 @@ export default defineNuxtConfig({
   devServer: {
     port: 3000,
   },
+
+  routeRules: {
+    "/dashboard/**": { appLayout: "dashboard" },
+  },
 });
