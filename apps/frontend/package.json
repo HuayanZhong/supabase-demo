@@ -31,10 +31,15 @@
     "zod": "catalog:dev"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "catalog:test",
     "@supabase/lint-config": "workspace:*",
+    "@vue/test-utils": "catalog:test",
+    "happy-dom": "catalog:test",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
-    "typescript": "catalog:dev"
+    "playwright-core": "catalog:test",
+    "typescript": "catalog:dev",
+    "vitest": "catalog:test"
   },
   "packageManager": "pnpm@11.4.0"
 }
