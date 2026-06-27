@@ -16,9 +16,9 @@ export function useCreateServerSupabase(event: any) {
       },
       setAll(cookiesToSet) {
         for (const { name, value, options } of cookiesToSet) {
-          // 生产环境强制安全选项
+          // 生产环境强制安全选项（不设 httpOnly，客户端 SDK 需要读写 cookie 来管理 session）
           const secureOptions = isProduction
-            ? { ...options, httpOnly: true, secure: true, sameSite: "strict" as const }
+            ? { ...options, secure: true, sameSite: "strict" as const }
             : options;
           appendHeader(event, "Set-Cookie", serializeCookieHeader(name, value, secureOptions));
         }
