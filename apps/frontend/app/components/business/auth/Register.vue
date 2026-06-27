@@ -8,6 +8,7 @@ const { t } = useI18n();
 const toast = useToast();
 const loading = ref(false);
 
+// 注册表单字段
 const fields = computed<AuthFormField[]>(() => [
   {
     name: "email",
