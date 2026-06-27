@@ -9,9 +9,10 @@ export function useAuth() {
    */
   async function checkAuth(): Promise<boolean> {
     if (import.meta.server) {
-      // SSR：createBrowserClient 无法读取服务端请求的 cookie，走后端接口
+      // SSR：使用 useRequestFetch 确保 cookie 正确传播到内部 API 路由
       try {
-        const { user } = await $fetch("/api/auth/session");
+        const requestFetch = useRequestFetch();
+        const { user } = await requestFetch("/api/auth/session");
         return !!user;
       } catch {
         return false;
