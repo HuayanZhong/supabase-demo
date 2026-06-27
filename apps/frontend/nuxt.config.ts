@@ -24,6 +24,8 @@ export default defineNuxtConfig({
       { code: "ko", name: "한국어", file: "ko.json" },
     ],
     langDir,
+    strategy: "no_prefix",
+    defaultLocale: "zh-CN",
   },
 
   // TypeScript 配置：允许 .ts 扩展名导入（monorepo 中 workspace 包直接引用源码）

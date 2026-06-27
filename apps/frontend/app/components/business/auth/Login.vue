@@ -53,6 +53,9 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
       description: t("Welcome back"),
       color: "success",
     });
+
+    // 登录成功后跳转到仪表盘
+    await navigateTo("/dashboard");
   } catch (error) {
     toast.add({
       title: t("Error"),
