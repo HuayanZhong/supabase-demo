@@ -2,7 +2,6 @@
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 import { authSchema, type AuthSchema } from "@supabase/types";
 
-// 定义切换状态
 const current = defineModel<"login" | "register">();
 
 const { t } = useI18n();
@@ -37,7 +36,6 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
       body: data,
     });
 
-    // 检查返回结果
     if ("error" in res && res.error) {
       toast.add({
         title: t("Register Failed"),
@@ -47,14 +45,12 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
       return;
     }
 
-    // 注册成功
     toast.add({
       title: t("Register Success"),
       description: t("Please check your email to verify your account"),
       color: "success",
     });
 
-    // 切换到登录页面
     current.value = "login";
   } catch (error) {
     toast.add({
@@ -69,34 +65,25 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
 </script>
 
 <template>
-  <UCard class="min-w-[20vw] max-w-md">
-    <UAuthForm
-      :title="$t('Register')"
-      :description="$t('Register Form Description')"
-      icon="i-lucide-user-plus"
-      :schema="schema"
-      :fields="fields"
-      :submit="{
-        label: $t('Register Submit'),
-        color: 'primary',
-        variant: 'subtle',
-        loading: loading,
-      }"
-      @submit="handleSubmit"
-    >
-      <template #footer>
-        <USeparator :label="$t('Quick login')" class="my-2" />
-        <div class="space-y-3">
-          <UButton :label="$t('QQ')" color="neutral" variant="subtle" block />
-          <UButton :label="$t('Wechat')" color="neutral" variant="subtle" block />
-        </div>
-        <div class="w-full flex justify-end items-center mt-4">
-          <p>
-            {{ $t("Login Description") }}
-          </p>
-          <UButton variant="link" @click="current = 'login'">{{ $t("Login") }}</UButton>
-        </div>
-      </template>
-    </UAuthForm>
-  </UCard>
+  <UAuthForm
+    :schema="schema"
+    :fields="fields"
+    :submit="{
+      label: $t('Register Submit'),
+      color: 'primary',
+      variant: 'solid',
+      block: true,
+      loading: loading,
+    }"
+    @submit="handleSubmit"
+  >
+    <template #footer>
+      <div class="flex items-center justify-center gap-1 mt-6 pt-6 border-t border-default">
+        <span class="text-sm text-toned">{{ $t("Login Description") }}</span>
+        <UButton variant="link" color="primary" size="sm" @click="current = 'login'">
+          {{ $t("Login") }}
+        </UButton>
+      </div>
+    </template>
+  </UAuthForm>
 </template>
