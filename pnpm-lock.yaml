@@ -261,6 +261,12 @@ catalogs:
       specifier: ^4.4.3
       version: 4.4.3
   frontend:
+    '@fontsource-variable/public-sans':
+      specifier: ^5.2.7
+      version: 5.2.7
+    '@fontsource/jetbrains-mono':
+      specifier: ^5.2.8
+      version: 5.2.8
     '@nuxt/fonts':
       specifier: ^0.14.0
       version: 0.14.0
@@ -406,6 +412,12 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@fontsource-variable/public-sans':
+        specifier: catalog:frontend
+        version: 5.2.7
+      '@fontsource/jetbrains-mono':
+        specifier: catalog:frontend
+        version: 5.2.8
       '@nuxt/fonts':
         specifier: catalog:frontend
         version: 0.14.0(db0@0.3.4)(ioredis@5.11.1)(magicast@0.5.3)(vite@7.3.5(@types/node@25.9.3)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.48.0)(tsx@4.22.4)(yaml@2.9.0))
@@ -1281,6 +1293,12 @@ packages:
 
   '@floating-ui/vue@1.1.11':
     resolution: {integrity: sha512-HzHKCNVxnGS35r9fCHBc3+uCnjw9IWIlCPL683cGgM9Kgj2BiAl8x1mS7vtvP6F9S/e/q4O6MApwSHj8hNLGfw==}
+
+  '@fontsource-variable/public-sans@5.2.7':
+    resolution: {integrity: sha512-4mvade2J3slKkvwRkS+p8T3szet/0vhWoSnuUJTVU81Uo2pRpSZY/Y8bSLRqpSwzIPxjVmRJ53oq6JKP/l/PSg==}
+
+  '@fontsource/jetbrains-mono@5.2.8':
+    resolution: {integrity: sha512-6w8/SG4kqvIMu7xd7wt6x3idn1Qux3p9N62s6G3rfldOUYHpWcc2FKrqf+Vo44jRvqWj2oAtTHrZXEP23oSKwQ==}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -8354,6 +8372,10 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  '@fontsource-variable/public-sans@5.2.7': {}
+
+  '@fontsource/jetbrains-mono@5.2.8': {}
 
   '@humanfs/core@0.19.2':
     dependencies:

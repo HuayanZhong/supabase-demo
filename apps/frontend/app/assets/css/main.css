@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "@fontsource-variable/public-sans";
+@import "@fontsource/jetbrains-mono/400.css";
 
 @theme {
-  --font-sans: "Public Sans", sans-serif;
+  --font-sans: "Public Sans Variable", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }

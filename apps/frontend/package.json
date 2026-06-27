@@ -16,6 +16,8 @@
     "test": "vitest --config vitest.config.ts"
   },
   "dependencies": {
+    "@fontsource-variable/public-sans": "catalog:frontend",
+    "@fontsource/jetbrains-mono": "catalog:frontend",
     "@nuxt/fonts": "catalog:frontend",
     "@nuxt/image": "catalog:frontend",
     "@nuxt/ui": "catalog:frontend",
