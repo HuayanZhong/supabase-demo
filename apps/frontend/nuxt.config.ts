@@ -2,7 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 import { langDir } from "@supabase/i18n";
 
 export default defineNuxtConfig({
-  modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image", "@nuxtjs/i18n"],
+  modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image", "@nuxtjs/i18n", "@nuxt/test-utils/module"],
 
   // 全局样式
   css: ["~/assets/css/main.css"],
