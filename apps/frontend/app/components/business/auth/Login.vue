@@ -63,25 +63,40 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
 </script>
 
 <template>
-  <UAuthForm
-    :schema="schema"
-    :fields="fields"
-    :submit="{
-      label: $t('Submit'),
-      color: 'primary',
-      variant: 'solid',
-      block: true,
-      loading: loading,
-    }"
-    @submit="handleSubmit"
-  >
+  <UCard class="max-w-md">
+    <template #header>
+      <div class="text-center">
+        <h2 class="text-lg font-semibold text-default">{{ $t("Login") }}</h2>
+        <p class="text-sm text-toned mt-1">{{ $t("Description") }}</p>
+      </div>
+    </template>
+
+    <UAuthForm
+      :schema="schema"
+      :fields="fields"
+      :submit="{
+        label: $t('Submit'),
+        color: 'primary',
+        variant: 'solid',
+        block: true,
+        loading: loading,
+      }"
+      @submit="handleSubmit"
+    />
+
     <template #footer>
-      <div class="flex items-center justify-center gap-1 mt-6 pt-6 border-t border-default">
-        <span class="text-sm text-toned">{{ $t("Register Description") }}</span>
-        <UButton variant="link" color="primary" size="sm" @click="current = 'register'">
+      <div class="text-center text-sm">
+        <span class="text-toned">{{ $t("Register Description") }}</span>
+        <UButton
+          variant="link"
+          color="primary"
+          size="sm"
+          class="ml-1"
+          @click="current = 'register'"
+        >
           {{ $t("Register") }}
         </UButton>
       </div>
     </template>
-  </UAuthForm>
+  </UCard>
 </template>
