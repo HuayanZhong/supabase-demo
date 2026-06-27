@@ -10,7 +10,7 @@ const currentComponent = computed(() => {
 
 <template>
   <div class="min-h-dvh flex flex-col items-center justify-center px-6">
-    <!-- 顶部操作区 -->
+    <!-- 顶栏操作区 -->
     <div class="fixed top-0 left-0 right-0 flex items-center justify-between px-4 h-12">
       <div class="flex items-center gap-2">
         <UIcon name="i-lucide-sprout" class="size-5 text-primary" />
@@ -22,7 +22,7 @@ const currentComponent = computed(() => {
       </div>
     </div>
 
-    <!-- 表单 -->
+    <!-- 登录/注册表单 -->
     <div class="w-full max-w-sm">
       <component :is="currentComponent" v-model="current" />
     </div>

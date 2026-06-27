@@ -27,6 +27,7 @@ const fields = computed<AuthFormField[]>(() => [
 
 const schema = computed(() => authSchema);
 
+// 发送登录请求
 async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
   loading.value = true;
 
