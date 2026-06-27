@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// 布局和中间件已在父路由 pages/dashboard.vue 中统一声明
+// 布局由 routeRules 统一配置，auth 由全局中间件统一处理
 </script>
 
 <template>
