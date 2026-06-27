@@ -1,5 +1,7 @@
 <script setup lang="ts">
 const route = useRoute();
+const { clearAuth } = useAuth();
+const toast = useToast();
 
 // 侧边栏导航链接
 const navLinks = [
@@ -10,6 +12,16 @@ const navLinks = [
 /** 判断当前路由是否匹配导航项 */
 function isActive(path: string) {
   return route.path === path;
+}
+
+/** 退出登录 */
+async function handleLogout() {
+  await clearAuth();
+  await navigateTo("/");
+  toast.add({
+    title: "退出登录成功",
+    color: "success",
+  });
 }
 </script>
 
@@ -45,11 +57,11 @@ function isActive(path: string) {
       <!-- 侧边栏底部：用户操作 -->
       <template #footer>
         <UButton
-          to="/"
           variant="ghost"
           color="neutral"
           class="justify-start"
           icon="i-lucide-log-out"
+          @click="handleLogout"
         >
           退出
         </UButton>

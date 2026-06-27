@@ -1,9 +1,15 @@
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
-/** 创建 Supabase 客户端实例 */
+/** Supabase 客户端单例（浏览器端，使用 cookie 存储 session，与服务端一致） */
+let supabaseInstance: ReturnType<typeof createBrowserClient> | null = null;
+
 export function useCreateSupabase() {
-  return createClient(
-    useRuntimeConfig().public.supabaseUrl,
-    useRuntimeConfig().public.supabasePublishableKey,
-  );
+  if (!supabaseInstance) {
+    const config = useRuntimeConfig();
+    supabaseInstance = createBrowserClient(
+      config.public.supabaseUrl,
+      config.public.supabasePublishableKey,
+    );
+  }
+  return supabaseInstance;
 }

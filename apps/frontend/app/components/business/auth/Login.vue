@@ -7,6 +7,7 @@ const current = defineModel<"login" | "register">();
 const { t } = useI18n();
 const toast = useToast();
 const loading = ref(false);
+const { setAuthed } = useAuth();
 
 // 登录表单字段
 const fields = computed<AuthFormField[]>(() => [
@@ -54,7 +55,8 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
       color: "success",
     });
 
-    // 登录成功后跳转到仪表盘
+    // 登录成功，刷新客户端 session 后跳转仪表盘
+    await setAuthed();
     await navigateTo("/dashboard/home");
   } catch (error) {
     toast.add({
