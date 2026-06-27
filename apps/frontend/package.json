@@ -12,7 +12,8 @@
     "lint": "oxlint",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
-    "check-types": "nuxt typecheck"
+    "check-types": "nuxt typecheck",
+    "test": "vitest --config vitest.config.ts"
   },
   "dependencies": {
     "@nuxt/fonts": "catalog:frontend",
