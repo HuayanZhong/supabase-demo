@@ -55,7 +55,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
     });
 
     // 登录成功后跳转到仪表盘
-    await navigateTo("/dashboard");
+    await navigateTo("/dashboard/home");
   } catch (error) {
     toast.add({
       title: t("Error"),

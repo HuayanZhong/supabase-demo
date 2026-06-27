@@ -49,13 +49,5 @@ export default defineNuxtConfig({
   devServer: {
     port: 3000,
   },
-
-  routeRules: {
-    "/dashboard/home/**": {
-      appLayout: "dashboard",
-    },
-    "/dashboard/projects/**": {
-      appLayout: "dashboard",
-    },
-  },
+  // routeRules.appLayout 暂不可用（Nuxt#34061），布局由 pages/dashboard.vue 父路由统一声明
 });
