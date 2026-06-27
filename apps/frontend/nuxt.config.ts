@@ -49,5 +49,4 @@ export default defineNuxtConfig({
   devServer: {
     port: 3000,
   },
-  // routeRules.appLayout 暂不可用（Nuxt#34061），布局由 pages/dashboard.vue 父路由统一声明
 });
