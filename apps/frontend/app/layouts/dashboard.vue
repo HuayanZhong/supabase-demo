@@ -1,37 +1,40 @@
 <script setup lang="ts">
-const route = useRoute();
-const { clearAuth } = useAuth();
-const toast = useToast();
+import type { NavigationMenuItem } from "@nuxt/ui";
 
-// 侧边栏导航链接
-const navLinks = [
-  { label: "首页", to: "/dashboard/home", icon: "i-lucide-home" },
-  { label: "项目空间", to: "/dashboard/projects", icon: "i-lucide-folder-kanban" },
+const supabase = useCreateSupabase();
+
+// 当前用户邮箱
+const userEmail = ref<string | null>(null);
+
+// 侧边栏导航菜单
+const navItems: NavigationMenuItem[][] = [
+  [
+    {
+      label: "首页",
+      to: "/dashboard/home",
+      icon: "i-lucide-home",
+    },
+    {
+      label: "项目空间",
+      to: "/dashboard/projects",
+      icon: "i-lucide-folder-kanban",
+    },
+  ],
 ];
 
-/** 判断当前路由是否匹配导航项 */
-function isActive(path: string) {
-  return route.path === path;
-}
-
-/** 退出登录 */
-async function handleLogout() {
-  await clearAuth();
-  await navigateTo("/");
-  toast.add({
-    title: "退出登录成功",
-    color: "success",
-  });
-}
+// 获取当前用户信息
+onMounted(async () => {
+  const { data } = await supabase.auth.getSession();
+  userEmail.value = data.session?.user?.email ?? null;
+});
 </script>
 
 <template>
   <UDashboardGroup>
-    <!-- 侧边栏 -->
     <UDashboardSidebar :default-size="12">
       <!-- 侧边栏顶部：品牌标识 -->
       <template #header>
-        <div class="flex items-center gap-2 px-2">
+        <div class="flex items-center gap-2">
           <UIcon name="i-lucide-sprout" class="size-5 text-primary shrink-0" />
           <span class="text-sm font-semibold text-default truncate">Growth OS</span>
         </div>
@@ -39,32 +42,27 @@ async function handleLogout() {
 
       <!-- 侧边栏导航菜单 -->
       <template #default>
-        <nav class="flex flex-col gap-1">
-          <UButton
-            v-for="link in navLinks"
-            :key="link.to"
-            :to="link.to"
-            :variant="isActive(link.to) ? 'soft' : 'ghost'"
-            color="neutral"
-            class="justify-start"
-            :icon="link.icon"
-          >
-            {{ link.label }}
-          </UButton>
-        </nav>
+        <UNavigationMenu :items="navItems" orientation="vertical" />
       </template>
 
-      <!-- 侧边栏底部：用户操作 -->
+      <!-- 侧边栏底部：用户面板 -->
       <template #footer>
-        <UButton
-          variant="ghost"
-          color="neutral"
-          class="justify-start"
-          icon="i-lucide-log-out"
-          @click="handleLogout"
-        >
-          退出
-        </UButton>
+        <div class="min-w-0 w-full overflow-hidden">
+          <UUser
+            v-if="userEmail"
+            :name="userEmail"
+            description="个人面板"
+            :avatar="{ icon: 'i-lucide-user' }"
+            class="w-full"
+          />
+          <div v-else class="flex items-center gap-2">
+            <USkeleton class="size-8 rounded-full shrink-0" />
+            <div class="flex-1 space-y-1.5 min-w-0">
+              <USkeleton class="h-3 w-3/4" />
+              <USkeleton class="h-2.5 w-1/2" />
+            </div>
+          </div>
+        </div>
       </template>
     </UDashboardSidebar>
 
