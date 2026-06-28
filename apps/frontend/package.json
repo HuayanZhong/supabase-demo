@@ -26,9 +26,11 @@
     "@supabase/ssr": "catalog:dev",
     "@supabase/supabase-js": "catalog:dev",
     "@supabase/types": "workspace:*",
+    "echarts": "catalog:frontend",
     "nuxt": "catalog:frontend",
     "tailwindcss": "catalog:frontend",
     "vue": "catalog:frontend",
+    "vue-echarts": "catalog:frontend",
     "vue-router": "catalog:frontend",
     "vue-tsc": "catalog:frontend",
     "zod": "catalog:dev"

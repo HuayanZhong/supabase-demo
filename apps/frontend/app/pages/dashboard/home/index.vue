@@ -1,42 +1,56 @@
 <script setup lang="ts">
-// 布局由 routeRules 统一配置，auth 由全局中间件统一处理
+const { t, locale } = useI18n();
+
+// 当前时间问候语
+const greeting = computed(() => {
+  const hour = new Date().getHours();
+  if (hour < 6) return t("Greeting Night");
+  if (hour < 12) return t("Greeting Morning");
+  if (hour < 18) return t("Greeting Afternoon");
+  return t("Greeting Evening");
+});
+
+// 本地化日期
+const today = computed(() =>
+  new Date().toLocaleDateString(locale.value, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  }),
+);
 </script>
 
 <template>
   <div class="space-y-6">
-    <h1 class="text-2xl font-bold text-highlighted">仪表盘</h1>
+    <!-- 页面头部：问候语 + 日期 -->
+    <div>
+      <h1 class="text-2xl font-bold text-highlighted">{{ greeting }}</h1>
+      <p class="text-sm text-toned mt-1">{{ today }}</p>
+    </div>
 
     <!-- 统计卡片 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <UCard>
-        <template #header>
-          <div class="flex items-center gap-2 text-muted">
-            <UIcon name="i-lucide-folder-kanban" class="size-4" />
-            <span class="text-sm">项目数</span>
-          </div>
-        </template>
-        <p class="text-3xl font-bold">--</p>
-      </UCard>
-
-      <UCard>
-        <template #header>
-          <div class="flex items-center gap-2 text-muted">
-            <UIcon name="i-lucide-users" class="size-4" />
-            <span class="text-sm">团队成员</span>
-          </div>
-        </template>
-        <p class="text-3xl font-bold">--</p>
-      </UCard>
-
-      <UCard>
-        <template #header>
-          <div class="flex items-center gap-2 text-muted">
-            <UIcon name="i-lucide-activity" class="size-4" />
-            <span class="text-sm">活跃度</span>
-          </div>
-        </template>
-        <p class="text-3xl font-bold">--</p>
-      </UCard>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <BusinessHomeStatGoalChart />
+      <BusinessHomeStatTaskGauge />
+      <BusinessHomeStatStreakBar />
+      <BusinessHomeStatScoreGauge />
     </div>
+
+    <!-- 中部区域：今日计划 + 成长雷达 -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <BusinessHomeTodayPlanCard />
+      <BusinessHomeGrowthRadarCard />
+    </div>
+
+    <!-- 工作空间 + 最近对话 + 日历/天气 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <BusinessHomeWorkspaceCard />
+      <BusinessHomeRecentChatsCard />
+      <BusinessHomeCalendarWeatherCard />
+    </div>
+
+    <!-- 最近文件 -->
+    <BusinessHomeRecentFilesCard />
   </div>
 </template>
