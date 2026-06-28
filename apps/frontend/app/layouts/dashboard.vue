@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
 
+const { clearAuth } = useAuth();
 const supabase = useCreateSupabase();
+const toast = useToast();
 
 // 当前用户邮箱
 const userEmail = ref<string | null>(null);
@@ -21,6 +23,16 @@ const navItems: NavigationMenuItem[][] = [
     },
   ],
 ];
+
+/** 退出登录 */
+async function handleLogout() {
+  await clearAuth();
+  await navigateTo("/");
+  toast.add({
+    title: "已退出登录",
+    color: "success",
+  });
+}
 
 // 获取当前用户信息
 onMounted(async () => {
@@ -71,8 +83,31 @@ onMounted(async () => {
       <!-- 顶栏 -->
       <UDashboardNavbar>
         <template #right>
-          <UColorModeButton />
-          <CommonLocaleSelect />
+          <UPopover :content="{ align: 'end' }">
+            <UButton icon="i-lucide-settings-2" color="neutral" variant="ghost" />
+            <template #content>
+              <div class="p-2 flex flex-col gap-2 w-48">
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-default">主题</span>
+                  <UColorModeSelect />
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-default">语言</span>
+                  <CommonLocaleSelect />
+                </div>
+                <div class="border-t border-default pt-2">
+                  <UButton
+                    block
+                    color="error"
+                    variant="ghost"
+                    label="退出登录"
+                    icon="i-lucide-log-out"
+                    @click="handleLogout"
+                  />
+                </div>
+              </div>
+            </template>
+          </UPopover>
         </template>
       </UDashboardNavbar>
 
