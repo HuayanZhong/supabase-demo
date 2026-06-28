@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { GaugeChart } from "echarts/charts";
-import VChart from "vue-echarts";
-
-use([CanvasRenderer, GaugeChart]);
-
 const { t } = useI18n();
-const { textColor, trackColor } = useChartTheme();
 
 // 今日计划任务数据（静态示例）
 const tasks = [{ done: true }, { done: true }, { done: true }, { done: false }, { done: false }];
@@ -17,74 +9,71 @@ const progress = computed(() =>
   Math.round((tasks.filter((task) => task.done).length / tasks.length) * 100),
 );
 
-// 环形进度图配置
-const chartOption = computed(() => ({
-  series: [
-    {
-      type: "gauge",
-      radius: "100%",
-      startAngle: 90,
-      endAngle: -270,
-      pointer: { show: false },
-      progress: {
-        show: true,
-        overlap: false,
-        roundCap: true,
-        clip: false,
-        itemStyle: { color: "#22c55e" },
-      },
-      axisLine: { lineStyle: { width: 12, color: [[1, trackColor.value]] } },
-      axisTick: { show: false },
-      splitLine: { show: false },
-      axisLabel: { show: false },
-      detail: {
-        valueAnimation: true,
-        fontSize: 20,
-        fontWeight: "bold",
-        color: textColor.value,
-        formatter: "{value}%",
-        offsetCenter: [0, "0%"],
-      },
-      title: { show: false },
-      data: [{ value: progress.value }],
-    },
-  ],
-}));
+// SVG 圆环参数
+const size = 120;
+const strokeWidth = 10;
+const radius = (size - strokeWidth) / 2;
+const circumference = 2 * Math.PI * radius;
+const dashOffset = computed(() => circumference * (1 - progress.value / 100));
 </script>
 
 <template>
   <div
-    class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default flex flex-col"
+    class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default"
   >
-    <!-- 头部：图标 + 完成数 -->
-    <div class="flex items-start justify-between mb-3">
-      <div class="flex items-center justify-center size-10 rounded-xl bg-success/10">
-        <UIcon name="i-lucide-check-square" class="size-5 text-success" />
+    <!-- 头部：图标 + 标题 -->
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <div class="flex items-center justify-center size-8 rounded-lg bg-success/10">
+          <UIcon name="i-lucide-check-square" class="size-4 text-success" />
+        </div>
+        <span class="text-sm font-semibold text-highlighted">{{ t("Stat TodayTasks") }}</span>
       </div>
-      <span class="text-xs text-muted font-medium"
-        >{{ tasks.filter((task) => task.done).length }}/{{ tasks.length }}
-        {{ t("Trend Completed") }}</span
-      >
+      <span class="text-xs text-muted">{{ t("Trend ThisWeek") }} +15%</span>
     </div>
 
-    <!-- 图表：居中大圆环 -->
-    <div class="flex-1 flex items-center justify-center min-h-[100px]">
-      <div class="w-full h-full max-w-[140px] max-h-[140px]">
-        <ClientOnly>
-          <VChart
-            :option="chartOption"
-            autoresize
-            :init-options="{ renderer: 'svg' }"
-            style="width: 100%; height: 100%"
+    <!-- SVG 圆环 + 中心文字 -->
+    <div class="flex items-center justify-center gap-6">
+      <div class="relative shrink-0">
+        <svg :width="size" :height="size" class="-rotate-90">
+          <!-- 背景轨道 -->
+          <circle
+            :cx="size / 2"
+            :cy="size / 2"
+            :r="radius"
+            fill="none"
+            :stroke-width="strokeWidth"
+            class="stroke-muted/20"
           />
-        </ClientOnly>
+          <!-- 进度弧 -->
+          <circle
+            :cx="size / 2"
+            :cy="size / 2"
+            :r="radius"
+            fill="none"
+            :stroke-width="strokeWidth"
+            stroke-linecap="round"
+            class="stroke-success transition-all duration-700 ease-out"
+            :stroke-dasharray="circumference"
+            :stroke-dashoffset="dashOffset"
+          />
+        </svg>
+        <!-- 中心数字 -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="text-2xl font-bold text-highlighted">{{ progress }}%</span>
+        </div>
+      </div>
+
+      <!-- 右侧详情 -->
+      <div class="space-y-2">
+        <div>
+          <p class="text-2xl font-bold text-highlighted">
+            {{ tasks.filter((task) => task.done).length }}/{{ tasks.length }}
+          </p>
+          <p class="text-xs text-muted">{{ t("Trend Completed") }}</p>
+        </div>
+        <UProgress :model-value="progress" color="success" size="sm" />
       </div>
     </div>
-
-    <!-- 标签 -->
-    <p class="text-center text-sm font-semibold text-highlighted mt-2">
-      {{ t("Stat TodayTasks") }}
-    </p>
-    <p class="text-center text-xs text-muted mt-0.5">{{ t("Trend ThisWeek") }} +15%</p>
   </div>
 </template>

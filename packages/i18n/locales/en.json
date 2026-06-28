@@ -88,5 +88,7 @@
   "Radar Reading": "Reading",
   "Radar Skills": "Skills",
   "Radar Exercise": "Exercise",
-  "Radar Efficiency": "Efficiency"
+  "Radar Efficiency": "Efficiency",
+  "Trend Points": "pts",
+  "Trend MaxScore": "Max"
 }

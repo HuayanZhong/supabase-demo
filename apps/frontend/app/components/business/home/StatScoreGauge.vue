@@ -1,94 +1,90 @@
 <script setup lang="ts">
-import { use } from "echarts/core";
-import { CanvasRenderer } from "echarts/renderers";
-import { GaugeChart } from "echarts/charts";
-import VChart from "vue-echarts";
-
-use([CanvasRenderer, GaugeChart]);
-
 const { t } = useI18n();
-const { textColor, trackColor } = useChartTheme();
 
-// 仪表盘配置
-const chartOption = computed(() => ({
-  series: [
-    {
-      type: "gauge",
-      radius: "100%",
-      startAngle: 210,
-      endAngle: -30,
-      min: 0,
-      max: 100,
-      pointer: { show: true, length: "60%", width: 4, itemStyle: { color: "#3b82f6" } },
-      progress: {
-        show: true,
-        overlap: false,
-        roundCap: true,
-        clip: false,
-        width: 10,
-        itemStyle: {
-          color: {
-            type: "linear",
-            x: 0,
-            y: 0,
-            x2: 1,
-            y2: 0,
-            colorStops: [
-              { offset: 0, color: "#60a5fa" },
-              { offset: 1, color: "#3b82f6" },
-            ],
-          },
-        },
-      },
-      axisLine: { lineStyle: { width: 10, color: [[1, trackColor.value]] } },
-      axisTick: { show: false },
-      splitLine: { show: false },
-      axisLabel: { show: false },
-      detail: {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: textColor.value,
-        offsetCenter: [0, "35%"],
-      },
-      title: { show: false },
-      data: [{ value: 87 }],
-    },
-  ],
-}));
+// 评分数据（静态示例）
+const score = 87;
+const prevScore = 82;
+const diff = score - prevScore;
+
+// SVG 圆环参数
+const size = 120;
+const strokeWidth = 10;
+const radius = (size - strokeWidth) / 2;
+const circumference = 2 * Math.PI * radius;
+const dashOffset = computed(() => circumference * (1 - score / 100));
 </script>
 
 <template>
   <div
-    class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default flex flex-col"
+    class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default"
   >
     <!-- 头部：图标 + 趋势 -->
-    <div class="flex items-start justify-between mb-3">
-      <div class="flex items-center justify-center size-10 rounded-xl bg-info/10">
-        <UIcon name="i-lucide-trending-up" class="size-5 text-info" />
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <div class="flex items-center justify-center size-8 rounded-lg bg-info/10">
+          <UIcon name="i-lucide-trending-up" class="size-4 text-info" />
+        </div>
+        <span class="text-sm font-semibold text-highlighted">{{ t("Stat GrowthScore") }}</span>
       </div>
       <div class="flex items-center gap-1 text-xs">
         <UIcon name="i-lucide-arrow-up-right" class="size-3.5 text-info" />
-        <span class="font-semibold text-info">+5</span>
+        <span class="font-semibold text-info">+{{ diff }}</span>
       </div>
     </div>
 
-    <!-- 图表：居中仪表盘 -->
-    <div class="flex-1 flex items-center justify-center min-h-[120px]">
-      <div class="w-full h-full max-w-[160px] max-h-[160px]">
-        <ClientOnly>
-          <VChart
-            :option="chartOption"
-            autoresize
-            :init-options="{ renderer: 'svg' }"
-            style="width: 100%; height: 100%"
+    <!-- SVG 圆环 + 中心文字 -->
+    <div class="flex items-center justify-center gap-6">
+      <div class="relative shrink-0">
+        <svg :width="size" :height="size" class="-rotate-90">
+          <!-- 渐变定义 -->
+          <defs>
+            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#60a5fa" />
+              <stop offset="100%" stop-color="#3b82f6" />
+            </linearGradient>
+          </defs>
+          <!-- 背景轨道 -->
+          <circle
+            :cx="size / 2"
+            :cy="size / 2"
+            :r="radius"
+            fill="none"
+            :stroke-width="strokeWidth"
+            class="stroke-muted/20"
           />
-        </ClientOnly>
+          <!-- 进度弧 -->
+          <circle
+            :cx="size / 2"
+            :cy="size / 2"
+            :r="radius"
+            fill="none"
+            :stroke-width="strokeWidth"
+            stroke-linecap="round"
+            stroke="url(#scoreGradient)"
+            class="transition-all duration-700 ease-out"
+            :stroke-dasharray="circumference"
+            :stroke-dashoffset="dashOffset"
+          />
+        </svg>
+        <!-- 中心数字 -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center">
+          <span class="text-2xl font-bold text-highlighted">{{ score }}</span>
+        </div>
+      </div>
+
+      <!-- 右侧详情 -->
+      <div class="space-y-2">
+        <div>
+          <p class="text-xs text-muted">{{ t("Trend ComparedLastWeek") }}</p>
+          <p class="text-lg font-semibold text-success mt-0.5">
+            +{{ diff }} {{ t("Trend Points") }}
+          </p>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-muted">
+          <UIcon name="i-lucide-target" class="size-3.5" />
+          <span>100 {{ t("Trend MaxScore") }}</span>
+        </div>
       </div>
     </div>
-
-    <!-- 标签 -->
-    <p class="text-center text-sm text-toned mt-1">
-      {{ t("Stat GrowthScore") }} · {{ t("Trend ComparedLastWeek") }}
-    </p>
   </div>
 </template>
