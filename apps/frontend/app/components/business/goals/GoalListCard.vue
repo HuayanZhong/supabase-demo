@@ -4,8 +4,8 @@ const { t } = useI18n();
 // 项目数据
 const projects = [
   {
-    name: t("Project GrowthOs"),
-    description: t("Project GrowthOsDesc"),
+    name: t("Goal GrowthOs"),
+    description: t("Goal GrowthOsDesc"),
     status: "active" as const,
     progress: 68,
     members: 3,
@@ -16,8 +16,8 @@ const projects = [
     color: "success" as const,
   },
   {
-    name: t("Project DesignSystem"),
-    description: t("Project DesignSystemDesc"),
+    name: t("Goal DesignSystem"),
+    description: t("Goal DesignSystemDesc"),
     status: "active" as const,
     progress: 45,
     members: 2,
@@ -28,8 +28,8 @@ const projects = [
     color: "info" as const,
   },
   {
-    name: t("Project ApiPlatform"),
-    description: t("Project ApiPlatformDesc"),
+    name: t("Goal ApiPlatform"),
+    description: t("Goal ApiPlatformDesc"),
     status: "active" as const,
     progress: 82,
     members: 4,
@@ -40,8 +40,8 @@ const projects = [
     color: "warning" as const,
   },
   {
-    name: t("Project MobileApp"),
-    description: t("Project MobileAppDesc"),
+    name: t("Goal MobileApp"),
+    description: t("Goal MobileAppDesc"),
     status: "archived" as const,
     progress: 100,
     members: 2,
@@ -52,8 +52,8 @@ const projects = [
     color: "primary" as const,
   },
   {
-    name: t("Project DataAnalytics"),
-    description: t("Project DataAnalyticsDesc"),
+    name: t("Goal DataAnalytics"),
+    description: t("Goal DataAnalyticsDesc"),
     status: "archived" as const,
     progress: 100,
     members: 1,
@@ -76,7 +76,7 @@ const colorClass: Record<ProjectColor, { bg: string; text: string }> = {
 };
 
 const statusLabel = (status: "active" | "archived") =>
-  status === "active" ? t("Project Status Active") : t("Project Status Archived");
+  status === "active" ? t("Goal Status Active") : t("Goal Status Archived");
 </script>
 
 <template>

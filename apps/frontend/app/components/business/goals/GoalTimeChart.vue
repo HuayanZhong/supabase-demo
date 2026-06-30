@@ -30,11 +30,11 @@ const totalHours = computed(() => timeRangeData[timeRange.value].reduce((a, b) =
 
 // 维度标签
 const dimLabels = computed(() => [
-  t("Project Dim Code"),
-  t("Project Dim Design"),
-  t("Project Dim Test"),
-  t("Project Dim Docs"),
-  t("Project Dim Meeting"),
+  t("Goal Dim Code"),
+  t("Goal Dim Design"),
+  t("Goal Dim Test"),
+  t("Goal Dim Docs"),
+  t("Goal Dim Meeting"),
 ]);
 // 需要响应主题变化，所以用 computed
 const dimColors = computed(() => [
@@ -90,7 +90,7 @@ const chartOption = computed(() => ({
         <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
           <UIcon name="i-lucide-pie-chart" class="size-4 text-primary" />
         </div>
-        <span class="font-semibold text-highlighted">{{ t("Project Dim Title") }}</span>
+        <span class="font-semibold text-highlighted">{{ t("Goal Dim Title") }}</span>
       </div>
       <!-- 时间范围筛选 -->
       <div class="flex items-center bg-elevated rounded-lg p-0.5">
@@ -125,7 +125,7 @@ const chartOption = computed(() => ({
     <!-- 总工时统计 -->
     <div class="px-5 pb-4 pt-3 border-t border-default">
       <div class="flex items-center justify-between mb-3">
-        <span class="text-xs text-muted">{{ t("Project Dim TotalHours") }}</span>
+        <span class="text-xs text-muted">{{ t("Goal Dim TotalHours") }}</span>
         <span class="text-lg font-bold text-highlighted">{{ totalHours }}h</span>
       </div>
       <div class="flex items-center gap-2">

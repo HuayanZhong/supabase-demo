@@ -17,8 +17,8 @@ const navItems: NavigationMenuItem[][] = [
       icon: "i-lucide-home",
     },
     {
-      label: "项目空间",
-      to: "/dashboard/projects",
+      label: "目标中心",
+      to: "/dashboard/goals",
       icon: "i-lucide-folder-kanban",
     },
   ],
