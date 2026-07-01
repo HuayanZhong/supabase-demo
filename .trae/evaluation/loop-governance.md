@@ -40,6 +40,12 @@ Evaluation → 不通过
 [LOOP:retry-wait] OK     | 退避等待               | wait_ms=等待毫秒数
 [LOOP:tool-dedup] SKIP   | 工具去重               | action=操作;hash=哈希;reason=重复
 [LOOP:semantic]   BLOCKED| 语义循环检测            | pattern=模式;conclusion=结论
+[LOOP:convergence]STALL  | 收敛停滞               | feature_hash=哈希;match=2/2;action=升级re-plan
+[LOOP:convergence]DEADLOCK| 收敛死锁              | feature_hash=哈希;failures_same=true;action=人工介入
+[LOOP:convergence]OK     | 有效收敛               | feature_hash=哈希;failure_reduction=百分比
+[LOOP:returns]    WARN   | 收益递减               | delta=百分比;threshold=阈值;consecutive=N;action=强制升级
+[LOOP:returns]    FAIL   | 收益退步               | delta=百分比;action=立即熔断
+[LOOP:returns]    OK     | 有效改进               | delta=百分比;threshold=阈值;status=继续
 [LOOP:cost]       WARN   | 调用数预警             | calls=N/30
 [LOOP:anchor]     OK/FAIL| 目标锚定              | deviation=偏差百分比
 [LOOP:exit]       END    | 退出循环               | exit_by=原因;cycles=N;result=结果
@@ -121,6 +127,95 @@ LOOP:start 之后每一步都有记录，任何步骤 FAIL 或 BLOCKED 都会影
 - AI 应记录每次工具的消耗情况（调用次数、结果类型），在状态中追踪
 - 如果某次循环消耗明显超出预期（如同一工具调用超 5 次），暂停并输出成本预警
 
+### 收敛检测（Convergence Detection）
+
+检测循环是否陷入"原地踏步"——每次都在改，但产出结果一模一样。
+
+**特征提取：**
+
+每次 re-execute 完成后，提取本次产出的关键特征：
+
+- 失败文件列表（排序后取 SHA256 哈希的前 12 位）
+- 错误类型列表（去重排序后取哈希）
+- 修复前后的代码 diff（取变更行数 + 变更文件数）
+
+**对比与判定：**
+
+```
+当前特征 vs 上次特征
+    ↓
+├── 特征完全相同 → 收敛停滞（Stall）
+│   连续 2 次 → 强制升级到 re-plan
+│
+├── 特征不同但失败列表完全相同 → 收敛死锁（Deadlock）
+│   说明在同一个问题上反复做不同尝试但都没用
+│   连续 2 次 → 强制升级到人工介入
+│
+└── 特征不同且失败列表减少 → 有效收敛
+    正常继续
+```
+
+**日志输出：**
+
+```
+[LOOP:convergence] STALL   | 收敛停滞             | feature_hash=xxx;match=2/2;action=升级re-plan
+[LOOP:convergence] DEADLOCK| 收敛死锁             | feature_hash=xxx;failures_same=true;action=人工介入
+[LOOP:convergence] OK      | 有效收敛             | feature_hash=xxx;failure_reduction=N%
+```
+
+**死锁和停滞的差异：**
+
+| 场景     | 特征     | 失败列表 | 处理方式                           |
+| -------- | -------- | -------- | ---------------------------------- |
+| 收敛停滞 | 完全相同 | 完全相同 | 升级 re-plan（同层重试无效）       |
+| 收敛死锁 | 不同     | 完全相同 | 升级人工介入（不同方案都解决不了） |
+
+收敛检测结果写入循环状态记录的 `convergence` 字段。
+
+### 收益递减检测（Diminishing Returns）
+
+检测每轮迭代的改进幅度是否持续缩小，以及是否出现退步。
+
+**改进幅度指标：**
+
+| 循环类型   | 改进幅度定义                             | 有效阈值                  |
+| ---------- | ---------------------------------------- | ------------------------- |
+| re-execute | `(本次失败数 - 上次失败数) / 上次失败数` | ≤ -10%（失败减少 ≥ 10%）  |
+| re-plan    | 方案关键决策点差异比例                   | ≥ 30%（方案有实质性变更） |
+
+**判定规则：**
+
+```
+当前改进幅度 vs 阈值
+    ↓
+├── 改进幅度 < 阈值（如失败只减少 5%）→ 收益递减
+│   连续 2 次 → 触发收益递减熔断
+│   re-execute 场景 → 强制升级到 re-plan
+│   re-plan 场景 → 强制升级到人工介入
+│
+├── 改进幅度 > 0（失败反而增加）→ 收益退步
+│   立即触发熔断，无需等待连续次数
+│
+└── 改进幅度 ≤ 阈值且为负值 → 有效改进
+    正常继续
+```
+
+**日志输出：**
+
+```
+[LOOP:returns] WARN  | 收益递减             | delta=-5%;threshold=10%;consecutive=2;action=强制升级re-plan
+[LOOP:returns] FAIL  | 收益退步             | delta=+15%;action=立即熔断
+[LOOP:returns] OK    | 有效改进             | delta=-50%;threshold=10%;status=继续
+```
+
+**首次迭代处理：**
+
+- 首次 re-execute 没有"上次对比"，跳过收益递减检测
+- 从第 2 次 re-execute 开始启用
+- 首次 re-plan 同样跳过，从第 2 次 re-plan 开始启用
+
+收益递减检测结果写入循环状态记录的 `diminishing_returns` 字段。
+
 ---
 
 ## Heuristic（启发式）
@@ -169,7 +264,21 @@ check-types error / lint error / 文件遗漏
     }
   ],
   "previous_failure_overlap": false,
-  "improvement_metric": "-50% error"
+  "improvement_metric": "-50% error",
+  "convergence": {
+    "status": "effective",
+    "feature_hash": "a1b2c3d4e5f6",
+    "previous_feature_hash": "d4e5f6a1b2c3",
+    "stall_count": 0,
+    "deadlock_count": 0
+  },
+  "diminishing_returns": {
+    "delta": -0.5,
+    "threshold": -0.1,
+    "below_threshold": false,
+    "consecutive_below": 0,
+    "regression": false
+  }
 }
 ```
 
@@ -319,30 +428,38 @@ check-types error / lint error / 文件遗漏
 | re-plan 次数                        | 2    | 强制人工介入   |
 | 总循环数（含 re-execute + re-plan） | 5    | 强制人工介入   |
 | 无效循环次数                        | 1    | 强制升级下一级 |
+| 收敛停滞次数                        | 1    | 强制 re-plan   |
+| 收敛死锁次数                        | 1    | 强制人工介入   |
+| 收益递减连续次数                    | 2    | 强制升级下一级 |
+| 收益退步次数                        | 1    | 立即熔断       |
 
 ### 失败分类 → 动作映射
 
-| 失败类型               | 首轮动作                   | 后续升级路径                       |
-| ---------------------- | -------------------------- | ---------------------------------- |
-| check-types error      | re-execute                 | re-execute → re-plan → 人工        |
-| lint error             | re-execute                 | re-execute → re-plan → 人工        |
-| 计划文件缺失           | re-execute                 | re-execute → re-plan               |
-| 计划外文件             | re-execute                 | re-execute                         |
-| Migration 无 down      | re-execute                 | re-execute                         |
-| 模块注册遗漏           | re-execute                 | re-execute                         |
-| Breaking change 未标注 | re-execute                 | re-execute                         |
-| API key 硬编码         | **人工介入**（直接）       | 安全事件                           |
-| 性能退化 > 10%         | re-plan                    | re-plan → 人工                     |
-| 安全审计 high 未修复   | **人工介入**（直接）       | 安全事件                           |
-| 依赖链 context 丢失    | re-execute（重跑该步骤）   | re-execute → re-plan               |
-| 语义错误               | re-plan                    | re-plan → 人工                     |
-| 工具调用重复           | 跳过调用，复用上次结果     | 第 2 次重复 → 无效循环升级         |
-| 静默失败（工具返回空） | 重新调用 1 次              | 连续 2 轮 → re-plan                |
-| 退避超 60 秒           | 标记工具不可用，走替代方案 | 替代方案失败 → re-plan             |
-| 调用次数超 30          | 成本熔断 → 强制 re-plan    | 人工介入                           |
-| 语义循环               | 允许一次差异化尝试         | 第 2 次 → 直接 re-plan（不等上限） |
-| 目标漂移 ≥ 20%         | 暂停，触发 re-plan         | ≥ 50% → 人工介入                   |
-| 循环中断（状态丢失）   | 从状态文件恢复             | 无状态文件 → 从头开始              |
+| 失败类型               | 首轮动作                   | 后续升级路径                          |
+| ---------------------- | -------------------------- | ------------------------------------- |
+| check-types error      | re-execute                 | re-execute → re-plan → 人工           |
+| lint error             | re-execute                 | re-execute → re-plan → 人工           |
+| 计划文件缺失           | re-execute                 | re-execute → re-plan                  |
+| 计划外文件             | re-execute                 | re-execute                            |
+| Migration 无 down      | re-execute                 | re-execute                            |
+| 模块注册遗漏           | re-execute                 | re-execute                            |
+| Breaking change 未标注 | re-execute                 | re-execute                            |
+| API key 硬编码         | **人工介入**（直接）       | 安全事件                              |
+| 性能退化 > 10%         | re-plan                    | re-plan → 人工                        |
+| 安全审计 high 未修复   | **人工介入**（直接）       | 安全事件                              |
+| 依赖链 context 丢失    | re-execute（重跑该步骤）   | re-execute → re-plan                  |
+| 语义错误               | re-plan                    | re-plan → 人工                        |
+| 工具调用重复           | 跳过调用，复用上次结果     | 第 2 次重复 → 无效循环升级            |
+| 静默失败（工具返回空） | 重新调用 1 次              | 连续 2 轮 → re-plan                   |
+| 退避超 60 秒           | 标记工具不可用，走替代方案 | 替代方案失败 → re-plan                |
+| 调用次数超 30          | 成本熔断 → 强制 re-plan    | 人工介入                              |
+| 语义循环               | 允许一次差异化尝试         | 第 2 次 → 直接 re-plan（不等上限）    |
+| 收敛停滞               | 连续 2 次 → 强制 re-plan   | re-plan → 人工                        |
+| 收敛死锁               | 连续 2 次 → 强制人工介入   | —                                     |
+| 收益递减               | 连续 2 次 → 强制升级下一级 | re-execute → re-plan / re-plan → 人工 |
+| 收益退步               | 立即熔断                   | 强制升级                              |
+| 目标漂移 ≥ 20%         | 暂停，触发 re-plan         | ≥ 50% → 人工介入                      |
+| 循环中断（状态丢失）   | 从状态文件恢复             | 无状态文件 → 从头开始                 |
 
 ### 人工介入的触发条件
 
@@ -390,6 +507,10 @@ check-types error / lint error / 文件遗漏
 | 退避超 60 秒无替代方案         | 升级 re-plan                 |
 | 工具调用次数超 30              | 成本熔断，强制 re-plan       |
 | 语义循环第 2 次                | 直接 re-plan（跳过次数上限） |
+| 收敛停滞第 2 次                | 强制 re-plan                 |
+| 收敛死锁第 2 次                | 强制人工介入                 |
+| 收益递减连续 2 次              | 强制升级下一级               |
+| 收益退步（失败数增加）         | 立即熔断，强制升级           |
 | 目标漂移 ≥ 20%                 | 暂停，触发 re-plan           |
 | 目标漂移 ≥ 50%                 | 直接人工介入                 |
 | 循环中断且有状态文件           | 从最近状态文件恢复           |
