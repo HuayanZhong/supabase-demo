@@ -14,14 +14,15 @@ description: 前端代码重构，由 frontend-architect agent 执行
 
 ### 1. 加载资源
 
-| 资源                               | 说明             |
-| ---------------------------------- | ---------------- |
-| `rules/frontend/styles.md`         | 样式规范         |
-| `rules/frontend/comments.md`       | 注释规范         |
-| `rules/frontend/frontend-types.md` | 类型定义规范     |
-| `skill/nuxt-ui`                    | Nuxt UI 组件知识 |
-| `nuxt-ui MCP`                      | 组件 API 查询    |
-| `skill/ui-ux-pro-max`              | 设计参考         |
+| 资源                               | 说明                             |
+| ---------------------------------- | -------------------------------- |
+| `rules/frontend/styles.md`         | 样式规范                         |
+| `rules/frontend/comments.md`       | 注释规范                         |
+| `rules/frontend/frontend-types.md` | 类型定义规范                     |
+| `skill/nuxt-ui`                    | Nuxt UI 组件知识                 |
+| `nuxt-ui MCP`                      | 组件 API 查询                    |
+| `skill/ui-ux-pro-max`              | 设计参考                         |
+| `execution-plan/frontend/`         | 规划指引：约束/最佳实践/决策策略 |
 
 ### 2. 分析重构范围
 
