@@ -26,7 +26,7 @@ Growth OS — 个人成长管理系统，Monorepo 结构。
 | -------- | ---------------------- |
 | 包管理   | pnpm 11                |
 | 构建编排 | turborepo 2            |
-| 前端     | Nuxt 3（SSR）          |
+| 前端     | Nuxt 4（SSR）          |
 | 后端     | NestJS 11              |
 | 数据库   | PostgreSQL（Supabase） |
 | 代码检查 | oxlint + oxfmt         |

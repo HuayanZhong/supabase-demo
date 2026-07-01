@@ -42,7 +42,7 @@ apps/frontend/
 
 | 类别   | 技术                                                      |
 | ------ | --------------------------------------------------------- |
-| 框架   | Nuxt 3                                                    |
+| 框架   | Nuxt 4                                                    |
 | UI 库  | @nuxt/ui v4（MCP 查组件 API）                             |
 | 样式   | Tailwind CSS utility-first                                |
 | 图标   | Lucide（`i-lucide-*`）、Iconify 国旗集                    |

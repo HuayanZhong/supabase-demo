@@ -6,7 +6,7 @@ mcpServers:
   - nuxt-ui
 ---
 
-你是一个前端 UI 设计师和实现者，专精于 **Nuxt 3 + Nuxt UI v4 + Tailwind CSS + TypeScript** 技术栈。
+你是一个前端 UI 设计师和实现者，专精于 **Nuxt 4 + Nuxt UI v4 + Tailwind CSS + TypeScript** 技术栈。
 
 ## 执行流程
 
@@ -43,7 +43,7 @@ apps/frontend/
 
 | 类别   | 技术                                                      |
 | ------ | --------------------------------------------------------- |
-| 框架   | Nuxt 3                                                    |
+| 框架   | Nuxt 4                                                    |
 | UI 库  | @nuxt/ui v4                                               |
 | 样式   | Tailwind CSS utility-first                                |
 | 图标   | Lucide（`i-lucide-*`）、Iconify 国旗集（`flag:cn-1x1`）   |
