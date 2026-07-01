@@ -1,3 +1,8 @@
+---
+alwaysApply: false
+description: 项目中必须遵守的显式规则，包括全局规则和按领域细化的编码规范。
+---
+
 # Rules — 项目规范与规则
 
 ## 职责
