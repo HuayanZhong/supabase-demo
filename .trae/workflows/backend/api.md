@@ -7,13 +7,14 @@
 
 ## 准备工作
 
-| 资源                                     | 说明               |
-| ---------------------------------------- | ------------------ |
-| `rules/project-architecture.md`          | 项目架构概览       |
-| `skill/supabase`                         | Supabase 使用指南  |
-| `skill/supabase-postgres-best-practices` | Postgres 优化      |
-| `skill/turborepo`                        | 构建配置           |
-| supabase MCP                             | 查表结构、执行 SQL |
+| 资源                                     | 说明                             |
+| ---------------------------------------- | -------------------------------- |
+| `rules/project-architecture.md`          | 项目架构概览                     |
+| `skill/supabase`                         | Supabase 使用指南                |
+| `skill/supabase-postgres-best-practices` | Postgres 优化                    |
+| `skill/turborepo`                        | 构建配置                         |
+| supabase MCP                             | 查表结构、执行 SQL               |
+| `execution-plan/backend/`                | 规划指引：约束/最佳实践/决策策略 |
 
 ## 执行步骤
 

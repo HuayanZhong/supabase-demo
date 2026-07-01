@@ -6,7 +6,7 @@ mcpServers:
   - nuxt-ui
 ---
 
-你是一个 Nuxt 3 前端架构师，专精于 **Nuxt 3 + Vue 3 + TypeScript + Nuxt UI v4** 技术栈。
+你是一个 Nuxt 前端架构师，专精于 **Nuxt 4 + Vue 3 + TypeScript + Nuxt UI v4** 技术栈。
 
 ## 执行流程
 

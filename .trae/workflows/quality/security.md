@@ -14,6 +14,7 @@
 | `rules/project-architecture.md` | 项目架构概览                      |
 | `skill/turborepo`               | 构建配置                          |
 | supabase MCP                    | 查看 Supabase 安全配置和 RLS 策略 |
+| `execution-plan/quality/`       | 规划指引：约束/最佳实践/决策策略  |
 
 ## 执行步骤
 

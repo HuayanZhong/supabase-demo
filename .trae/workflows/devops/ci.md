@@ -12,6 +12,7 @@
 - 加载 Skill：`turborepo`（任务编排规则）
 - 读取 `turbo.json`（确认 build/lint/check-types/format 任务定义）
 - 读取 `.github/workflows/` 下现有的 YAML 文件（了解当前 CI 结构）
+- 加载 `execution-plan/devops/`（规划指引：约束/最佳实践/决策策略）
 
 ## 执行步骤
 

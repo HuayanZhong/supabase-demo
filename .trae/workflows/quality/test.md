@@ -9,11 +9,12 @@
 
 ## 准备工作
 
-| 资源                            | 说明                            |
-| ------------------------------- | ------------------------------- |
-| `rules/project-architecture.md` | 项目架构概览                    |
-| `skill/turborepo`               | 构建配置和测试命令              |
-| `agents/api-test-pro.md`        | api-test-pro 完整约束和项目背景 |
+| 资源                            | 说明                             |
+| ------------------------------- | -------------------------------- |
+| `rules/project-architecture.md` | 项目架构概览                     |
+| `skill/turborepo`               | 构建配置和测试命令               |
+| `agents/api-test-pro.md`        | api-test-pro 完整约束和项目背景  |
+| `execution-plan/quality/`       | 规划指引：约束/最佳实践/决策策略 |
 
 ## 执行步骤
 

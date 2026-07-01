@@ -13,6 +13,7 @@
 - 读取 `turbo.json`（根级任务编排配置）
 - 读取目标 app 的配置文件（`nuxt.config.ts`、`tsconfig.json` 等）
 - 读取共享配置包 `packages/lint-config/`
+- 加载 `execution-plan/devops/`（规划指引：约束/最佳实践/决策策略）
 
 ## 执行步骤
 

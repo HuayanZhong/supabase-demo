@@ -14,6 +14,7 @@
 | `skill/supabase-postgres-best-practices` | Postgres 优化指南                         |
 | `skill/turborepo`                        | 构建配置                                  |
 | supabase MCP                             | **必要**—查表结构、执行 SQL、查看迁移历史 |
+| `execution-plan/backend/`                | 规划指引：约束/最佳实践/决策策略          |
 
 ## 执行步骤
 

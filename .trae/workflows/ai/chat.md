@@ -21,6 +21,7 @@
 | `workflows/ai/integrate.md`        | 确认 AI Service 已就绪（依赖前置） |
 | 已有组件 `RecentChatsCard.vue`     | AI 对话入口的 UI 占位              |
 | supabase MCP                       | 如需要存储对话记录                 |
+| `execution-plan/ai/`               | 规划指引：约束/最佳实践/决策策略   |
 
 ## 3. 执行步骤
 

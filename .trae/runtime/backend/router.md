@@ -31,10 +31,10 @@
 
 ### 按任务类型额外加载
 
-| 任务类型 | 额外资源                                             |
-| -------- | ---------------------------------------------------- |
-| data     | supabase MCP（list_tables、execute_sql）             |
-| create   | `rules/frontend/frontend-types.md`（如需联动类型包） |
+| 任务类型 | 额外资源                                                                                       |
+| -------- | ---------------------------------------------------------------------------------------------- |
+| data     | supabase MCP（list_tables、execute_sql）                                                       |
+| create   | `rules/frontend/frontend-types.md`（全项目类型规范 — 虽在 rules/frontend/ 下但内容适用于后端） |
 
 ## 调用 Workflow
 

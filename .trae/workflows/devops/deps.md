@@ -13,6 +13,7 @@
 - 读取 `pnpm-workspace.yaml`（了解当前 catalog 分组和版本）
 - 读取各 app 的 `package.json`（确认哪些包引用哪些 catalog）
 - 加载 Skill：`turborepo`（理解构建依赖关系）
+- 加载 `execution-plan/devops/`（规划指引：约束/最佳实践/决策策略）
 
 ## 执行步骤
 

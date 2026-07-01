@@ -11,12 +11,13 @@
 
 ## 2. 准备工作
 
-| 资源                                     | 用途                           |
-| ---------------------------------------- | ------------------------------ |
-| `rules/project-architecture.md`          | 了解项目结构和现有 AI 相关代码 |
-| `skill/supabase`                         | 如有需要部署 Edge Function     |
-| supabase MCP                             | 查询 Supabase 项目状态         |
-| 环境变量配置文件 `.env` / `.env.example` | 确认密钥管理方式               |
+| 资源                                     | 用途                             |
+| ---------------------------------------- | -------------------------------- |
+| `rules/project-architecture.md`          | 了解项目结构和现有 AI 相关代码   |
+| `skill/supabase`                         | 如有需要部署 Edge Function       |
+| supabase MCP                             | 查询 Supabase 项目状态           |
+| 环境变量配置文件 `.env` / `.env.example` | 确认密钥管理方式                 |
+| `execution-plan/ai/`                     | 规划指引：约束/最佳实践/决策策略 |
 
 ## 3. 执行步骤
 

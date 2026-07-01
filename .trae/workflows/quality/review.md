@@ -15,6 +15,7 @@
 | `skill/turborepo`               | 构建配置                                          |
 | `rules/git-commit-message.md`   | 提交信息规范                                      |
 | 对应业务域的 rules              | 审查前端加载 `rules/frontend/*`，后端加载后端规则 |
+| `execution-plan/quality/`       | 规划指引：约束/最佳实践/决策策略                  |
 
 ### 按审查对象加载规则
 

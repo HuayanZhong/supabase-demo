@@ -20,6 +20,7 @@ description: 新增共享包，由 devops-architect agent 执行
 | `skill/turborepo`               | Monorepo 构建知识                 |
 | `pnpm-workspace.yaml`           | 工作空间配置（catalogs 版本管理） |
 | `turbo.json`                    | 全局任务编排配置                  |
+| `execution-plan/shared/`        | 规划指引：约束/最佳实践/决策策略  |
 
 ### 2. 确认包范围
 
