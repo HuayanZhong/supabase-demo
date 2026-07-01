@@ -31,11 +31,12 @@
 
 ### 按任务类型额外加载
 
-| 任务类型 | 额外资源                          |
-| -------- | --------------------------------- |
-| i18n     | `rules/frontend/i18n.md`          |
-| create   | 无（通用即可）                    |
-| refactor | `skill/ui-ux-pro-max`（设计参考） |
+| 任务类型 | 额外资源                                   |
+| -------- | ------------------------------------------ |
+| i18n     | `rules/frontend/i18n.md`                   |
+| create   | 无（通用即可）                             |
+| fix      | supabase MCP（如涉及 Auth 问题可查表诊断） |
+| refactor | `skill/ui-ux-pro-max`（设计参考）          |
 
 ## 调用 Workflow
 

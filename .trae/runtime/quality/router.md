@@ -27,11 +27,11 @@
 
 ### 按任务类型额外加载
 
-| 任务类型 | 额外资源                                                  |
-| -------- | --------------------------------------------------------- |
-| api-test | `rules/runtime/backend/README.md`（如存在）、supabase MCP |
-| perf     | `pnpm-workspace.yaml`（查看依赖版本）                     |
-| review   | 对应业务的 rules                                          |
+| 任务类型 | 额外资源                                                 |
+| -------- | -------------------------------------------------------- |
+| api-test | supabase MCP（查表结构理解 API 背后数据）                |
+| perf     | `pnpm-workspace.yaml`（查看依赖版本）                    |
+| review   | 加载对应业务域的 rules（如审查前端则加载 frontend 规则） |
 
 ## 注意事项
 
