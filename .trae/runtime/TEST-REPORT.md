@@ -161,21 +161,139 @@
 
 ---
 
+## E. 评估模块防御测试（12 场景）
+
+### 场景 14 — 范围溢出：AI 创建了计划外文件
+
+| 检查点                                               | 文件                                        | 结果 |
+| ---------------------------------------------------- | ------------------------------------------- | ---- |
+| "改登录页按钮颜色"，AI 额外创建了 `test-button.scss` |                                             |      |
+| evaluation/frontend/constraint.md L27                | "apps/frontend/ 不得有未列入计划的新建文件" | ✅   |
+| evaluation/frontend/heuristic.md style ④             | "多余文件检查"                              | ✅   |
+
+### 场景 15 — 静默越界：AI 修改了计划外文件
+
+| 检查点                                       | 文件                              | 结果 |
+| -------------------------------------------- | --------------------------------- | ---- |
+| "修改用户列表页面"，AI 顺手改了后端 API 文件 |                                   |      |
+| execution-engine/general/constraint.md L43   | "单领域任务不得修改其他领域代码"  | ✅   |
+| evaluation/frontend/constraint.md L26        | "只读文件不得有变更"              | ✅   |
+| evaluation/frontend/policy.md L21            | "计划外文件被修改 → 阻断性不通过" | ✅   |
+
+### 场景 16 — 静默语义错误：类型语法对但逻辑错
+
+| 检查点                                                             | 文件                                             | 结果        |
+| ------------------------------------------------------------------ | ------------------------------------------------ | ----------- |
+| AI 写了 `z.string()` 但应是 `z.string().email()`，check-types 通过 |                                                  |             |
+| evaluation/frontend/heuristic.md create ⑦                          | "数据流验证 → 预览确认数据正确"                  | ⚠️ 依赖预览 |
+| evaluation/frontend/constraint.md L12-18                           | 门禁不检查语义正确性                             | ❌ 无法兜住 |
+| **结论**                                                           | 治理框架不替代代码审查，此类问题依赖 AI 代码质量 |             |
+
+### 场景 17 — 翻译不完整：只添加 2/4 语言
+
+| 检查点                                        | 文件                         | 结果 |
+| --------------------------------------------- | ---------------------------- | ---- |
+| "给登录页加日语翻译"，AI 只更新了 zh-CN 和 en |                              |      |
+| evaluation/shared/constraint.md L12           | "4 语言翻译文件必须同时更新" | ✅   |
+| evaluation/shared/policy.md L19-21            | "2/4 → 不通过"               | ✅   |
+| evaluation/shared/heuristic.md L23            | i18n 检查第①步 key 完整性    | ✅   |
+
+### 场景 18 — Migration 缺少回滚
+
+| 检查点                                          | 文件                            | 结果 |
+| ----------------------------------------------- | ------------------------------- | ---- |
+| "给 users 表加 phone 字段"，migration 无 down() |                                 |      |
+| evaluation/backend/constraint.md L11            | "migration 必须包含 up 和 down" | ✅   |
+| evaluation/backend/constraint.md L22            | "新增 migration 无 down → 阻断" | ✅   |
+| evaluation/backend/policy.md L10                | "migration 缺失 down → 不通过"  | ✅   |
+
+### 场景 19 — 模块注册遗漏：创建了文件但没注册
+
+| 检查点                                                   | 文件                                          | 结果 |
+| -------------------------------------------------------- | --------------------------------------------- | ---- |
+| 创建了 HabitsEntity/Service/Controller 但忘记注册 Module |                                               |      |
+| evaluation/backend/constraint.md L20                     | "DTO/Entity/Service/Controller/Module 链完整" | ✅   |
+| evaluation/backend/heuristic.md L17                      | create 第①步 "文件完整性检查"                 | ✅   |
+| execution-engine/backend/heuristic.md                    | 执行步骤含模块注册验证                        | ✅   |
+
+### 场景 20 — Breaking change 未标注
+
+| 检查点                                                          | 文件                            | 结果 |
+| --------------------------------------------------------------- | ------------------------------- | ---- |
+| "用户 API 的 id 从 number 改为 string"，无 breaking change 标注 |                                 |      |
+| evaluation/backend/constraint.md L32-33                         | "API 结构变更通知前端引用方"    | ✅   |
+| evaluation/backend/constraint.md L42                            | "涉及 breaking change 必须标注" | ✅   |
+| evaluation/shared/policy.md L28-34                              | 类型 breaking change 判定表     | ✅   |
+
+### 场景 21 — 依赖链 context key 错位
+
+| 检查点                                                      | 文件                                                                                   | 结果 |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------- | ---- |
+| 头像上传 devops BUCKET_NAME 写成 bucketName，backend 读不到 |                                                                                        |      |
+| runtime/router.md L152-158                                  | 定义标准上下文格式（outputs: [{key, value}]）                                          | ✅   |
+| execution-engine/heuristic.md L18-23                        | 依赖链执行模式描述                                                                     | ✅   |
+| evaluation/heuristic.md L35-36                              | "上下文交接内容必须可追溯"                                                             | ✅   |
+| **建议**                                                    | 可补充 evaluation 通用约束：上一步 context outputs 中 key 必须与下一步 inputs 完全匹配 | 待定 |
+
+### 场景 22 — 硬编码密钥
+
+| 检查点                                             | 文件                              | 结果 |
+| -------------------------------------------------- | --------------------------------- | ---- |
+| "接入第三方天气 API"，AI 把 API key 写进 config.ts |                                   |      |
+| evaluation/ai/constraint.md L10                    | "API key 硬编码 → 阻断并上报"     | ✅   |
+| evaluation/ai/policy.md L19-21                     | "0/3 硬编码 → 通过；1-2 → 不通过" | ✅   |
+| evaluation/ai/heuristic.md L15                     | "密钥安全确认"                    | ✅   |
+
+### 场景 23 — 无高可用/降级方案
+
+| 检查点                                         | 文件                              | 结果 |
+| ---------------------------------------------- | --------------------------------- | ---- |
+| "接入 DeepSeek 对话"，模型调用无错误处理和超时 |                                   |      |
+| evaluation/ai/constraint.md L12-13             | "有降级处理、超时机制"            | ✅   |
+| evaluation/ai/policy.md L27-33                 | "网络不通→友好提示；429→自动重试" | ✅   |
+| evaluation/ai/heuristic.md L31                 | "错误处理确认"                    | ✅   |
+
+### 场景 24 — 性能退化未被检出
+
+| 检查点                                         | 文件                      | 结果 |
+| ---------------------------------------------- | ------------------------- | ---- |
+| "给 habits 加搜索"，AI 写客户端 10K 条全量过滤 |                           |      |
+| evaluation/quality/policy.md L39-44            | "P50 退化 > 10% → 不通过" | ✅   |
+| evaluation/quality/heuristic.md L41-47         | "基线数据确认 + 对比分析" | ✅   |
+| evaluation/quality/constraint.md L14           | "性能退化 < 10%"          | ✅   |
+
+### 场景 25 — 安全审计 high 未修复
+
+| 检查点                                   | 文件                            | 结果 |
+| ---------------------------------------- | ------------------------------- | ---- |
+| "审查后端 API 安全"，发现 SQL 注入但没修 |                                 |      |
+| evaluation/quality/policy.md L15         | "安全审计 high 未修复 → 不通过" | ✅   |
+| evaluation/quality/policy.md L29-34      | "high → 本次任务内修复"         | ✅   |
+| evaluation/quality/constraint.md L24-27  | "高危及阻断性问题必须先修复"    | ✅   |
+
+---
+
 ## 核心发现
 
-| #   | 问题                                                                                                      | 优先级 |
-| --- | --------------------------------------------------------------------------------------------------------- | ------ |
-| ①   | agents/ 未审查，回退链路不可靠                                                                            | 中等   |
-| ②   | 场景 8（4 域复杂链）依赖链识别全靠 AI 自主判断，无文件指引                                                | 较低   |
-| ③   | backend/create 额外资源引用了 `rules/frontend/frontend-types.md` — 路径前缀是 frontend/ 但 backend 也引用 | 建议   |
-| ④   | 场景 7 的"re-route"机制无实际可用文件来记录依赖链中间状态                                                 | 较低   |
-| ⑤   | execution-engine/ 和 evaluation/ 空缺，整个流程到 Plan 就断                                               | **高** |
+| #   | 问题                                           | 优先级 | 状态     |
+| --- | ---------------------------------------------- | ------ | -------- |
+| ①   | agents/ 未审查，回退链路不可靠                 | 中等   | **待定** |
+| ②   | 场景 21 依赖链 context key 校验需补充          | 较低   | **建议** |
+| ③   | 场景 16 治理无法替代代码审查（语义错误兜不住） | —      | 认知上限 |
 
 ## 链路完整性
 
 ```
-runtime/ → workflow/ → execution-plan/ →  ❌ execution-engine/  →  ❌ evaluation/
-   ✅           ✅             ✅
+general-rules.md (触发)
+      ↓
+ runtime/      →  workflows/   →  execution-plan/
+    ✅               ✅               ✅
+      ↓
+      ↓                ↓
+ execution-engine/ →  evaluation/
+    ✅                  ✅
+      ↓                  ↓
+   Finished ✅    re-execute/re-plan 🔄
 ```
 
-前三步都已打通并验证。下半段还在等架构设计。
+全链路 7 层（触发→路由→工作流→规划→执行→评估→决策）全部打通。
