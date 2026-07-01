@@ -5,10 +5,11 @@
 | 字段         | 值                          |
 | ------------ | --------------------------- |
 | pattern_id   | PATTERN-002                 |
+| type         | governance                  |
 | name         | 守卫规则可执行性            |
 | created_at   | 2026-07-02                  |
 | source       | BUG-002~006（Jaccard=0.72） |
-| status       | active                      |
+| status       | draft                       |
 | verify_count | 0/3                         |
 
 ## 问题描述
@@ -64,5 +65,5 @@
 ## 关联
 
 - 关联 bug：BUG-002、BUG-003、BUG-004、BUG-005、BUG-006
-- 关联文件：execution-engine/constraint.md
+- 关联文件：.trae/execution-engine/constraint.md、.trae/logging.md
 - 关联模式：PATTERN-001（治理框架强制机制）
