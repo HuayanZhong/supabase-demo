@@ -120,6 +120,7 @@
   "failed_items": [],
   "cycle_count": 2,
   "subagent_used": "ui-designer",
+  "templates_used": ["frontend/page.md", "frontend/component.md"],
   "key_observations": "开发顺利，无阻塞"
 }
 ```
@@ -156,4 +157,4 @@
 
 4. 安全类约束不与任何规则比较——安全约束永远优先
 
-- 每次变更前，必须检查 `runtime/` `workflows/` `execution-plan/` `execution-engine/` `evaluation/` 中引用该文件的位置是否需要同步更新
+- 每次变更前，必须检查 `runtime/` `workflows/` `execution-plan/` `execution-engine/` `evaluation/` `templates/` 中引用该文件的位置是否需要同步更新

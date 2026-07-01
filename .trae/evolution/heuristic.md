@@ -212,9 +212,38 @@ AI 提取关键字段写入经验数据结构
       "target_file": "execution-plan/devops/heuristic.md",
       "severity": "low"
     }
+  ],
+  "template_issues": [
+    {
+      "type": "template_drift",
+      "template": "frontend/component.md",
+      "evidence": "最近 5 次创建的组件中，3 次使用了 `<script setup lang=\"ts\">` + `defineOptions` 模式，但骨架中未包含 defineOptions",
+      "suggested_action": "在 component.md 骨架中补充 defineOptions 示例",
+      "severity": "medium"
+    },
+    {
+      "type": "template_gap",
+      "domain": "backend",
+      "evidence": "最近 3 次创建了 DTO 文件，但 scaffold/backend/ 下没有 dto.md 骨架",
+      "suggested_action": "新增 scaffold/backend/dto.md 骨架",
+      "severity": "low"
+    }
   ]
 }
 ```
+
+### 模板一致性检测
+
+在根因分析的同时，对模板进行一致性检查：
+
+1. **模板漂移检测** — 比较实际生成代码与对应骨架之间的结构性差异：
+   - 如果同一类文件最近 5 次创建中有 ≥ 3 次在骨架外的相同位置添加了相同结构 → 骨架落后了
+   - 如果某一骨架文件最近 10 次被引用率为 0 → 考虑标记为废弃
+2. **模板缺口检测** — 检查是否有新出现的文件类型没有对应骨架：
+   - 如果某类文件（如 `*.dto.ts`）在项目中已存在 ≥ 3 个实例，但无对应骨架 → 建议新增
+3. **模板过时检测** — 检查骨架引用的 API / 装饰器 / 函数是否已弃用
+
+漂移和缺口检测结果写入 `template_issues` 数组，作为分析输出的补充部分。
 
 ---
 
