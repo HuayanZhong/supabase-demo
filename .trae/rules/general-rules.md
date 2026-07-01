@@ -18,6 +18,17 @@ Monorepo 项目，使用 pnpm workspace + turborepo：
 - `apps/frontend` — Nuxt 前端
 - `packages/lint-config` — 共享 lint 配置
 
+## 资源同步检查
+
+**开始路由前，先检查 MCP 和 Skill 是否有新增或变更。**
+
+1. 读取 `resources/registry.md`，获取当前注册的资源清单
+2. 对比 `mcp.json` 和 `skills/` 目录的实际状态与注册表是否一致
+3. 如有差异，按 `resources/sync.md` 执行同步流程（更新注册表 → 传播到各 router.md → 记录）
+4. 确认无误后再进入路由决策
+
+> 资源同步确保 governance 治理文件中的资源引用始终与实际可用资源一致，避免路由调度到不存在的 MCP 或 Skill。
+
 ## 任务路由
 
 **任何涉及代码变更的任务，必须先执行路由决策，不得直接开始编码。**
