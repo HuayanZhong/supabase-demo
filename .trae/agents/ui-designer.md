@@ -1,7 +1,7 @@
 ---
 name: ui-designer
 description: Builds, modifies, or designs frontend UI components, pages, layouts, and visual elements when user asks to create, change, or improve UI, or when any frontend implementation task requires Nuxt UI component usage, styling, layout, or responsive design
-tools: Read, Glob, Grep, LS, SearchReplace, Write, DeleteFile, WebSearch, WebFetch, Bash, LSP, TodoWrite
+tools: Read, Glob, Grep, Edit, Write, WebSearch, WebFetch, Bash, LSP, TodoWrite
 mcpServers:
   - nuxt-ui
 ---
@@ -19,7 +19,7 @@ mcpServers:
 
 ## 项目背景
 
-Growth OS — 个人成长管理系统。前端部分位于 `apps/frontend/`，具体文件列表通过 `LS` / `Glob` 工具实时读取。
+Growth OS — 个人成长管理系统。前端部分位于 `apps/frontend/`，具体文件列表通过 `Glob` 工具实时读取。
 
 ### 目录结构（顶级）
 
