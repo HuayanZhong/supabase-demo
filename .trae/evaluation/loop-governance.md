@@ -37,6 +37,10 @@ Evaluation → 不通过
 ```
 [LOOP:enter]      START  | 进入循环治理           | task_id=任务ID;trigger=评估不通过;conclusion=结论
 [LOOP:cycle]      RETRY  | re-execute 第N次        | attempts=N/3;failure=失败类型
+[LOOP:lock]       LOCK   | 锁定检查项             | check=检查项;cycle=N;locked_count=N
+[LOOP:lock]       UNLOCK | 解锁检查项             | check=检查项;trigger=解锁原因
+[LOOP:lock]       CLEAR  | 清空锁定               | trigger=清空原因;locked_count=N
+[LOOP:lock]       EXPIRE | 锁定过期               | check=检查项;cycle=N;action=自动解锁
 [LOOP:retry-wait] OK     | 退避等待               | wait_ms=等待毫秒数
 [LOOP:tool-dedup] SKIP   | 工具去重               | action=操作;hash=哈希;reason=重复
 [LOOP:semantic]   BLOCKED| 语义循环检测            | pattern=模式;conclusion=结论
@@ -78,6 +82,55 @@ LOOP:start 之后每一步都有记录，任何步骤 FAIL 或 BLOCKED 都会影
 - 每次 re-execute 后的产出必须与前一次**有可量化的改进**（减少的 lint error 数、修复的文件数等）
 - 每次 re-plan 后的方案必须与前一次**有实质性差异**（不同的架构方式、不同的工具选择）
 - 无实质改进的循环视为"无效循环"，直接升级
+
+### 状态锁定（State Locking）
+
+防止循环中已通过的检查项反复被重试，浪费工具调用和上下文空间。
+
+**锁定机制：**
+
+每次 re-execute 完成后，将本轮通过的所有检查项加入"已通过列表"：
+
+```json
+{
+  "locked_checks": [
+    { "check": "pnpm check-types", "passed_since": "cycle-1", "status": "locked" },
+    { "check": "pnpm lint", "passed_since": "cycle-2", "status": "locked" }
+  ]
+}
+```
+
+该列表写入循环状态记录的 `locked_checks` 字段。
+
+**锁定规则：**
+
+| 规则         | 说明                                                                     |
+| ------------ | ------------------------------------------------------------------------ |
+| 锁定范围     | 仅限于当前任务内的非安全类检查                                           |
+| 锁定生效域   | re-execute 锁定只在本轮 re-execute 内有效，re-plan 开始后清空            |
+| 跳过检查     | 被锁定的检查项不在后续循环的 fail 清单中，不占用重试次数                 |
+| 可锁定类型   | lint 检查、check-types、单文件格式验证、模块注册检查                     |
+| 不可锁定类型 | 安全检查（始终重检）、集成测试（因其他修改可能间接受损）、跨文件影响验证 |
+
+**解锁条件：**
+
+锁定不是永久性的，以下情况解锁：
+
+| 触发条件                       | 处理方式                             |
+| ------------------------------ | ------------------------------------ |
+| 另一项修复导致已锁定的检查报错 | 该检查项自动解锁，重新加入失败列表   |
+| re-plan 方案变更               | 清空所有锁定                         |
+| 人工介入后指定                 | 按人工指示处理                       |
+| 超过 3 轮循环                  | 自动解锁（防止因锁定掩盖了退化问题） |
+
+**日志输出：**
+
+```
+[LOOP:lock] LOCK  | 锁定检查项           | check=pnpm check-types;cycle=2;action=跳过后续检查
+[LOOP:lock] UNLOCK| 解锁检查项           | check=pnpm lint;trigger=因另一修复报错;action=重新加入失败列表
+[LOOP:lock] CLEAR  | 清空锁定             | trigger=re-plan;locked_count=3
+[LOOP:lock] EXPIRE | 锁定过期             | check=pnpm format;cycle=4;max=3;action=自动解锁
+```
 
 ### 工具调用去重
 
@@ -263,6 +316,7 @@ check-types error / lint error / 文件遗漏
       "error_location": "src/components/Form.vue:45"
     }
   ],
+  "locked_checks": [{ "check": "pnpm lint", "passed_since": "cycle-1", "status": "locked" }],
   "previous_failure_overlap": false,
   "improvement_metric": "-50% error",
   "convergence": {
@@ -435,31 +489,33 @@ check-types error / lint error / 文件遗漏
 
 ### 失败分类 → 动作映射
 
-| 失败类型               | 首轮动作                   | 后续升级路径                          |
-| ---------------------- | -------------------------- | ------------------------------------- |
-| check-types error      | re-execute                 | re-execute → re-plan → 人工           |
-| lint error             | re-execute                 | re-execute → re-plan → 人工           |
-| 计划文件缺失           | re-execute                 | re-execute → re-plan                  |
-| 计划外文件             | re-execute                 | re-execute                            |
-| Migration 无 down      | re-execute                 | re-execute                            |
-| 模块注册遗漏           | re-execute                 | re-execute                            |
-| Breaking change 未标注 | re-execute                 | re-execute                            |
-| API key 硬编码         | **人工介入**（直接）       | 安全事件                              |
-| 性能退化 > 10%         | re-plan                    | re-plan → 人工                        |
-| 安全审计 high 未修复   | **人工介入**（直接）       | 安全事件                              |
-| 依赖链 context 丢失    | re-execute（重跑该步骤）   | re-execute → re-plan                  |
-| 语义错误               | re-plan                    | re-plan → 人工                        |
-| 工具调用重复           | 跳过调用，复用上次结果     | 第 2 次重复 → 无效循环升级            |
-| 静默失败（工具返回空） | 重新调用 1 次              | 连续 2 轮 → re-plan                   |
-| 退避超 60 秒           | 标记工具不可用，走替代方案 | 替代方案失败 → re-plan                |
-| 调用次数超 30          | 成本熔断 → 强制 re-plan    | 人工介入                              |
-| 语义循环               | 允许一次差异化尝试         | 第 2 次 → 直接 re-plan（不等上限）    |
-| 收敛停滞               | 连续 2 次 → 强制 re-plan   | re-plan → 人工                        |
-| 收敛死锁               | 连续 2 次 → 强制人工介入   | —                                     |
-| 收益递减               | 连续 2 次 → 强制升级下一级 | re-execute → re-plan / re-plan → 人工 |
-| 收益退步               | 立即熔断                   | 强制升级                              |
-| 目标漂移 ≥ 20%         | 暂停，触发 re-plan         | ≥ 50% → 人工介入                      |
-| 循环中断（状态丢失）   | 从状态文件恢复             | 无状态文件 → 从头开始                 |
+| 失败类型                 | 首轮动作                   | 后续升级路径                          |
+| ------------------------ | -------------------------- | ------------------------------------- |
+| check-types error        | re-execute                 | re-execute → re-plan → 人工           |
+| lint error               | re-execute                 | re-execute → re-plan → 人工           |
+| 计划文件缺失             | re-execute                 | re-execute → re-plan                  |
+| 计划外文件               | re-execute                 | re-execute                            |
+| Migration 无 down        | re-execute                 | re-execute                            |
+| 模块注册遗漏             | re-execute                 | re-execute                            |
+| Breaking change 未标注   | re-execute                 | re-execute                            |
+| API key 硬编码           | **人工介入**（直接）       | 安全事件                              |
+| 性能退化 > 10%           | re-plan                    | re-plan → 人工                        |
+| 安全审计 high 未修复     | **人工介入**（直接）       | 安全事件                              |
+| 依赖链 context 丢失      | re-execute（重跑该步骤）   | re-execute → re-plan                  |
+| 语义错误                 | re-plan                    | re-plan → 人工                        |
+| 工具调用重复             | 跳过调用，复用上次结果     | 第 2 次重复 → 无效循环升级            |
+| 静默失败（工具返回空）   | 重新调用 1 次              | 连续 2 轮 → re-plan                   |
+| 退避超 60 秒             | 标记工具不可用，走替代方案 | 替代方案失败 → re-plan                |
+| 调用次数超 30            | 成本熔断 → 强制 re-plan    | 人工介入                              |
+| 语义循环                 | 允许一次差异化尝试         | 第 2 次 → 直接 re-plan（不等上限）    |
+| 收敛停滞                 | 连续 2 次 → 强制 re-plan   | re-plan → 人工                        |
+| 收敛死锁                 | 连续 2 次 → 强制人工介入   | —                                     |
+| 收益递减                 | 连续 2 次 → 强制升级下一级 | re-execute → re-plan / re-plan → 人工 |
+| 收益退步                 | 立即熔断                   | 强制升级                              |
+| 目标漂移 ≥ 20%           | 暂停，触发 re-plan         | ≥ 50% → 人工介入                      |
+| 循环中断（状态丢失）     | 从状态文件恢复             | 无状态文件 → 从头开始                 |
+| 锁定检查项被其他修复破坏 | 自动解锁，重新加入失败列表 | 连续 2 次解锁 → 该检查项不可锁定      |
+| 锁定过期（超 3 轮）      | 自动解锁，重新检查         | —                                     |
 
 ### 人工介入的触发条件
 
@@ -515,6 +571,9 @@ check-types error / lint error / 文件遗漏
 | 目标漂移 ≥ 50%                 | 直接人工介入                 |
 | 循环中断且有状态文件           | 从最近状态文件恢复           |
 | 循环中断且无状态文件           | 从头开始（安全降级）         |
+| 锁定检查项因另一修复报错       | 自动解锁，重新加入失败列表   |
+| 同一检查项重复解锁 ≥ 2 次      | 标记该检查项不可锁定         |
+| 锁定过期（超过 3 轮循环）      | 自动解锁，重新执行检查       |
 
 ### 完整循环决策流程图
 

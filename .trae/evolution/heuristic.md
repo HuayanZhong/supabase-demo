@@ -185,6 +185,31 @@ AI 提取关键字段写入经验数据结构
     1. 该领域的治理是否过于严格？
     2. 是否有可以放宽的约束？
     3. 是否可以考虑简化该领域的 workflow？
+    4. 交叉检查 patterns/ 与 profile/ 的记忆反馈：
+```
+
+打开 .trae/memory/patterns/
+↓
+当前高频失败类型 ↔ patterns/ 中成功模式对比
+├── 如果 patterns/ 有与当前失败相关的成功模式
+│ → 建议在约束中引用该模式，避免重蹈覆辙
+│ → 日志：[EVOLVE:mem] MATCH | 记忆匹配 | pattern=PTN-001; failure=typescript_error; action=建议引用
+│
+└── 如果没有相关模式
+→ 该失败类型已记录为新模式候选
+→ 日志：[EVOLVE:mem] UNMATCH| 无匹配模式 | failure=typescript_error; action=记录新候选
+
+打开 .trae/memory/profile/
+↓
+检查是否有与当前任务领域相关的用户偏好
+├── 有相关偏好 → 纳入提案参考
+│ → 日志：[EVOLVE:mem] PROFILE | 偏好命中 | key=api_design; preference=RESTful; action=纳入提案
+│
+└── 无相关偏好 → 跳过
+→ 日志：[EVOLVE:mem] PROFILE | 无相关偏好 | domain=frontend; action=跳过
+
+```
+    5. 汇总记忆参考结果，写入分析输出的 `memory_references` 字段
 ```
 
 ### 分析输出
@@ -227,6 +252,48 @@ AI 提取关键字段写入经验数据结构
       "evidence": "最近 3 次创建了 DTO 文件，但 scaffold/backend/ 下没有 dto.md 骨架",
       "suggested_action": "新增 scaffold/backend/dto.md 骨架",
       "severity": "low"
+    }
+  ],
+  "memory_references": [
+    {
+      "source": "patterns/PTN-001",
+      "type": "code_style",
+      "failure_type": "typescript_error",
+      "match": true,
+      "action": "建议在约束中引用 PTN-001 的类型定义模式"
+    },
+    {
+      "source": "profile",
+      "key": "api_design",
+      "preference": "RESTful",
+      "match": false,
+      "action": "跳过（当前高频失败非 API 设计类）"
+    }
+  ],
+  "crystallized_patterns": [
+    {
+      "type": "code_style",
+      "name": "表单组件组合",
+      "elements": ["UForm", "UInput", "UButton"],
+      "success_count": 4,
+      "action": "crystallized",
+      "target": "patterns/PTN-001.json"
+    },
+    {
+      "type": "tool_chain",
+      "name": "后端 CRUD 三板斧",
+      "elements": ["Glob(读参考) → Write(entity) → Write(service) → Write(controller)"],
+      "success_count": 3,
+      "action": "crystallized",
+      "target": "patterns/PTN-002.json"
+    },
+    {
+      "type": "file_structure",
+      "name": "DTO 文件未入库",
+      "elements": ["*.dto.ts × 3 次"],
+      "success_count": 3,
+      "action": "pending",
+      "reason": "需确认是否应新增 dto.md 骨架"
     }
   ]
 }
@@ -341,6 +408,103 @@ AI 提取关键字段写入经验数据结构
 ```
 
 所有检测结果写入 `template_issues` 数组，作为分析输出的补充部分。
+
+#### 4. 模式结晶（Pattern Crystallization）
+
+从成功的任务执行中自动提取可复用的代码模式，写入 `.trae/memory/patterns/`。
+
+```
+[EVOLVE:crystal] START  | 模式结晶开始           | successful_tasks=N; span=最近任务数
+```
+
+**扫描范围：**
+
+- 仅扫描最近评估为 `pass` 的任务经验数据
+- 仅扫描 `task_type` 为 `create`、`modify`、`refactor` 的任务（fix 和 style 通常不产生新模式）
+- 跳过依赖链中的中间步骤（只从最终通过的任务中提取）
+
+```
+[EVOLVE:crystal] SCAN  | 扫描成功任务           | tasks=N; create=N; modify=N; refactor=N
+```
+
+**模式候选提取：**
+
+从每条成功经验中提取以下可复用信息：
+
+| 信息来源                           | 提取内容     | 示例                                                         |
+| ---------------------------------- | ------------ | ------------------------------------------------------------ |
+| 执行过程中连续使用的工具组合       | 工具链模式   | `Glob → Read → SearchReplace → RunCommand(pnpm check-types)` |
+| 多次同时出现的文件类型组合         | 文件结构模式 | `entity.ts + controller.ts + service.ts` 同时出现            |
+| 成功通过 evaluation 的代码结构     | 代码风格模式 | `UForm + UInput + UButton` 组件组合                          |
+| 在同一个任务中按固定顺序出现的步骤 | 流程模式     | "先创建 entity → 再 migration → 再 API"                      |
+
+```
+[EVOLVE:crystal] EXTRACT | 提取候选               | tool_chain=N; file_structure=N; code_style=N; workflow=N
+```
+
+**去重与合并：**
+
+将提取的候选模式与 `.trae/memory/patterns/` 中已有模式对比：
+
+```
+[EVOLVE:crystal] MATCH  | 对比已有模式           | candidates=N; existing=N
+```
+
+- 如果候选模式与已有模式**完全相同** → 已有模式 `success_count++`，不新增
+- 如果候选模式与已有模式**相似但不同**（如同一组件组合的不同变体） → 合并为更通用的模式
+- 如果候选模式**不存在** → 作为新候选入库（初始 `success_count=1`）
+
+```
+[EVOLVE:crystal] MERGE  | 合并模式               | existing=PTN-003; variant_count=2; action=合并为通用模式
+[EVOLVE:crystal] NEW    | 新增候选               | candidate=xxx; success_count=1; action=暂存待结晶
+```
+
+**结晶条件：**
+
+候选模式只有在达到阈值后才正式"结晶"（写入 patterns/ 作为可用模式）：
+
+| 条件                | 阈值 | 动作                         |
+| ------------------- | ---- | ---------------------------- |
+| 同一候选出现 ≥ 3 次 | 3    | 正式结晶，写入 patterns/     |
+| 同一候选出现 2 次   | 2    | 暂存，标记为"待确认"         |
+| 同一候选出现 1 次   | 1    | 丢弃（单次事件，不构成模式） |
+
+```
+[EVOLVE:crystal] CRYSTAL| 正式结晶               | candidate=xxx; match=3/3; target=patterns/xxx.json; status=crystallized
+[EVOLVE:crystal] PENDING| 暂存待确认             | candidate=xxx; match=2/3; target=patterns/pending/xxx.json; action=下次再检
+[EVOLVE:crystal] DISCARD| 单次事件丢弃           | candidate=xxx; match=1/3; action=不满足阈值
+```
+
+**写入 memory/patterns/：**
+
+正式结晶后的模式写入 patterns/ 目录：
+
+```json
+{
+  "pattern_id": "PTN-{seq}",
+  "name": "{模式名称}",
+  "type": "tool_chain | file_structure | code_style | workflow",
+  "description": "{描述}",
+  "elements": ["{元素1}", "{元素2}"],
+  "success_count": 3,
+  "first_seen": "2026-07-01",
+  "last_seen": "2026-07-05",
+  "source_tasks": ["task-hash-001", "task-hash-003", "task-hash-007"],
+  "status": "active"
+}
+```
+
+```
+[EVOLVE:crystal] WRITE  | 写入模式文件           | path=patterns/PTN-001.json; type=code_style; elements=3
+```
+
+**汇总：**
+
+```
+[EVOLVE:crystal] RESULT | 模式结晶完成           | new=N; merged=N; pending=N; discarded=N; total_active=N
+```
+
+模式结晶结果写入分析输出的补充部分（与 template_issues 同级）。
 
 ---
 
