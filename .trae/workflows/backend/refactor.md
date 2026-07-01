@@ -17,6 +17,7 @@
 | `skill/turborepo`                        | 构建配置                         |
 | supabase MCP                             | 查表结构、执行 SQL               |
 | `execution-plan/backend/`                | 规划指引：约束/最佳实践/决策策略 |
+| `execution-engine/backend/`              | 执行指引：约束/最佳实践/决策策略 |
 
 ## 执行步骤
 

@@ -1,5 +1,15 @@
 # Heuristic — DevOps 规划最佳实践
 
+## Agent 映射
+
+| 任务类型 | 执行 Agent       | 关注重点                           |
+| -------- | ---------------- | ---------------------------------- |
+| ci       | devops-architect | CI/CD pipeline、GitHub Actions     |
+| deploy   | devops-architect | 部署策略、回滚方案、环境配置       |
+| config   | devops-architect | 环境变量、项目配置、一致性         |
+| deps     | devops-architect | pnpm workspace、版本兼容、lockfile |
+| hooks    | devops-architect | Husky、lint-staged、git 工作流     |
+
 ## 扫描先手
 
 1. 修改 CI 前先读当前 workflow 文件，理解现有流程

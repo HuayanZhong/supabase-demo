@@ -22,6 +22,7 @@ description: 从零新建前端组件或页面，由 ui-designer agent 执行
 | `skill/nuxt-ui`                    | Nuxt UI 组件知识库                                     |
 | `nuxt-ui MCP`                      | 组件 API 查询（`search-components` / `get-component`） |
 | `execution-plan/frontend/`         | 规划指引：约束/最佳实践/决策策略                       |
+| `execution-engine/frontend/`       | 执行指引：约束/最佳实践/决策策略                       |
 
 ### 2. 确认需求
 

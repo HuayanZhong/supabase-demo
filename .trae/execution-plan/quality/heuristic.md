@@ -1,5 +1,15 @@
 # Heuristic — 质量规划最佳实践
 
+## Agent 映射
+
+| 任务类型 | 执行 Agent         | 关注重点                         |
+| -------- | ------------------ | -------------------------------- |
+| test     | api-test-pro       | 测试覆盖、边界条件、回归验证     |
+| review   | compliance-checker | 代码审查、规则检查、一致性       |
+| perf     | performance-expert | 性能基线、瓶颈分析、前后对比     |
+| security | security-auditor   | 安全审计、CVE 检查、依赖扫描     |
+| api-test | api-test-pro       | API 合约验证、负载测试、端点覆盖 |
+
 ## 测试策略
 
 | 测试类型 | 覆盖范围               |

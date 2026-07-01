@@ -19,6 +19,7 @@
 | `workflows/ai/rag.md`           | 确认向量检索可用（Agent 可使用的工具之一） |
 | supabase MCP                    | 如 Agent 需要操作数据库                    |
 | `execution-plan/ai/`            | 规划指引：约束/最佳实践/决策策略           |
+| `execution-engine/ai/`          | 执行指引：约束/最佳实践/决策策略           |
 
 ## 3. 执行步骤
 

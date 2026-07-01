@@ -15,6 +15,7 @@
 | `skill/turborepo`               | 构建配置和测试命令               |
 | `agents/api-test-pro.md`        | api-test-pro 完整约束和项目背景  |
 | `execution-plan/quality/`       | 规划指引：约束/最佳实践/决策策略 |
+| `execution-engine/quality/`     | 执行指引：约束/最佳实践/决策策略 |
 
 ## 执行步骤
 

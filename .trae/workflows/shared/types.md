@@ -19,6 +19,7 @@ description: 新增或修改共享类型，由 backend-architect agent 执行
 | `rules/frontend/frontend-types.md` | 类型定义规范（packages/types 结构、Zod 用法） |
 | `rules/frontend/comments.md`       | 注释规范                                      |
 | `execution-plan/shared/`           | 规划指引：约束/最佳实践/决策策略              |
+| `execution-engine/shared/`         | 执行指引：约束/最佳实践/决策策略              |
 
 ### 2. 确认变更范围
 

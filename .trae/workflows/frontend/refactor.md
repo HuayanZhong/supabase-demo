@@ -23,6 +23,7 @@ description: 前端代码重构，由 frontend-architect agent 执行
 | `nuxt-ui MCP`                      | 组件 API 查询                    |
 | `skill/ui-ux-pro-max`              | 设计参考                         |
 | `execution-plan/frontend/`         | 规划指引：约束/最佳实践/决策策略 |
+| `execution-engine/frontend/`       | 执行指引：约束/最佳实践/决策策略 |
 
 ### 2. 分析重构范围
 

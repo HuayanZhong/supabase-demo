@@ -1,5 +1,16 @@
 # Heuristic — 后端规划最佳实践
 
+## Agent 映射
+
+| 任务类型 | 执行 Agent        | 关注重点                           |
+| -------- | ----------------- | ---------------------------------- |
+| create   | backend-architect | Entity/Service/Controller 完整链路 |
+| modify   | backend-architect | API 兼容性、现有逻辑扩展           |
+| fix      | backend-architect | 错误排查、数据库诊断、类型修复     |
+| refactor | backend-architect | 模块结构、依赖关系、迁移路径       |
+| api      | backend-architect | REST 规范、响应格式、路由注册      |
+| data     | backend-architect | 表结构、迁移、查询优化             |
+
 ## 扫描先手
 
 1. 新增模块前，先读 `app.module.ts` 了解现有模块注册方式

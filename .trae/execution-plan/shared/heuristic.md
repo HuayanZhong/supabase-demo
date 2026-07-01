@@ -1,5 +1,14 @@
 # Heuristic — 共享包规划最佳实践
 
+## Agent 映射
+
+| 任务类型    | 执行 Agent         | 关注重点                           |
+| ----------- | ------------------ | ---------------------------------- |
+| types       | backend-architect  | Zod v4 schema、类型兼容、exports   |
+| i18n        | frontend-architect | 4 语言同步、key 命名约定           |
+| lint        | backend-architect  | oxlint 规则、项目一致性            |
+| add-package | backend-architect  | 包结构、exports 路径、package.json |
+
 ## 扫描先手
 
 1. 新增类型前，先搜索 `packages/types/src/` 中是否已有定义

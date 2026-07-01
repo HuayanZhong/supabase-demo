@@ -1,5 +1,14 @@
 # Heuristic — AI 规划最佳实践
 
+## Agent 映射
+
+| 任务类型  | 执行 Agent              | 关注重点                           |
+| --------- | ----------------------- | ---------------------------------- |
+| integrate | ai-integration-engineer | 模型接入、API 封装、密钥管理       |
+| chat      | ai-integration-engineer | 对话功能、流式响应、上下文管理     |
+| rag       | ai-integration-engineer | Embedding、向量存储、检索质量      |
+| agent     | ai-integration-engineer | Tool calling、Agent 编排、状态管理 |
+
 ## 扫描先手
 
 1. 接入新 AI 服务前，先搜索项目中是否已有类似集成可参考

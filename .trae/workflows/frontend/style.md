@@ -14,12 +14,13 @@ description: 纯样式/视觉调整，由 ui-designer agent 执行
 
 ### 1. 加载资源
 
-| 资源                       | 说明                                           |
-| -------------------------- | ---------------------------------------------- |
-| `rules/frontend/styles.md` | 样式规范（核心约束：语义色、响应式、暗色模式） |
-| `skill/nuxt-ui`            | Nuxt UI 组件知识库（组件样式 API、主题定制）   |
-| `nuxt-ui MCP`              | 组件样式相关 API 查询                          |
-| `execution-plan/frontend/` | 规划指引：约束/最佳实践/决策策略               |
+| 资源                         | 说明                                           |
+| ---------------------------- | ---------------------------------------------- |
+| `rules/frontend/styles.md`   | 样式规范（核心约束：语义色、响应式、暗色模式） |
+| `skill/nuxt-ui`              | Nuxt UI 组件知识库（组件样式 API、主题定制）   |
+| `nuxt-ui MCP`                | 组件样式相关 API 查询                          |
+| `execution-plan/frontend/`   | 规划指引：约束/最佳实践/决策策略               |
+| `execution-engine/frontend/` | 执行指引：约束/最佳实践/决策策略               |
 
 ### 2. 确认样式需求
 

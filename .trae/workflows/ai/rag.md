@@ -20,6 +20,7 @@
 | supabase MCP — `execute_sql`     | 执行 DDL 创建向量表/索引           |
 | supabase MCP — `get_advisors`    | 获取性能建议                       |
 | `execution-plan/ai/`             | 规划指引：约束/最佳实践/决策策略   |
+| `execution-engine/ai/`           | 执行指引：约束/最佳实践/决策策略   |
 
 ## 3. 执行步骤
 

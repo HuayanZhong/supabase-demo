@@ -15,6 +15,7 @@
 - 读取根 `package.json`（确认 husky、lint-staged 版本和 prepare script）
 - 读取各 app 的 `package.json`（确认 lint/format 命令）
 - 加载 `execution-plan/devops/`（规划指引：约束/最佳实践/决策策略）
+- 加载 `execution-engine/devops/`（执行指引：约束/最佳实践/决策策略）
 
 ## 执行步骤
 

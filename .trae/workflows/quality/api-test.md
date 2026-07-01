@@ -16,6 +16,7 @@
 | `agents/api-test-pro.md`        | api-test-pro 完整约束、API 规范和技术栈信息 |
 | supabase MCP                    | 查表结构，理解 API 背后数据                 |
 | `execution-plan/quality/`       | 规划指引：约束/最佳实践/决策策略            |
+| `execution-engine/quality/`     | 执行指引：约束/最佳实践/决策策略            |
 
 ## 执行步骤
 

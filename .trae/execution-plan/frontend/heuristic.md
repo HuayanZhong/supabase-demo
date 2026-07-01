@@ -1,5 +1,16 @@
 # Heuristic — 前端规划最佳实践
 
+## Agent 映射
+
+| 任务类型 | 执行 Agent         | 关注重点                           |
+| -------- | ------------------ | ---------------------------------- |
+| create   | ui-designer        | 组件规范、Nuxt UI 组件 API、语义色 |
+| modify   | frontend-architect | 数据结构、composable、页面状态     |
+| fix      | frontend-architect | 错误排查、运行时诊断、回归验证     |
+| refactor | frontend-architect | 代码结构、组件拆分、类型对齐       |
+| style    | ui-designer        | 语义色、响应式、间距、Tailwind     |
+| i18n     | frontend-architect | 翻译 key 使用、不修改翻译文件      |
+
 ## 扫描先手
 
 1. 新建组件前，先搜索是否已有同类组件可复用或扩展

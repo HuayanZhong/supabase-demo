@@ -16,6 +16,7 @@
 | supabase MCP                             | 查表结构、查看日志、执行 SQL       |
 | `skill/TRAE-debugger`                    | 运行时调试（需用户主动要求时启用） |
 | `execution-plan/backend/`                | 规划指引：约束/最佳实践/决策策略   |
+| `execution-engine/backend/`              | 执行指引：约束/最佳实践/决策策略   |
 
 ## 执行步骤
 
