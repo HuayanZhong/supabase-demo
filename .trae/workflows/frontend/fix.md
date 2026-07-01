@@ -24,6 +24,7 @@ description: 排查并修复前端 Bug，由 frontend-architect agent 执行
 | `supabase MCP`                     | 如涉及 Auth 问题可查表诊断       |
 | `execution-plan/frontend/`         | 规划指引：约束/最佳实践/决策策略 |
 | `execution-engine/frontend/`       | 执行指引：约束/最佳实践/决策策略 |
+| `evaluation/frontend/`             | 评估指引：约束/最佳实践/决策策略 |
 
 ### 2. 收集信息
 

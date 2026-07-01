@@ -23,6 +23,7 @@ description: 修改已有前端功能，由 frontend-architect agent 执行
 | `nuxt-ui MCP`                      | 组件 API 查询                    |
 | `execution-plan/frontend/`         | 规划指引：约束/最佳实践/决策策略 |
 | `execution-engine/frontend/`       | 执行指引：约束/最佳实践/决策策略 |
+| `evaluation/frontend/`             | 评估指引：约束/最佳实践/决策策略 |
 
 ### 2. 理解变更范围
 
