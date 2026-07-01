@@ -4,6 +4,9 @@ alwaysApply: true
 
 # 通用规则
 
+> 本项目治理框架见 `AGENTS.md`（项目根目录）和 `.trae/runtime/router.md`（任务路由）。
+> 治理框架的 7 层闭环详见 `.trae/ARCHITECTURE.md`，日志格式见 `.trae/logging.md`。
+
 ## 语言
 
 - 所有回答使用中文
@@ -17,55 +20,6 @@ Monorepo 项目，使用 pnpm workspace + turborepo：
 - `apps/backend` — NestJS 后端
 - `apps/frontend` — Nuxt 前端
 - `packages/lint-config` — 共享 lint 配置
-
-## 资源同步检查
-
-**开始路由前，先检查 MCP 和 Skill 是否有新增或变更。**
-
-1. 读取 `resources/registry.md`，获取当前注册的资源清单
-2. 对比 `mcp.json` 和 `skills/` 目录的实际状态与注册表是否一致
-3. 如有差异，按 `resources/sync.md` 执行同步流程（更新注册表 → 传播到各 router.md → 记录）
-4. 确认无误后再进入路由决策
-
-> 资源同步确保 governance 治理文件中的资源引用始终与实际可用资源一致，避免路由调度到不存在的 MCP 或 Skill。
-
-## 任务路由
-
-**任何涉及代码变更的任务，必须先执行路由决策，不得直接开始编码。**
-
-路由文件位于 `.trae/runtime/router.md`，按以下流程执行：
-
-1. 读取 `runtime/router.md` 的关键词映射，判断请求所属领域
-2. 如匹配到领域，读取对应 `runtime/{domain}/router.md`，按子任务分类决定 agent 和资源
-3. 如匹配多个领域，按冲突优先级裁决（router.md 中有优先级表）
-4. 如无法匹配任何领域，回退到 agents/ 下 description 匹配或 SOLO Agent 自主判断
-
-> 路由决策的目的不是限制 AI，而是确保每次任务都加载正确的 rules、skills 和 MCP，减少遗漏和错误。
-
-## 任务完成闭环
-
-**每次任务评估完成后（无论通过/不通过），必须将经验数据写入 evolution。**
-
-完整流程链：
-
-```
-路由 → 工作流 → 执行规划 → 执行引擎 → 评估
-                                         ↓
-                                   通过 / 不通过
-                                         ↓
-                               evolution（元治理 — 收集经验数据）
-                                         ↓
-                               ⏳ 达到阈值后 → 聚合分析 → 改进治理规则
-```
-
-任务完成后，AI 按以下步骤操作：
-
-1. 读取 `.trae/evolution/` 下的 3 个文件（constraint/heuristic/policy）
-2. 按 `evolution/heuristic.md` ① 数据收集 规范，输出经验数据结构
-3. 将经验数据写入 `.trae/experience/{domain}/{task-type}-{date}.json`
-4. 如达到聚合阈值（10 次或 7 天），自动触发进化流程
-
-**这条规则适用于所有任务，不得跳过。**
 
 ## 代码风格
 
