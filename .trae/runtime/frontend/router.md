@@ -46,4 +46,4 @@
 workflows/frontend/{task-type}.md
 ```
 
-如 `workflows/frontend/create-component.md`、`workflows/frontend/fix-ui.md` 等。
+如 `workflows/frontend/create.md`、`workflows/frontend/fix.md` 等。
