@@ -75,7 +75,7 @@
 [EVAL:step]       SKIP   | ④回归验证              | reason=无外部引用方
 [EVAL:step]       OK     | ⑤范围检查              | plan_files=3;actual=3;extras=0
 [EVAL:step]       OK     | ⑥输出评估报告          | conclusion=PASS
-[EVAL:step]       OK     | ⑦写入经验数据         | path=.trae/experience/frontend/create-2026-07-01.json
+[EVAL:step]       OK     | ⑦写入经验数据         | path=.trae/memory/experience/frontend/create-2026-07-01.json
 [EVAL:done]       END    | 评估完成               | conclusion=PASS;passed=6;failed=0;skipped=1
 ```
 

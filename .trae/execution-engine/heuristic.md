@@ -81,9 +81,9 @@ Step 2 subagent 读取 context →
 
 执行完毕并输出摘要后，**必须触发以下后续流程**：
 
-1. **调用 evaluation** — 读取 `evaluation/{domain}/` 下的约束/启发式/策略，执行质量门禁检查
-2. **输出评估报告** — 按 evaluation/heuristic.md 通用评估流程执行 ①→⑦
-3. **写入经验数据** — 按 evolution/heuristic.md ① 数据收集规范，将本次执行的经验写入 `.trae/experience/`
+1. **输出结构化执行摘要** — 包含：执行步骤、修改的文件清单、工具调用记录、执行结果状态
+2. **移交上层调度** — 执行引擎不主动触发评估，由 router/workflow 层调度评估时机
+3. **写入经验数据** — 按 evolution/heuristic.md ① 数据收集规范，将本次执行的经验写入 `.trae/memory/experience/`
 4. 如任务属于依赖链的一部分，将执行摘要作为 context 传递给下一步 subagent
 
-不得在未触发评估的情况下直接结束任务。
+执行引擎的职责止于"输出执行摘要"，评估由上层调度触发，避免层级倒置。

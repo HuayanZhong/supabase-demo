@@ -5,7 +5,7 @@
 ## 核心规则
 
 - 所有涉及代码变更的任务，必须先走 `.trae/runtime/router.md` 路由决策，不得直接编码
-- 任务完成后写入经验数据到 `.trae/experience/`，用于治理框架自迭代
+- 任务完成后写入经验数据到 `.trae/memory/experience/`，用于治理框架自迭代
 - 具体行为规则见 `.trae/rules/` 下的规则文件
 
 ## 架构总览

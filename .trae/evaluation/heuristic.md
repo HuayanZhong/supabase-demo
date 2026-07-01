@@ -32,7 +32,7 @@
 ④ 回归验证            → 引用方是否正常工作
 ⑤ 范围检查            → 无计划外文件、无越界修改
 ⑥ 输出评估报告        → 结构化、可追溯
-⑦ 写入经验数据       → 按 evolution/heuristic.md 格式写入 .trae/experience/
+⑦ 写入经验数据       → 按 evolution/heuristic.md 格式写入 .trae/memory/experience/
 ```
 
 ## 证据采集通用方法

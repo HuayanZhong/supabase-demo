@@ -184,6 +184,10 @@ LOOP:start 之后每一步都有记录，任何步骤 FAIL 或 BLOCKED 都会影
 
 检测循环是否陷入"原地踏步"——每次都在改，但产出结果一模一样。
 
+> **统一计数器：** 使用单一 `no_progress_count`，不再区分 stall_count 和 deadlock_count。
+> 凡"失败列表未减少"或"产出特征完全相同"均 +1，连续 2 次强制升级。
+> 这避免了 AI 在两种状态间交替跳变绕过升级。
+
 **特征提取：**
 
 每次 re-execute 完成后，提取本次产出的关键特征：
@@ -197,69 +201,56 @@ LOOP:start 之后每一步都有记录，任何步骤 FAIL 或 BLOCKED 都会影
 ```
 当前特征 vs 上次特征
     ↓
-├── 特征完全相同 → 收敛停滞（Stall）
-│   连续 2 次 → 强制升级到 re-plan
+├── 产出特征完全相同 → no_progress_count +1
+│   说明 AI 在重复输出相同内容
 │
-├── 特征不同但失败列表完全相同 → 收敛死锁（Deadlock）
+├── 特征不同但失败列表完全相同 → no_progress_count +1
 │   说明在同一个问题上反复做不同尝试但都没用
-│   连续 2 次 → 强制升级到人工介入
 │
-└── 特征不同且失败列表减少 → 有效收敛
-    正常继续
+├── 特征不同且失败列表减少 → 检查改进幅度
+│   │
+│   ├── 改进幅度 ≥ 10%（失败减少 ≥ 10%）→ no_progress_count 归零，正常继续
+│   │
+│   └── 改进幅度 < 10%（改进不足）→ no_progress_count +1
+│       收益递减，连续 2 次触发熔断
+│
+└── 失败列表增加（退步）→ 立即熔断，不等连续次数
+
+no_progress_count ≥ 2 → 强制升级
+    re-execute 场景 → 升级到 re-plan
+    re-plan 场景 → 升级到人工介入
 ```
 
 **日志输出：**
 
 ```
-[LOOP:convergence] STALL   | 收敛停滞             | feature_hash=xxx;match=2/2;action=升级re-plan
-[LOOP:convergence] DEADLOCK| 收敛死锁             | feature_hash=xxx;failures_same=true;action=人工介入
-[LOOP:convergence] OK      | 有效收敛             | feature_hash=xxx;failure_reduction=N%
+[LOOP:convergence] STALL    | 无进展              | reason=特征相同/no_progress=N;action=升级re-plan
+[LOOP:convergence] DEADLOCK | 无进展              | reason=失败列表相同/no_progress=N;action=升级人工
+[LOOP:convergence] DIMINISH | 收益递减            | delta=改进幅度;no_progress=N;action=升级
+[LOOP:convergence] REGRESS  | 收益退步            | delta=+N%;action=立即熔断
+[LOOP:convergence] OK       | 有效收敛            | feature_hash=xxx;failure_reduction=N%;no_progress=0
 ```
-
-**死锁和停滞的差异：**
-
-| 场景     | 特征     | 失败列表 | 处理方式                           |
-| -------- | -------- | -------- | ---------------------------------- |
-| 收敛停滞 | 完全相同 | 完全相同 | 升级 re-plan（同层重试无效）       |
-| 收敛死锁 | 不同     | 完全相同 | 升级人工介入（不同方案都解决不了） |
 
 收敛检测结果写入循环状态记录的 `convergence` 字段。
 
 ### 收益递减检测（Diminishing Returns）
 
-检测每轮迭代的改进幅度是否持续缩小，以及是否出现退步。
+收益递减的判定已合并到上方收敛检测的 `no_progress_count` 统一计数器中。
 
-**改进幅度指标：**
+**改进幅度定义：**
 
-| 循环类型   | 改进幅度定义                             | 有效阈值                  |
+| 循环类型   | 改进幅度计算                             | 有效阈值                  |
 | ---------- | ---------------------------------------- | ------------------------- |
 | re-execute | `(本次失败数 - 上次失败数) / 上次失败数` | ≤ -10%（失败减少 ≥ 10%）  |
 | re-plan    | 方案关键决策点差异比例                   | ≥ 30%（方案有实质性变更） |
 
-**判定规则：**
+**判定规则（与收敛检测统一）：**
 
-```
-当前改进幅度 vs 阈值
-    ↓
-├── 改进幅度 < 阈值（如失败只减少 5%）→ 收益递减
-│   连续 2 次 → 触发收益递减熔断
-│   re-execute 场景 → 强制升级到 re-plan
-│   re-plan 场景 → 强制升级到人工介入
-│
-├── 改进幅度 > 0（失败反而增加）→ 收益退步
-│   立即触发熔断，无需等待连续次数
-│
-└── 改进幅度 ≤ 阈值且为负值 → 有效改进
-    正常继续
-```
-
-**日志输出：**
-
-```
-[LOOP:returns] WARN  | 收益递减             | delta=-5%;threshold=10%;consecutive=2;action=强制升级re-plan
-[LOOP:returns] FAIL  | 收益退步             | delta=+15%;action=立即熔断
-[LOOP:returns] OK    | 有效改进             | delta=-50%;threshold=10%;status=继续
-```
+| 改进幅度 delta（负=改进，正=退步） | 判定     | no_progress_count |
+| ---------------------------------- | -------- | ----------------- |
+| delta > 0（失败增加）              | 收益退步 | 立即熔断          |
+| -10% < delta ≤ 0（改进不足 10%）   | 收益递减 | +1，连续 2 次熔断 |
+| delta ≤ -10%（失败减少 ≥ 10%）     | 有效改进 | 归零              |
 
 **首次迭代处理：**
 
@@ -323,8 +314,8 @@ check-types error / lint error / 文件遗漏
     "status": "effective",
     "feature_hash": "a1b2c3d4e5f6",
     "previous_feature_hash": "d4e5f6a1b2c3",
-    "stall_count": 0,
-    "deadlock_count": 0
+    "no_progress_count": 0,
+    "last_reason": null
   },
   "diminishing_returns": {
     "delta": -0.5,
@@ -336,10 +327,10 @@ check-types error / lint error / 文件遗漏
 }
 ```
 
-**每轮循环迭代完成后，该状态记录必须同步写入 `.trae/experience/`**，供 evolution 收集。文件名命名规则：
+**每轮循环迭代完成后，该状态记录必须同步写入 `.trae/memory/experience/`**，供 evolution 收集。文件名命名规则：
 
 ```
-.trae/experience/{domain}/loop-{task-id}-cycle-{n}-{date}.json
+.trae/memory/experience/{domain}/loop-{task-id}-cycle-{n}-{date}.json
 ```
 
 最终评估通过后，再提交 1 条聚合后的完整经验记录（覆盖首次执行 + 所有循环迭代）。evolution 聚合时会按 `task_id` 将循环记录和最终记录合并。

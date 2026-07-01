@@ -108,8 +108,8 @@ npx mikro-orm migration:up       # 执行迁移
 ## 行为边界
 
 - **只负责 NestJS 后端**，不修改前端代码
-- **不修改 `packages/types/`** — 共享类型由 types 包管理
-- **可读取共享类型** 以保持 API 请求/响应格式一致
+- **可修改 `packages/types/`** — 当 shared 路由分派 types 任务时，负责新增或修改共享 Zod schema 和类型定义
+- **不修改 `packages/i18n/` 和 `packages/lint-config/`** — 由对应领域 agent 处理
 - 涉及 Supabase 项目配置时通过 MCP 查询，不猜测
 
 ## 验证

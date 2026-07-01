@@ -58,7 +58,7 @@ Evaluation 输出评估报告
     ↓
 AI 提取关键字段写入经验数据结构
     ↓
-写入 .trae/experience/{domain}/{task-type}-{date}.json
+写入 .trae/memory/experience/{domain}/{task-type}-{date}.json
     ↓
 每次任务独立文件，不合并
 ```
@@ -124,7 +124,7 @@ AI 提取关键字段写入经验数据结构
 ### 聚合方式
 
 ```
-扫描 .trae/experience/ 下所有未聚合的文件
+扫描 .trae/memory/experience/ 下所有未聚合的文件
     ↓
 按 domain 分组 → 按 failure_type 分组 → 按 evaluation_result 分组
     ↓
@@ -132,7 +132,7 @@ AI 提取关键字段写入经验数据结构
     ↓
 标注"高频失败"（≥ threshold）和"低频成功"（≤ 1 次失败）
     ↓
-聚合后的数据写入 .trae/evolution/aggregation/{date}-report.json
+聚合后的数据写入 .trae/memory/aggregation/{date}-report.json
     ↓
 已聚合的文件标记为 processed（不删除，做历史留档）
 ```
@@ -474,7 +474,7 @@ AI 提取关键字段写入经验数据结构
 [EVOLVE:crystal] EXTRACT | 提取候选               | tool_chain=N; file_structure=N; code_style=N; workflow=N
 ```
 
-**去重与合并：**
+**去重与合并（Jaccard 相似度算法）：**
 
 将提取的候选模式与 `.trae/memory/patterns/` 中已有模式对比：
 
@@ -482,14 +482,40 @@ AI 提取关键字段写入经验数据结构
 [EVOLVE:crystal] MATCH  | 对比已有模式           | candidates=N; existing=N
 ```
 
-- 如果候选模式与已有模式**完全相同** → 已有模式 `success_count++`，不新增
-- 如果候选模式与已有模式**相似但不同**（如同一组件组合的不同变体） → 合并为更通用的模式
-- 如果候选模式**不存在** → 作为新候选入库（初始 `success_count=1`）
+**相似度计算：** 对每种模式类型，将元素提取为集合，计算 Jaccard 相似度：
 
 ```
-[EVOLVE:crystal] MERGE  | 合并模式               | existing=PTN-003; variant_count=2; action=合并为通用模式
-[EVOLVE:crystal] NEW    | 新增候选               | candidate=xxx; success_count=1; action=暂存待结晶
+Jaccard(A, B) = |A ∩ B| / |A ∪ B|
 ```
+
+| 模式类型     | 集合元素      | 示例                                    |
+| ------------ | ------------- | --------------------------------------- |
+| 工具链模式   | 工具名集合    | {Glob, Read, SearchReplace, RunCommand} |
+| 文件结构模式 | 文件类型集合  | {entity.ts, controller.ts, service.ts}  |
+| 代码风格模式 | 组件/元素集合 | {UForm, UInput, UButton}                |
+| 流程模式     | 步骤名集合    | {create_entity, migration, create_api}  |
+
+**判定阈值：**
+
+| Jaccard 相似度 | 判定       | 动作                                                   |
+| -------------- | ---------- | ------------------------------------------------------ |
+| = 1.0          | 完全相同   | 已有模式 `success_count++`，不新增                     |
+| ≥ 0.8          | 高度相似   | 合并为更通用的模式（取并集元素），`success_count` 累加 |
+| 0.5 ≤ J < 0.8  | 相关但不同 | 独立存储，标注 `related_to=PTN-xxx`                    |
+| < 0.5          | 不同       | 作为新候选入库                                         |
+
+```
+[EVOLVE:crystal] MERGE  | 合并模式               | existing=PTN-003; jaccard=0.85; variant_count=2; action=合并为通用模式
+[EVOLVE:crystal] RELATE | 相关模式               | existing=PTN-003; jaccard=0.6; action=独立存储并标注关联
+[EVOLVE:crystal] NEW    | 新增候选               | candidate=xxx; jaccard<0.5; success_count=1; action=暂存待结晶
+```
+
+**模式失效检测：** 每次聚合时检查已结晶模式的使用情况：
+
+| 条件                            | 动作                                           |
+| ------------------------------- | ---------------------------------------------- |
+| 连续 3 次聚合中未被任何任务引用 | 标记为 `deprecated`，移出活跃列表              |
+| `success_count` 未增长超 30 天  | 标记为 `stale`，等待 1 次聚合确认后 deprecated |
 
 **结晶条件：**
 
@@ -584,18 +610,35 @@ AI 提取关键字段写入经验数据结构
     └── 新增文件 → 提交人工审批
 ```
 
-### 自动应用方式
+### 自动应用方式（Two-Phase Commit）
 
 ```
+Phase 1: 预写 Changelog（Prepare）
 ① 读取提案中的 target_file 和 proposed_change
-② 读取目标文件当前内容（Read）
-③ 定位需要修改的位置
-④ 生成 diff（当前 vs 提议）
-⑤ 写入目标文件（SearchReplace）
-⑥ 记录变更到 .trae/governance-changelog/
-⑦ 标记提案为 "applied"
+② 读取目标文件当前内容（Read），保存原内容快照
+③ 生成 diff（当前 vs 提议）
+④ 写入临时 changelog 到 .trae/memory/changelog/{proposal-id}.pending.json
+   包含：target_file、original_content、proposed_diff、timestamp、status="pending"
+⑤ 日志：[EVOLVE:apply] PREPARE | 预写变更日志 | file={target};changelog={path}
+
+Phase 2: 应用变更（Commit）或回滚（Abort）
+⑥ 定位需要修改的位置
+⑦ 写入目标文件（SearchReplace）
+   ├── 成功 → 标记 changelog status="completed"，标记提案为 "applied"
+   │          日志：[EVOLVE:apply] COMMIT  | 应用变更完成 | file={target};proposal={id}
+   └── 失败 → 根据 changelog 中的 original_content 回滚目标文件
+              标记 changelog status="aborted"，标记提案为 "failed_apply"
+              日志：[EVOLVE:apply] ABORT   | 应用失败已回滚 | file={target};reason={错误}
+
 ⑧ 标记为 "待验证"
 ```
+
+**原子性保证：** 如果 Phase 1 成功但 Phase 2 未完成（如会话中断），
+下次 evolution 启动时扫描 `.pending.json` 文件，根据 status 决定：
+
+- `pending` 且目标文件未变更 → 重新执行 Phase 2
+- `pending` 且目标文件已变更 → 标记为 `completed`（可能已被其他流程处理）
+- `aborted` → 清理临时文件
 
 ### 人工审批流程
 
