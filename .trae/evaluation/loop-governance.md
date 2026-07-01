@@ -156,6 +156,14 @@ check-types error / lint error / 文件遗漏
 }
 ```
 
+**每轮循环迭代完成后，该状态记录必须同步写入 `.trae/experience/`**，供 evolution 收集。文件名命名规则：
+
+```
+.trae/experience/{domain}/loop-{task-id}-cycle-{n}-{date}.json
+```
+
+最终评估通过后，再提交 1 条聚合后的完整经验记录（覆盖首次执行 + 所有循环迭代）。evolution 聚合时会按 `task_id` 将循环记录和最终记录合并。
+
 ### re-execute → re-plan 切换判断
 
 使用以下判断表决定是否切换：
