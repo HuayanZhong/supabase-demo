@@ -6,14 +6,14 @@
 
 ## 领域目录
 
-| 目录        | 骨架数 | 覆盖类型                                 |
-| ----------- | ------ | ---------------------------------------- |
-| `backend/`  | 4      | entity、controller、service、migration   |
-| `frontend/` | 3      | page、component、composable              |
-| `devops/`   | 3      | ci-workflow、turbo-pipeline、config-file |
-| `quality/`  | 2      | unit-test、api-test                      |
-| `ai/`       | 2      | service、rag-pipeline                    |
-| `shared/`   | 2      | types、i18n                              |
+| 目录        | 骨架数 | 覆盖类型                                                             |
+| ----------- | ------ | -------------------------------------------------------------------- |
+| `backend/`  | 6      | entity、controller、service、migration、module、dto                  |
+| `frontend/` | 5      | page、component、composable、layout、middleware                      |
+| `devops/`   | 5      | ci-workflow、turbo-pipeline、config-file、dockerfile、docker-compose |
+| `quality/`  | 3      | unit-test、api-test、e2e-test                                        |
+| `ai/`       | 3      | service、rag-pipeline、agent-tool                                    |
+| `shared/`   | 4      | types、i18n、lint-config、package                                    |
 
 ## 使用
 

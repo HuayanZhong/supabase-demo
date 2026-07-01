@@ -4,6 +4,12 @@
 
 各关键节点输出结构化日志，便于任务卡住时快速定位断点位置。每个日志条目独立一行，按统一格式输出。
 
+## 日志输出位置
+
+- **主输出** — 所有日志直接输出到对话流（用户可见）
+- **持久化** — 关键日志（FAIL/BLOCKED/escalate）同步写入 `.trae/memory/sessions/{date}-logs.jsonl`，保留 30 天
+- **格式** — JSONL 格式，每行一个 JSON 对象：`{"ts":"2026-07-01T12:00:00","layer":"ROUTE","step":"parse","status":"OK","desc":"解析用户请求","kv":{"input":"..."}}`
+
 ## 日志格式
 
 ```
@@ -12,13 +18,13 @@
 
 各字段说明：
 
-| 字段      | 必填 | 说明           | 可选值                                                  |
-| --------- | ---- | -------------- | ------------------------------------------------------- |
-| LAYER     | 是   | 当前层级       | ROUTE / WORKFLOW / PLAN / ENGINE / EVAL / LOOP / EVOLVE |
-| step      | 是   | 当前步骤标识   | 见各层细分                                              |
-| STATUS    | 是   | 当前状态       | OK / FAIL / START / END / SKIP / RETRY / BLOCKED        |
-| 描述      | 是   | 一句话说明     | 自由文本                                                |
-| key=value | 否   | 附带的关键数据 | 见各层约定                                              |
+| 字段      | 必填 | 说明           | 可选值                                                                                |
+| --------- | ---- | -------------- | ------------------------------------------------------------------------------------- |
+| LAYER     | 是   | 当前层级       | ROUTE / WORKFLOW / PLAN / ENGINE / EVAL / LOOP / EVOLVE / GUARD / SILENT / MEM / SYNC |
+| step      | 是   | 当前步骤标识   | 见各层细分                                                                            |
+| STATUS    | 是   | 当前状态       | OK / FAIL / START / END / SKIP / RETRY / BLOCKED                                      |
+| 描述      | 是   | 一句话说明     | 自由文本                                                                              |
+| key=value | 否   | 附带的关键数据 | 见各层约定                                                                            |
 
 ## 各层日志约定
 

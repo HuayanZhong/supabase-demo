@@ -122,6 +122,7 @@
 [ROUTE:conflict]  STATUS | 冲突检查               | conflict=有/无;priority=裁决结果
 [ROUTE:chain]     STATUS | 依赖链编排              | steps=N;order=按→连接
 [ROUTE:fallback]  STATUS | 无匹配回退              | reason=原因;fallback=去向
+[ROUTE:re-route]  COUNT  | 重新路由                | reason=新依赖/冲突;count=N/2;max=2
 ```
 
 当且仅当上述日志全部 OK，路由阶段才算完成。有任意 FAIL 或 BLOCKED，任务不得继续。

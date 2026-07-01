@@ -93,6 +93,31 @@
 
 如果新增/删除的资源属于核心资源（supabase、nuxt-ui），同步更新 `ARCHITECTURE.md` 的资源章节和 `logging.md` 的领域章节。
 
+#### 3e. rules/ 传播表
+
+| 资源类型     | 需要更新的 rules 范围                 | 更新位置           |
+| ------------ | ------------------------------------- | ------------------ |
+| supabase MCP | `rules/backend/database.md`           | 工具引用段落       |
+| nuxt-ui MCP  | `rules/frontend/`（如有组件约束引用） | 组件引用段落       |
+| 新增 AI MCP  | `rules/ai/`（如有安全约束需引用）     | 安全约束段落       |
+| 删除资源     | 所有 rules/ 中引用了该资源的文件      | 移除引用，标注替代 |
+
+#### 3f. evaluation/ 传播表
+
+| 资源类型     | 需要更新的 evaluation 范围                    | 更新位置                |
+| ------------ | --------------------------------------------- | ----------------------- |
+| supabase MCP | `evaluation/backend/heuristic.md`             | 检查清单中的 MCP 验证项 |
+| nuxt-ui MCP  | `evaluation/frontend/constraint.md`           | 组件门禁中的文档验证项  |
+| 新增 MCP     | 对应领域的 `evaluation/{domain}/heuristic.md` | 新增资源验证检查项      |
+| 删除资源     | 对应领域的 evaluation 文件                    | 移除该资源的检查项      |
+
+#### 3g. execution-plan/ 传播表
+
+| 资源类型       | 需要更新的 execution-plan 范围                 | 更新位置             |
+| -------------- | ---------------------------------------------- | -------------------- |
+| 新增 MCP/Skill | 对应领域的 `execution-plan/{domain}/policy.md` | 工具选择策略段落     |
+| 删除资源       | 对应领域的 execution-plan 文件                 | 移除该资源的策略选项 |
+
 ### 步骤 4：未知资源领域归属
 
 当新增的资源不在上述传播表范围内时，按以下规则推断其领域归属：
@@ -122,13 +147,43 @@
 
 ---
 
-### 步骤 5：通知
+### 步骤 5：通知 + 触发 evolution
 
 在任务日志中输出同步结果，格式：
 
 ```
 [SYNC] {操作} | {资源名} | {类型} | {说明}
 ```
+
+**资源变更立即通知 evolution（不等下次聚合）：**
+
+同步完成后，写入一条资源变更记录到 `.trae/memory/experience/resource-change-{date}.json`：
+
+```json
+{
+  "type": "resource_change",
+  "timestamp": "2026-07-01T12:00:00",
+  "changes": [{ "action": "added|removed|updated", "resource": "name", "domain": "inferred" }],
+  "trigger_evolution": true
+}
+```
+
+这使 evolution 在下次任务完成时立即检测到资源变更，无需等待 10 次聚合阈值。
+
+---
+
+## 未入表资源清理机制
+
+registry.md 中标注"未引用"的资源超过 30 天后，按以下规则处置：
+
+| 状态                  | 超期处理                                                 |
+| --------------------- | -------------------------------------------------------- |
+| 全局 MCP（Trae 内置） | 生成入表提案（推断领域 + 建议引用位置），等人工确认      |
+| 项目级 MCP            | 确认是否仍在 mcp.json 中，不在则从 registry.md 删除      |
+| 原生 Skill            | 确认 skills/ 目录是否仍存在，不存在则从 registry.md 删除 |
+| Junction Skill        | 确认 junction 目标是否仍有效，无效则从 registry.md 删除  |
+
+每次 `/sync-resources` 执行时检查未入表资源的首次注册日期，超 30 天的输出 `[SYNC] STALE | {name} | 超期未入表 | action=生成提案/清理`。
 
 ---
 
