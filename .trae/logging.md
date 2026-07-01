@@ -74,8 +74,7 @@
 [SILENT:partial]    FAIL    | 部分成功                | expected=N;actual=M;missing=文件列表
 [SILENT:cache]      FAIL    | 缓存命中掩盖            | cache=hit;task=build;action=--force重跑
 [SILENT:deprecated] WARN    | deprecated 警告         | tool=名称;warning=deprecated;action=记录到经验
-[SILENT:permission] FAIL    | 权限降级返回空          | resource=表名;status=200;rows=0;action=检查RLS
-[SILENT:rls]        FAIL    | Supabase RLS 返回空集   | table=表名;policy=缺失;action=要求补RLS
+[SILENT:permission] FAIL    | 权限降级返回空          | resource=表名;status=200;rows=0;type=rls;action=检查RLS
 [SILENT:escalate]   BLOCKED | 连续静默失败升级        | count=2;action=升级loop-governance
 ```
 

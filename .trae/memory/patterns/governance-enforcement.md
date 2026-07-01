@@ -57,13 +57,14 @@
 
 ## 反模式
 
-以下场景不得走 fast-path，必须走完整 7 层：
+以下场景不得走 fast-path，必须走完整 7 层（与 router.md "不走 Fast-Path 的场景"一致）：
 
 - 数据库变更（migration/seed/schema）
 - 部署/CI/CD 配置
 - 密钥/凭证/安全相关
 - 跨领域依赖链
 - 3 个以上文件修改
+- 用户明确要求"严格治理"/"完整流程"
 - evolution 自迭代变更
 
 ## 验证记录
