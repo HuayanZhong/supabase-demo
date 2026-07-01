@@ -137,15 +137,51 @@
 
 > 依赖链的识别由读取多领域任务的 AI 自主判断，不需要用户手动标注。判断依据：A 的输出是否是 B 的输入（如存储配置是 API 的前提，API 结构是前端的前提）。
 
+### 上下文传递规范
+
+依赖链中相邻步骤间通过结构化上下文交接：
+
+```
+上一步输出格式：
+{
+  "summary": "完成了什么",
+  "outputs": [
+    { "key": "配置项名称", "value": "..." },
+    { "key": "定义/结构", "value": "..." }
+  ],
+  "affected_files": ["变更的文件路径"],
+  "notes": "后续步骤注意事项（可选）"
+}
+```
+
+传递规则：
+
+1. 上一步的 subagent 在完成时按上述格式输出 context
+2. 下一步的 subagent 在启动时读取上一步的 context 作为已知输入
+3. 所有 context 累积，最终汇总结果
+
 例如："添加用户头像上传功能"
 
 ```
 涉及 frontend（上传组件） + backend（文件 API）+ devops（存储配置）
 
 依赖关系：devops → backend → frontend
-  1. devops：配好存储桶 → 输出存储配置
-  2. backend：基于存储配置写文件上传 API → 输出 API 结构
-  3. frontend：基于 API 结构做上传组件
+
+Step 1 — devops（devops-architect）
+  完成：配置存储桶
+  输出 context：{ outputs: [{key:"BUCKET_NAME", value:"growth-os-uploads"},
+                             {key:"BUCKET_REGION", value:"ap-east-1"}] }
+                          ↓
+Step 2 — backend（backend-architect）
+  读取 context.BUCKET_NAME + context.BUCKET_REGION 作为已知配置
+  完成：写文件上传 API
+  输出 context：{ outputs: [{key:"API_ENDPOINT", value:"POST /api/upload"},
+                             {key:"REQUEST_FORMAT", value:"multipart/form-data"},
+                             {key:"RESPONSE_STRUCTURE", value:"{ url: string }"}] }
+                          ↓
+Step 3 — frontend（ui-designer）
+  读取 context.API_ENDPOINT + context.RESPONSE_STRUCTURE 作为已知输入
+  完成：做上传组件
 ```
 
 ## 调用 Workflow
