@@ -6,6 +6,6 @@ scene: coding
 
 # 代码风格
 
-- 必须使用项目已有的工具链（oxlint、oxfmt、prettier）
+- 必须使用项目已有的工具链（oxlint、oxfmt），禁止引入 prettier/eslint
 - 必须遵循现有代码风格，不得引入新约定
 - 必须优先使用项目内已有的工具函数，不得重复造轮子

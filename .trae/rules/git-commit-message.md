@@ -61,7 +61,7 @@ Monorepo 项目，scope 用包名或目录名：
 ```
 feat(backend): 添加 JWT 刷新令牌接口
 fix(frontend): 修复用户资料页空值崩溃问题
-chore(deps): 升级 typescript 至 5.7
-refactor(lint-config): 提取共享的 eslint 规则
+chore(deps): 升级 typescript 至 6.0
+refactor(lint-config): 提取共享的 oxlint 规则
 docs: 更新 AGENTS.md 添加 hook 排查说明
 ```

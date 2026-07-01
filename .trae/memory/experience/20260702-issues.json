@@ -1,0 +1,46 @@
+{
+  "type": "issue_backlog",
+  "timestamp": "2026-07-02T09:30:00Z",
+  "source": "SES-20260702-001",
+  "trigger_evolution": true,
+  "issues": [
+    {
+      "id": "META-001",
+      "category": "governance_self_violation",
+      "severity": "P0",
+      "title": "治理框架缺少强制机制和轻量级快路径",
+      "description": "解决 dockerfile.md 问题时未走完整 7 层流程，证明框架对小任务执行成本过高，且无强制 hook",
+      "affected_files": [
+        ".trae/runtime/router.md",
+        ".trae/logging.md",
+        ".trae/execution-engine/constraint.md"
+      ],
+      "proposed_actions": [
+        "router.md 增加 fast-path 路由：低风险任务（重命名、格式修复、文档修订）仅走守卫+日志，跳过 evaluation",
+        "增加 husky pre-commit hook 校验 [ROUTE]/[GUARD] 日志格式存在性",
+        "logging.md 中日志写入机制从文档约定改为真实文件写入（.trae/memory/sessions/{date}-logs.jsonl）"
+      ]
+    },
+    {
+      "id": "META-002",
+      "category": "tech_stack_drift",
+      "severity": "P1",
+      "title": "治理框架多处引用 prettier/eslint，与项目实际 oxlint/oxfmt 不一致",
+      "description": "项目实际使用 oxlint/oxfmt（pnpm-workspace.yaml catalog:dev），但治理框架 6 处文档误引用 prettier/eslint",
+      "affected_files": [
+        ".trae/rules/code-style.md",
+        ".trae/execution-engine/shared/policy.md",
+        ".trae/execution-engine/frontend/policy.md",
+        ".trae/execution-engine/backend/policy.md",
+        ".trae/evaluation/shared/heuristic.md",
+        ".trae/workflows/devops/config.md",
+        ".trae/rules/git-commit-message.md"
+      ],
+      "proposed_actions": [
+        "统一替换 prettier → oxfmt",
+        "统一替换 eslint config → oxlint config",
+        "保留 ESLint/Jest 仅作为路由关键词识别（workflows/shared/lint.md、runtime/router.md）"
+      ]
+    }
+  ]
+}

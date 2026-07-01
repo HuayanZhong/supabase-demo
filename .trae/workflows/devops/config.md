@@ -5,7 +5,7 @@
 ## 触发条件
 
 - 用户要求「修改配置」「调整 nuxt.config」「改 tsconfig」
-- 涉及 `turbo.json`、`nuxt.config.ts`、`tsconfig.json`、eslint 等配置文件
+- 涉及 `turbo.json`、`nuxt.config.ts`、`tsconfig.json`、oxlint 等配置文件
 - 新增或修改 packages 下的共享配置包
 
 ## 准备工作
