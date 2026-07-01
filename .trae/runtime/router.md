@@ -112,6 +112,20 @@
 > 例：用户说"给 types 加一个新 schema 并在后端使用"→ shared 优先（先定义类型），
 > 完成后再由 shared 子路由回抛给总路由分配后端任务
 
+## 路由日志输出
+
+**每次路由决策完成后，必须按以下标准输出日志**（日志格式标准见 `../logging.md`）：
+
+```
+[ROUTE:parse]     STATUS | 解析用户请求           | input=用户输入原文
+[ROUTE:match]     STATUS | 匹配领域               | domain=匹配到的领域;agent=分配的子智能体
+[ROUTE:conflict]  STATUS | 冲突检查               | conflict=有/无;priority=裁决结果
+[ROUTE:chain]     STATUS | 依赖链编排              | steps=N;order=按→连接
+[ROUTE:fallback]  STATUS | 无匹配回退              | reason=原因;fallback=去向
+```
+
+当且仅当上述日志全部 OK，路由阶段才算完成。有任意 FAIL 或 BLOCKED，任务不得继续。
+
 ## 多领域任务处理
 
 当一个请求明确涉及多个领域时（而非冲突），分两种情况处理。

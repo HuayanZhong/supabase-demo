@@ -11,6 +11,20 @@
 
 ## 通用评估流程
 
+评估开始和每一步都输出日志（日志格式标准见 `../logging.md`）：
+
+```
+[EVAL:start]      START  | 开始评估               | domain=领域;type=任务类型
+[EVAL:step]       OK/FAIL| ①读取完成检查清单      | checks=N;passed=N
+[EVAL:step]       OK/FAIL| ②验证文件完整性         | files=N;expected=N;extra=N
+[EVAL:step]       OK/FAIL| ③执行质量门禁           | check=类型/lint/format;errors=N
+[EVAL:step]       OK/FAIL| ④回归验证               | impacts=N;all_ok=true/false
+[EVAL:step]       OK/FAIL| ⑤范围检查               | planned=N;actual=N;extras=N
+[EVAL:step]       OK     | ⑥输出评估报告           | conclusion=PASS/FAIL/CONDITIONAL
+[EVAL:step]       OK     | ⑦写入经验数据           | path=写入路径
+[EVAL:done]       END    | 评估完成               | conclusion=PASS/FAIL;passed=N;failed=N
+```
+
 ```
 ① 读取完成检查清单    → 明确本次任务的目标和验收标准
 ② 验证文件完整性      → 计划文件是否存在/是否被修改

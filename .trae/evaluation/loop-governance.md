@@ -30,6 +30,23 @@ Evaluation → 不通过
 
 ---
 
+## 循环进入日志
+
+**每次进入循环治理时，必须输出以下日志**（日志格式标准见 `../logging.md`）：
+
+```
+[LOOP:enter]      START  | 进入循环治理           | task_id=任务ID;trigger=评估不通过;conclusion=结论
+[LOOP:cycle]      RETRY  | re-execute 第N次        | attempts=N/3;failure=失败类型
+[LOOP:retry-wait] OK     | 退避等待               | wait_ms=等待毫秒数
+[LOOP:tool-dedup] SKIP   | 工具去重               | action=操作;hash=哈希;reason=重复
+[LOOP:semantic]   BLOCKED| 语义循环检测            | pattern=模式;conclusion=结论
+[LOOP:cost]       WARN   | 调用数预警             | calls=N/30
+[LOOP:anchor]     OK/FAIL| 目标锚定              | deviation=偏差百分比
+[LOOP:exit]       END    | 退出循环               | exit_by=原因;cycles=N;result=结果
+```
+
+LOOP:start 之后每一步都有记录，任何步骤 FAIL 或 BLOCKED 都会影响循环走向。以上日志是循环治理的必输项，不得跳过。
+
 ## Constraint（硬约束）
 
 ### 循环计数

@@ -40,7 +40,17 @@ Step 2 subagent 读取 context →
 
 ## 分步执行习惯
 
-- 复杂任务分步执行，每步只做一件事
+每执行一步之前和之后，输出执行日志（日志格式标准见 `../logging.md`）：
+
+```
+[ENGINE:start]    START  | 开始执行               | domain=领域;type=任务类型
+[ENGINE:step]     OK/FAIL | 当前步骤描述          | file=文件名;operation=新建/修改/删除
+[ENGINE:tool]     OK/FAIL | 工具调用描述           | tool=工具名;action=操作;result=结果
+[ENGINE:done]     END    | 执行完成               | files=N;tools=N;errors=N
+```
+
+复杂任务分步执行，每步只做一件事
+
 - 每步完成后用 `pnpm check-types` 或等价命令验证
 - 验证通过后再进入下一步
 - 不急于一次性完成所有内容

@@ -24,6 +24,25 @@
 └─────────────────────────────────────────────────────┘
 ```
 
+### 进化日志输出
+
+**每个进化阶段的开始和结束必须输出以下日志**（日志格式标准见 `../logging.md`）：
+
+```
+[EVOLVE:collect]  OK     | 收集经验数据           | domain=领域;records=N;period=天数
+[EVOLVE:aggregate]START  | 开始聚合               | threshold=N;trigger=次数/时间
+[EVOLVE:aggregate]OK/FAIL| 聚合完成               | reports=N;coverage=覆盖率
+[EVOLVE:analyze]  OK/FAIL| 根因分析完成           | top=前N问题;count=N;gap=治理遗漏
+[EVOLVE:propose]  OK     | 生成提案               | target=目标文件;type=收紧/放宽;auto=true/false
+[EVOLVE:contradict]OK/FAIL| 矛盾检测              | checked=N;conflict=有/无
+[EVOLVE:apply]    OK/FAIL| 应用变更               | file=文件名;change=变更说明;auto=是否自动
+[EVOLVE:verify]   START  | 开始验证               | task_count=0/N
+[EVOLVE:verify]   OK/FAIL| 验证完成               | task_count=N/N;passed=N;failed=N;conclusion=保留/回滚
+[EVOLVE:rollback] OK     | 回滚变更               | file=文件名;revert_to=版本;reason=原因
+```
+
+有任意 FAIL 或 BLOCKED，进化流程暂停并等待人工介入。
+
 ---
 
 ## ① 数据收集
