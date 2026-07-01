@@ -284,7 +284,7 @@
 ## 链路完整性
 
 ```
-general-rules.md (触发)
+language.md + interaction.md + ai-safety.md (alwaysApply 触发)
       ↓
  runtime/      →  workflows/   →  execution-plan/
     ✅               ✅               ✅

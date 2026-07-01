@@ -19,11 +19,10 @@
 
 ### 通用加载
 
-| 资源                            | 说明                         |
-| ------------------------------- | ---------------------------- |
-| `rules/project-architecture.md` | 项目架构                     |
-| `skill/supabase`                | Supabase 向量/Edge Functions |
-| supabase MCP                    | 查询数据库配置               |
+| 资源             | 说明                         |
+| ---------------- | ---------------------------- |
+| `skill/supabase` | Supabase 向量/Edge Functions |
+| supabase MCP     | 查询数据库配置               |
 
 ### 按任务类型额外加载
 

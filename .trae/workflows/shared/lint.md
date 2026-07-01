@@ -14,12 +14,11 @@ description: 共享 lint 配置变更，由 devops-architect agent 执行
 
 ### 1. 加载资源
 
-| 资源                            | 说明                             |
-| ------------------------------- | -------------------------------- |
-| `rules/project-architecture.md` | 项目架构                         |
-| `skill/turborepo`               | Monorepo 构建知识                |
-| `execution-plan/shared/`        | 规划指引：约束/最佳实践/决策策略 |
-| `execution-engine/shared/`      | 执行指引：约束/最佳实践/决策策略 |
+| 资源                       | 说明                             |
+| -------------------------- | -------------------------------- |
+| `skill/turborepo`          | Monorepo 构建知识                |
+| `execution-plan/shared/`   | 规划指引：约束/最佳实践/决策策略 |
+| `execution-engine/shared/` | 执行指引：约束/最佳实践/决策策略 |
 
 ### 2. 确认变更范围
 

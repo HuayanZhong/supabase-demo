@@ -13,7 +13,6 @@
 
 | 资源                               | 用途                               |
 | ---------------------------------- | ---------------------------------- |
-| `rules/project-architecture.md`    | 了解项目结构                       |
 | `rules/frontend/comments.md`       | 前端注释规范                       |
 | `rules/frontend/frontend-types.md` | 前端类型定义规范                   |
 | `rules/frontend/i18n.md`           | 国际化规范                         |

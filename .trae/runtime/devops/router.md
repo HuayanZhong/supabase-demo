@@ -20,11 +20,10 @@
 
 ### 通用加载
 
-| 资源                            | 说明          |
-| ------------------------------- | ------------- |
-| `rules/project-architecture.md` | 项目架构      |
-| `skill/turborepo`               | Monorepo 构建 |
-| `rules/git-commit-message.md`   | Commit 规范   |
+| 资源                          | 说明          |
+| ----------------------------- | ------------- |
+| `skill/turborepo`             | Monorepo 构建 |
+| `rules/git-commit-message.md` | Commit 规范   |
 
 ### 按任务类型额外加载
 

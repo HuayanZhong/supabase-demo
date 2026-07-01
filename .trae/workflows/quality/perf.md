@@ -9,13 +9,12 @@
 
 ## 准备工作
 
-| 资源                            | 说明                             |
-| ------------------------------- | -------------------------------- |
-| `rules/project-architecture.md` | 项目架构概览                     |
-| `skill/turborepo`               | 构建配置                         |
-| `pnpm-workspace.yaml`           | 查看依赖版本，判断是否有升级空间 |
-| `execution-plan/quality/`       | 规划指引：约束/最佳实践/决策策略 |
-| `execution-engine/quality/`     | 执行指引：约束/最佳实践/决策策略 |
+| 资源                        | 说明                             |
+| --------------------------- | -------------------------------- |
+| `skill/turborepo`           | 构建配置                         |
+| `pnpm-workspace.yaml`       | 查看依赖版本，判断是否有升级空间 |
+| `execution-plan/quality/`   | 规划指引：约束/最佳实践/决策策略 |
+| `execution-engine/quality/` | 执行指引：约束/最佳实践/决策策略 |
 
 ## 执行步骤
 

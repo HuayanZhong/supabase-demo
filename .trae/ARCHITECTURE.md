@@ -11,7 +11,7 @@
 ╔═══════════════════════════════════════════════════════════════════════════════════════════╗
 ║                       Layer 0: 触发层 (Trigger)                                          ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════╣
-║  .trae/rules/general-rules.md     ← alwaysApply: true                                    ║
+║  .trae/rules/language.md + interaction.md + ai-safety.md  ← alwaysApply: true (3 files)  ║
 ║  → "任何涉及代码变更的任务，必须先执行路由决策"                                           ║
 ║  → 激活 runtime/router.md                                                                 ║
 ╚═══════════════════════════════════════════════════════════════════════════════════════════╝
@@ -173,7 +173,7 @@
 ║                      支持层: 公共资源                                                      ║
 ╠═══════════════════════════════════════════════════════════════════════════════════════════╣
 ║                                                                                           ║
-║  .trae/rules/          项目显式规范（general-rules 作为触发入口）                        ║
+║  .trae/rules/          项目显式规范（language.md + interaction.md + ai-safety.md 作为触发）║
 ║  .trae/agents/         子智能体定义（8个 Agent 文件）                                    ║
 ║  .trae/skills/         技能包（当前: ui-ux-pro-max）                                     ║
 ║  .trae/references/     参考资料（当前: subagent-guide）                                  ║
@@ -189,12 +189,17 @@
 
 ```
 .trae/
-├── rules/                  Layer 0  触发层     — 6 文件
+├── rules/                  Layer 0  触发层     — 16 文件
 │   ├── README.md
-│   ├── general-rules.md           alwaysApply 入口
-│   ├── git-commit-message.md
-│   ├── project-architecture.md
-│   └── frontend/                  × 4 规范文件
+│   ├── language.md                 alwaysApply: true
+│   ├── interaction.md              alwaysApply: true
+│   ├── ai-safety.md                alwaysApply: true
+│   ├── code-style.md / document-query.md / naming.md / review.md / git-commit-message.md
+│   ├── frontend/                   × 4 约束文件
+│   ├── backend/                    × 2 约束文件
+│   ├── devops/                     × 1 约束文件
+│   ├── quality/                    × 2 约束文件
+│   └── shared/                     × 1 约束文件
 │
 ├── runtime/                Layer 1  路由层     — 7 文件
 │   ├── README.md

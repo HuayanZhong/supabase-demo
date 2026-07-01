@@ -89,7 +89,9 @@
   ```
   .trae/evolution/constraint.md
   .trae/evaluation/loop-governance.md
-  .trae/rules/general-rules.md
+  .trae/rules/language.md
+  .trae/rules/interaction.md
+  .trae/rules/ai-safety.md
   .trae/runtime/router.md
   ```
 

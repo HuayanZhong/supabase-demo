@@ -13,7 +13,6 @@
 
 | 资源                             | 用途                               |
 | -------------------------------- | ---------------------------------- |
-| `rules/project-architecture.md`  | 了解项目结构                       |
 | `workflows/ai/integrate.md`      | 确认 AI Service（嵌入模型）已就绪  |
 | `workflows/ai/chat.md`           | 确认对话功能已就绪（RAG 增强对话） |
 | supabase MCP — `list_extensions` | 检查 pgvector 是否已启用           |

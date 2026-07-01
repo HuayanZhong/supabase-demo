@@ -11,15 +11,14 @@
 
 ## 2. 准备工作
 
-| 资源                            | 用途                                       |
-| ------------------------------- | ------------------------------------------ |
-| `rules/project-architecture.md` | 了解项目结构                               |
-| `workflows/ai/integrate.md`     | 确认 AI Service 已就绪（依赖前置）         |
-| `workflows/ai/chat.md`          | 确认对话功能已就绪（Agent 对话基础）       |
-| `workflows/ai/rag.md`           | 确认向量检索可用（Agent 可使用的工具之一） |
-| supabase MCP                    | 如 Agent 需要操作数据库                    |
-| `execution-plan/ai/`            | 规划指引：约束/最佳实践/决策策略           |
-| `execution-engine/ai/`          | 执行指引：约束/最佳实践/决策策略           |
+| 资源                        | 用途                                       |
+| --------------------------- | ------------------------------------------ |
+| `workflows/ai/integrate.md` | 确认 AI Service 已就绪（依赖前置）         |
+| `workflows/ai/chat.md`      | 确认对话功能已就绪（Agent 对话基础）       |
+| `workflows/ai/rag.md`       | 确认向量检索可用（Agent 可使用的工具之一） |
+| supabase MCP                | 如 Agent 需要操作数据库                    |
+| `execution-plan/ai/`        | 规划指引：约束/最佳实践/决策策略           |
+| `execution-engine/ai/`      | 执行指引：约束/最佳实践/决策策略           |
 
 ## 3. 执行步骤
 

@@ -8,13 +8,13 @@
 
 ## MCP 服务
 
-| 名称            | 类型 | 来源                  | 实际位置                       | 功能域                     | 路由资源表引用                                    |
-| --------------- | ---- | --------------------- | ------------------------------ | -------------------------- | ------------------------------------------------- |
-| supabase        | MCP  | `mcp.json`            | 项目级 + 全局 MCPS 注册        | backend / quality / devops | ✅ backend/ai/quality router.md                   |
-| nuxt-ui         | MCP  | `mcp.json`            | 项目级 + 全局 MCPS 注册        | frontend                   | ✅ frontend router.md                             |
-| tavily_search   | MCP  | 全局（Trae IDE 内置） | `~/.trae-cn/mcps/s_{project}/` | ai / general               | ⚠️ 仅在 general-rules.md 提及，未入 router 资源表 |
-| chrome-devtools | MCP  | 全局（Trae IDE 内置） | `~/.trae-cn/mcps/s_{project}/` | frontend / quality         | ❌ 未在任何 router 资源表中引用                   |
-| windows-cli     | MCP  | 全局（Trae IDE 内置） | `~/.trae-cn/mcps/s_{project}/` | devops                     | ❌ 未在任何 router 资源表中引用                   |
+| 名称            | 类型 | 来源                  | 实际位置                       | 功能域                     | 路由资源表引用                                     |
+| --------------- | ---- | --------------------- | ------------------------------ | -------------------------- | -------------------------------------------------- |
+| supabase        | MCP  | `mcp.json`            | 项目级 + 全局 MCPS 注册        | backend / quality / devops | ✅ backend/ai/quality router.md                    |
+| nuxt-ui         | MCP  | `mcp.json`            | 项目级 + 全局 MCPS 注册        | frontend                   | ✅ frontend router.md                              |
+| tavily_search   | MCP  | 全局（Trae IDE 内置） | `~/.trae-cn/mcps/s_{project}/` | ai / general               | ⚠️ 仅在 document-query.md 提及，未入 router 资源表 |
+| chrome-devtools | MCP  | 全局（Trae IDE 内置） | `~/.trae-cn/mcps/s_{project}/` | frontend / quality         | ❌ 未在任何 router 资源表中引用                    |
+| windows-cli     | MCP  | 全局（Trae IDE 内置） | `~/.trae-cn/mcps/s_{project}/` | devops                     | ❌ 未在任何 router 资源表中引用                    |
 
 **MCP 统计：** 5 个（project: 2 + global: 3）| 已纳入资源表：2 个 | 未纳入：3 个
 

@@ -9,7 +9,6 @@
 
 | 资源                                     | 说明                             |
 | ---------------------------------------- | -------------------------------- |
-| `rules/project-architecture.md`          | 项目架构概览，了解模块间依赖     |
 | `skill/supabase`                         | Supabase 使用指南                |
 | `skill/supabase-postgres-best-practices` | Postgres 优化                    |
 | `skill/turborepo`                        | 构建配置                         |
