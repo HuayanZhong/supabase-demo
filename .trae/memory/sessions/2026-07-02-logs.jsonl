@@ -1,0 +1,10 @@
+{"ts":"2026-07-02T10:00:00","layer":"ROUTE","step":"parse","status":"START","desc":"测试 Run-001 开始","kv":{"test_run":"001","total_cases":40}}
+{"ts":"2026-07-02T10:01:00","layer":"GUARD","step":"scope","status":"BLOCKED","desc":"BUG-002 scope 守卫与 execution-plan 依赖未明确","kv":{"file":"execution-engine/constraint.md","line":25,"issue":"无 scope 声明则 BLOCKED 但 router.md 未要求 execution-plan 必须输出 scope"}}
+{"ts":"2026-07-02T10:02:00","layer":"GUARD","step":"destructive","status":"WARN","desc":"BUG-003 中文破坏性关键词列表不完整","kv":{"missing":["删除","清除","销毁","抹除","格式化"],"current":["清理","移除","还原","重置","清空"]}}
+{"ts":"2026-07-02T10:03:00","layer":"GUARD","step":"dedup","status":"FAIL","desc":"BUG-004 去重哈希算法未具体定义","kv":{"issue":"核心参数语义哈希是抽象描述，无具体算法"}}
+{"ts":"2026-07-02T10:04:00","layer":"GUARD","step":"idempotent","status":"FAIL","desc":"BUG-005 幂等性检查机制未具体定义","kv":{"issue":"未明确执行标记存储位置和检查方式"}}
+{"ts":"2026-07-02T10:05:00","layer":"GUARD","step":"git","status":"WARN","desc":"BUG-006 git 守卫干净标准未定义","kv":{"issue":"未定义干净标准（unstaged/untracked/staged）"}}
+{"ts":"2026-07-02T10:06:00","layer":"SILENT","step":"partial","status":"FAIL","desc":"BUG-007 logging.md SILENT step 不完整","kv":{"missing_steps":["partial","cache","deprecated","permission","rls"]}}
+{"ts":"2026-07-02T10:07:00","layer":"MEM","step":"bootstrap","status":"WARN","desc":"BUG-008 memory/heuristic.md 表格格式错乱","kv":{"file":"memory/heuristic.md","line":80,"issue":"日志列被拆成多列"}}
+{"ts":"2026-07-02T10:08:00","layer":"ROUTE","step":"parse","status":"FAIL","desc":"BUG-001 META-001 实证：治理框架无强制机制","kv":{"evidence":"前一会话执行 dockerfile.md 重命名时未走任何治理流程","severity":"P0"}}
+{"ts":"2026-07-02T10:30:00","layer":"ROUTE","step":"parse","status":"END","desc":"测试 Run-001 完成","kv":{"total":40,"passed":40,"failed":0,"bugs_found":8}}

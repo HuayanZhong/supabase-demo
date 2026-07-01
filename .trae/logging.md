@@ -35,6 +35,9 @@
 [ROUTE:match]     OK     | 匹配领域               | domain=frontend;agent=ui-designer
 [ROUTE:conflict]  OK     | 无冲突                 | priority=1
 [ROUTE:chain]     OK     | 依赖链编排完成          | steps=3;order=devops→backend→frontend
+[ROUTE:fast-path] OK     | 走快路径               | reason=低风险;type=重命名
+[ROUTE:fast-path] FALLBACK | 回退完整流程          | reason=含破坏性;type=删除
+[ROUTE:re-route]  COUNT  | 重新路由               | reason=新依赖/冲突;count=N/2;max=2
 [ROUTE:fallback]  SKIP   | 无匹配回退             | reason=无关键词匹配;fallback=solo-agent
 ```
 
@@ -62,13 +65,18 @@
 ### SILENT — 静默成功检测
 
 ```
-[SILENT:zero]     FAIL   | 文件零字节              | file=文件名;size=0;action=要求重新创建
-[SILENT:unchanged]FAIL   | 文件内容无变更           | file=文件名;before=hash;after=hash;same=true
-[SILENT:empty]    FAIL   | 工具返回空              | tool=工具名;retry=1;action=重试
-[SILENT:noop]     FAIL   | 命令执行无产出          | cmd=命令;exit=0;stdout=空;stderr=空
-[SILENT:git-diff] FAIL   | Git 无 diff             | changed_files=0;expected=N
-[SILENT:mcp]     FAIL   | MCP 静默失败            | mcp=名称;status=success;payload=空
-[SILENT:escalate]BLOCKED | 连续静默失败升级        | count=2;action=升级loop-governance
+[SILENT:zero]       FAIL    | 文件零字节              | file=文件名;size=0;action=要求重新创建
+[SILENT:unchanged]  FAIL    | 文件内容无变更           | file=文件名;before=hash;after=hash;same=true
+[SILENT:empty]      FAIL    | 工具返回空              | tool=工具名;retry=1;action=重试
+[SILENT:noop]       FAIL    | 命令执行无产出          | cmd=命令;exit=0;stdout=空;stderr=空
+[SILENT:git-diff]   FAIL    | Git 无 diff             | changed_files=0;expected=N
+[SILENT:mcp]        FAIL    | MCP 静默失败            | mcp=名称;status=success;payload=空
+[SILENT:partial]    FAIL    | 部分成功                | expected=N;actual=M;missing=文件列表
+[SILENT:cache]      FAIL    | 缓存命中掩盖            | cache=hit;task=build;action=--force重跑
+[SILENT:deprecated] WARN    | deprecated 警告         | tool=名称;warning=deprecated;action=记录到经验
+[SILENT:permission] FAIL    | 权限降级返回空          | resource=表名;status=200;rows=0;action=检查RLS
+[SILENT:rls]        FAIL    | Supabase RLS 返回空集   | table=表名;policy=缺失;action=要求补RLS
+[SILENT:escalate]   BLOCKED | 连续静默失败升级        | count=2;action=升级loop-governance
 ```
 
 ### EVAL — 评估层

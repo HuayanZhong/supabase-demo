@@ -209,6 +209,68 @@ Step 3 — frontend（ui-designer）
 
 > workflow 文件是为高频任务类型提供标准化参考，缺文件不会阻塞执行。Agent 始终以完成任务为目标，workflow 是指导而非约束。
 
+## Fast-Path 快路径（BUG-001 修复）
+
+并非所有任务都需要走完整 7 层闭环。低风险任务走快路径，仅经过路由 + 守卫 + 日志，跳过 execution-plan 和 evaluation。
+
+### Fast-Path 判定条件
+
+**同时满足以下条件时走快路径**：
+
+| 条件               | 说明                                                    |
+| ------------------ | ------------------------------------------------------- |
+| 任务类型           | 重命名 / 格式修复 / 文档修订 / 查询 / 解释 / 单文件编辑 |
+| 无文件创建/删除    | 不涉及新建或删除文件（重命名例外，需破坏性守卫确认）    |
+| 无跨域影响         | 仅涉及单一领域，无依赖链                                |
+| 无破坏性命令       | 不含 delete/rm/drop/清理 等关键词（重命名例外）         |
+| 用户未要求完整流程 | 用户没有明确要求"走完整流程"/"严格治理"                 |
+
+### Fast-Path 流程
+
+```
+用户请求
+    ↓
+[ROUTE:parse]       → 识别意图
+[ROUTE:match]       → 匹配领域
+[ROUTE:fast-path]   → 判定走快路径（OK / FALLBACK 到完整流程）
+    ↓
+[GUARD:scope]       → 范围守卫（无 plan 时降级为 WARN）
+[GUARD:destructive] → 破坏性守卫（重命名等操作触发确认）
+    ↓
+执行（直接由主 Agent 完成，不分派 subagent）
+    ↓
+[ENGINE:done]       → 输出执行摘要
+    ↓
+[MEM:write]         → 写入 sessions/ 摘要
+```
+
+### Fast-Path 日志
+
+```
+[ROUTE:fast-path] OK     | 走快路径 | reason=低风险;type=重命名
+[ROUTE:fast-path] FALLBACK | 回退完整流程 | reason=含破坏性;type=删除
+```
+
+### 不走 Fast-Path 的场景
+
+以下场景必须走完整 7 层流程，不得走快路径：
+
+- 涉及数据库变更（migration / seed / schema）
+- 涉及部署 / CI/CD 配置
+- 涉及密钥 / 凭证 / 安全相关
+- 涉及跨领域依赖链
+- 涉及 3 个以上文件修改
+- 用户明确要求"严格治理"/"完整流程"
+- evolution 阶段的自迭代变更
+
+### Fast-Path 与强制机制
+
+文档级约定无法保证执行。实际强制机制需要通过以下方式落地（提案，待人工确认是否启用）：
+
+1. **husky pre-commit hook**（推荐）— 校验本次提交是否包含 `[ROUTE:parse]` 日志（快路径或完整流程均可），无日志则警告
+2. **Trae IDE 规则触发**（依赖 IDE 能力）— 在 `.trae/rules/ai-safety.md` 增加"任务开始前必须输出 `[ROUTE:parse] START`"
+3. **会话自检**（最低保障）— 任务完成时输出追踪路径摘要，无 ROUTE 日志则标记为"未走治理流程"
+
 ## 无法分类
 
 关键词不匹配任何领域时，回退到默认逻辑：

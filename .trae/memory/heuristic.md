@@ -76,13 +76,13 @@ Evaluation 输出评估报告
 
 **异常与兜底：**
 
-| 场景                 | 现象                    | 处理方式                           | 日志                  |
-| -------------------- | ----------------------- | ---------------------------------- | --------------------- | ---------------- | --------------------- |
-| 项目记忆为空         | 首次运行或记忆被清      | 跳过 Trae 记忆，直接加载 sessions/ | `[MEM:bootstrap] INFO | 项目记忆为空     | action=跳过`          |
-| sessions/ 目录不存在 | 还未完成任务            | 跳过 session 加载                  | `[MEM:bootstrap] INFO | sessions/ 不存在 | action=跳过`          |
-| patterns/ 为空       | 尚无结晶模式            | 沿用通用流程，不套用模式           | `[MEM:bootstrap] INFO | patterns/ 为空   | action=通用流程`      |
-| experience/ 数据异常 | 文件损坏或格式不符      | 跳过该条经验，加载上一条           | `[MEM:bootstrap] WARN | experience/ 损坏 | file=xxx;action=跳过` |
-| 所有记忆均不可用     | 整个 .trae/memory/ 丢失 | 从零开始，如同首次运行             | `[MEM:bootstrap] FAIL | 所有记忆不可用   | action=从头开始`      |
+| 场景                 | 现象                    | 处理方式                           | 日志                                                               |
+| -------------------- | ----------------------- | ---------------------------------- | ------------------------------------------------------------------ |
+| 项目记忆为空         | 首次运行或记忆被清      | 跳过 Trae 记忆，直接加载 sessions/ | `[MEM:bootstrap] INFO \| 项目记忆为空 \| action=跳过`              |
+| sessions/ 目录不存在 | 还未完成任务            | 跳过 session 加载                  | `[MEM:bootstrap] INFO \| sessions/ 不存在 \| action=跳过`          |
+| patterns/ 为空       | 尚无结晶模式            | 沿用通用流程，不套用模式           | `[MEM:bootstrap] INFO \| patterns/ 为空 \| action=通用流程`        |
+| experience/ 数据异常 | 文件损坏或格式不符      | 跳过该条经验，加载上一条           | `[MEM:bootstrap] WARN \| experience/ 损坏 \| file=xxx;action=跳过` |
+| 所有记忆均不可用     | 整个 .trae/memory/ 丢失 | 从零开始，如同首次运行             | `[MEM:bootstrap] FAIL \| 所有记忆不可用 \| action=从头开始`        |
 
 **加载日志：**
 

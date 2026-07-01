@@ -1,0 +1,90 @@
+{
+  "type": "test_failure_backlog",
+  "timestamp": "2026-07-02T10:30:00Z",
+  "source": "run-001-results.md",
+  "trigger_evolution": true,
+  "test_summary": {
+    "total_cases": 40,
+    "passed": 40,
+    "failed": 0,
+    "bugs_found": 8
+  },
+  "bugs": [
+    {
+      "id": "BUG-001",
+      "severity": "P0",
+      "category": "governance_self_violation",
+      "title": "治理框架无强制机制（META-001 实证）",
+      "description": "前一会话执行 dockerfile.md 重命名时未走任何治理流程，证明文档级约定无强制力",
+      "affected_files": [".trae/runtime/router.md", ".trae/logging.md"],
+      "proposed_fix": [
+        "增加 fast-path 路由：低风险任务（重命名/格式修复/文档修订）仅走守卫+日志，跳过 evaluation",
+        "增加 husky pre-commit hook 校验 [ROUTE]/[GUARD] 日志格式存在性",
+        "logging.md 中日志写入机制从文档约定改为真实文件写入"
+      ]
+    },
+    {
+      "id": "BUG-002",
+      "severity": "P1",
+      "category": "doc_inconsistency",
+      "title": "scope 守卫与 execution-plan scope 声明依赖未明确",
+      "description": "constraint.md L25 说'无 scope 声明则 BLOCKED'，但 router.md 未要求 execution-plan 必须输出 scope，简单任务会被误拦截",
+      "affected_files": [".trae/execution-engine/constraint.md"],
+      "proposed_fix": "增加 fast-path 说明：无 execution-plan 的简单任务，scope 守卫降级为 WARN（记录但不拦截）"
+    },
+    {
+      "id": "BUG-003",
+      "severity": "P2",
+      "category": "doc_incomplete",
+      "title": "中文破坏性关键词列表不完整",
+      "description": "constraint.md L27 中文关键词缺失常用词：删除/清除/销毁/抹除/格式化",
+      "affected_files": [".trae/execution-engine/constraint.md"],
+      "proposed_fix": "扩展中文关键词列表"
+    },
+    {
+      "id": "BUG-004",
+      "severity": "P2",
+      "category": "doc_ambiguous",
+      "title": "去重哈希算法未具体定义",
+      "description": "'核心参数语义哈希'是抽象描述，无具体算法",
+      "affected_files": [".trae/execution-engine/constraint.md"],
+      "proposed_fix": "增加哈希算法伪代码：归一化（去空白+排序参数）→ SHA256 → 取前 16 字符"
+    },
+    {
+      "id": "BUG-005",
+      "severity": "P2",
+      "category": "doc_ambiguous",
+      "title": "幂等性检查机制未具体定义",
+      "description": "未明确执行标记存储位置、检查方式、幂等性敏感操作清单",
+      "affected_files": [".trae/execution-engine/constraint.md"],
+      "proposed_fix": "明确：执行标记存 .trae/loop-state/idempotent-marks.jsonl；敏感操作清单 migration/seed/deploy；检查方式读标记文件"
+    },
+    {
+      "id": "BUG-006",
+      "severity": "P2",
+      "category": "doc_ambiguous",
+      "title": "git 守卫干净标准未定义",
+      "description": "未定义'干净'标准（unstaged/untracked/staged）和处理建议",
+      "affected_files": [".trae/execution-engine/constraint.md"],
+      "proposed_fix": "定义干净标准=无 unstaged + 无 staged 的非任务文件；处理建议=stash 或 commit 任务文件后重试"
+    },
+    {
+      "id": "BUG-007",
+      "severity": "P1",
+      "category": "doc_incomplete",
+      "title": "logging.md SILENT step 不完整",
+      "description": "logging.md SILENT 段缺少 partial/cache/deprecated/permission/rls 等 step，但 evaluation/constraint.md 已定义这些静默类型",
+      "affected_files": [".trae/logging.md"],
+      "proposed_fix": "在 logging.md SILENT 段补全 5 个 step 的日志格式"
+    },
+    {
+      "id": "BUG-008",
+      "severity": "P2",
+      "category": "doc_format",
+      "title": "memory/heuristic.md 表格格式错乱",
+      "description": "L80 异常兜底表格的'日志'列被拆成多列，渲染异常",
+      "affected_files": [".trae/memory/heuristic.md"],
+      "proposed_fix": "修复表格格式，合并被拆分的列"
+    }
+  ]
+}
