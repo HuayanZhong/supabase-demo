@@ -234,16 +234,113 @@ AI 提取关键字段写入经验数据结构
 
 ### 模板一致性检测
 
-在根因分析的同时，对模板进行一致性检查：
+在根因分析的同时，对模板进行一致性检查。每个关键判断点输出日志。
 
-1. **模板漂移检测** — 比较实际生成代码与对应骨架之间的结构性差异：
-   - 如果同一类文件最近 5 次创建中有 ≥ 3 次在骨架外的相同位置添加了相同结构 → 骨架落后了
-   - 如果某一骨架文件最近 10 次被引用率为 0 → 考虑标记为废弃
-2. **模板缺口检测** — 检查是否有新出现的文件类型没有对应骨架：
-   - 如果某类文件（如 `*.dto.ts`）在项目中已存在 ≥ 3 个实例，但无对应骨架 → 建议新增
-3. **模板过时检测** — 检查骨架引用的 API / 装饰器 / 函数是否已弃用
+```
+[EVOLVE:template] START | 模板一致性检测开始 | templates_count=N; recent_tasks=N
+```
 
-漂移和缺口检测结果写入 `template_issues` 数组，作为分析输出的补充部分。
+#### 1. 模板漂移检测
+
+```
+[EVOLVE:template] DRIFT | 扫描骨架使用记录     | span=最近5次
+```
+
+检查每类文件实际生成代码与对应骨架之间的结构性差异：
+
+- 同一类文件最近 5 次创建中，逐次对比生成代码与骨架结构的差异：
+
+```
+[EVOLVE:template] DRIFT | 对比文件             | file=xxx.vue; skeleton=xxx.md; diff_count=N; diff_positions=[...]
+```
+
+- 如果差异项定位到同一位置 ≥ 3 次 → 标记漂移：
+
+```
+[EVOLVE:template] DRIFT | 漂移命中             | template=component.md; position=defineOptions; match=3/5; action=更新骨架
+```
+
+- 如果 < 3 次 → 不处理，仅记录：
+
+```
+[EVOLVE:template] DRIFT | 漂移不达标           | template=component.md; position=defineOptions; match=2/5; threshold=3; action=跳过
+```
+
+- 检查骨架引用率：
+
+```
+[EVOLVE:template] DRIFT | 检查引用率           | template=xxx.md; ref_count=N; total_tasks=N; ref_rate=N%
+```
+
+- 如果最近 10 次任务中引用率为 0 → 标记废弃候选项：
+
+```
+[EVOLVE:template] DRIFT | 引用率为零           | template=xxx.md; action=标记废弃候选项
+```
+
+- 否则：
+
+```
+[EVOLVE:template] DRIFT | 引用正常             | template=xxx.md; ref_rate=N%
+```
+
+#### 2. 模板缺口检测
+
+```
+[EVOLVE:template] GAP   | 扫描文件类型分布     | total_files=N; type_count=N
+```
+
+- 按文件扩展名和目录模式分组，统计每类文件的数量（仅统计项目源文件，排除 node_modules / dist / .git）：
+
+```
+[EVOLVE:template] GAP   | 文件类型统计         | type=*.dto.ts; count=5; has_skeleton=false
+[EVOLVE:template] GAP   | 文件类型统计         | type=*.middleware.ts; count=2; has_skeleton=false
+[EVOLVE:template] GAP   | 文件类型统计         | type=*.entity.ts; count=3; has_skeleton=true
+```
+
+- 如果某类型文件 ≥ 3 个实例且无对应骨架 → 缺口命中：
+
+```
+[EVOLVE:template] GAP   | 缺口命中             | type=*.dto.ts; count=5; skeleton=dto.md; action=建议新增骨架
+```
+
+- 如果某类型文件 < 3 个实例，属于低频类型 → 不处理：
+
+```
+[EVOLVE:template] GAP   | 低频类型跳过         | type=*.middleware.ts; count=2; threshold=3; action=跳过
+```
+
+#### 3. 模板过时检测
+
+```
+[EVOLVE:template] OBSOLETE | 检查 API 弃用     | skeleton_count=N
+```
+
+- 遍历每个骨架文件，检查引用的 API / 装饰器 / 函数是否有已知的替代项：
+
+```
+[EVOLVE:template] OBSOLETE | 检查骨架           | skeleton=xxx.md; referenced_apis=[...]
+```
+
+- 如果发现弃用 → 标记更新：
+
+```
+[EVOLVE:template] OBSOLETE | API 弃用           | skeleton=xxx.md; api=@MikroORM/xxx; alternative=@MikroORM/yyy; action=更新骨架
+```
+
+- 如果无弃用 → 跳过：
+
+```
+[EVOLVE:template] OBSOLETE | API 正常           | skeleton=xxx.md; all_apis_up_to_date=true
+```
+
+#### 汇总
+
+```
+[EVOLVE:template] RESULT | 检测完成             | drift_hits=N; gap_hits=N; obsolete=N; total_issues=N
+```
+
+所有检测结果写入 `template_issues` 数组，作为分析输出的补充部分。
 
 ---
 
