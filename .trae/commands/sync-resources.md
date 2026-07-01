@@ -1,9 +1,7 @@
 ---
 name: sync-resources
-description: 扫描 MCP 和 Skill 资源差异，同步到 governance 文件
+description: 扫描 MCP 和 Skill 资源差异，自动同步到 governance 文件
 ---
-
-请执行以下操作：
 
 ## 1. 读取当前状态
 
@@ -31,38 +29,36 @@ description: 扫描 MCP 和 Skill 资源差异，同步到 governance 文件
 
 > 注意：全局资源（Trae IDE 内置）不出现在 mcp.json 或 skills/ 目录中，如果 registry.md 已正确标注其来源为"全局"，则视为已注册。
 
-## 3. 扫描 router 引用
+## 3. 扫描所有引用
 
-- 遍历 `.trae/runtime/` 下所有 `router.md`
-- 标记各 MCP 和 Skill 是否被至少一个 router.md 的资源映射表引用
+- 遍历 `.trae/runtime/` 下所有 `router.md`，标记各 MCP 和 Skill 是否被引用
+- 遍历 `.trae/workflows/` 下所有 `.md`，标记是否引用该资源
+- 遍历 `.trae/execution-engine/` 下所有 `.md`，标记是否引用该资源
 
-## 4. 输出差异报告
+## 4. 根据差异执行同步
 
-格式如下：
+### 有新增资源
 
-```markdown
-## sync-resources 报告
+1. 在 `registry.md` 的 MCP/Skill 表格中新增一行，标注来源、类型、功能域
+2. 按 `.trae/resources/sync.md` 的传播规则更新所有 affected 文件
+3. 追加变更记录到 registry.md
+4. 输出 `[SYNC] ADD | {name} | {type} | {domain}`
 
-### 新增资源
+### 有删除资源
 
-- mcp: {name}（{project/global}）→ 建议加入 {domain}/router.md
-- skill: {name}（{project/global}）→ 建议加入 {domain}/router.md
-
-### 已删除资源
-
-- mcp: {name} → 需从 registry.md 移除
-- skill: {name} → 需从 registry.md 移除
+1. 从 `registry.md` 的 MCP/Skill 表格中删除对应行
+2. 清理所有引用该资源的 governance 文件（router.md / workflows / execution-engine）
+3. 追加变更记录到 registry.md
+4. 输出 `[SYNC] DEL | {name} | {type} | 已清理 {N} 个引用`
 
 ### 未引入 router 表
 
-- mcp: {name} → 未被任何 router.md 引用
-- skill: {name} → 未被任何 router.md 引用
+对于已注册但未被任何 router.md 引用的资源（如 chrome-devtools、windows-cli），不自动添加，仅在日志中提示：
+
+```
+[SYNC] WARN | {name} | {type} | 已注册但未引入任何 router.md 资源表
 ```
 
-## 5. 根据差异执行同步
+### 无差异
 
-执行 `.trae/resources/sync.md` 定义的同步流程：
-
-- 有新增 → 更新 registry.md + 传播到路由资源表
-- 有删除 → 清理 registry.md + 移除路由引用
-- 无差异 → 输出"注册表与实际一致，无需变更"
+输出 `[SYNC] OK | 注册表与实际一致，无需变更`

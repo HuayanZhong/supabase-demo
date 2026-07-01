@@ -163,6 +163,38 @@ AI 提取关键字段写入经验数据结构
 
 ## ③ 分析
 
+### 资源变更检测
+
+在进入根因分析前，先检查资源是否发生变化：
+
+```
+读取 .trae/resources/registry.md 的变更记录表
+    ↓
+对比上次聚合时的资源状态
+    ↓
+如果存在新增/删除的资源：
+    ├── 检查新增资源是否需要补充对应的 templates/scaffold/
+    │   ├── 需要补充 → 输出模板缺口
+    │   │   → 日志：[EVOLVE:sresource] GAP  | 模板缺口         | resource={name};missing_template={path}
+    │   └── 不需要 → 跳过
+    │
+    ├── 检查已删除资源是否需要清理对应的 templates/scaffold/
+    │   ├── 需要清理 → 输出模板过时
+    │   │   → 日志：[EVOLVE:resource] OBSOLETE | 模板过时       | resource={name};obsolete_template={path}
+    │   └── 不需要 → 跳过
+    │
+    ├── 检查资源变更是否影响现有 rules/
+    │   ├── 有影响 → 输出规则缺口
+    │   │   → 日志：[EVOLVE:resource] RULE_GAP | 规则缺口       | resource={name};missing_rule={domain}/{name}.md
+    │   └── 无影响 → 跳过
+    │
+    └── 输出汇总
+        → 日志：[EVOLVE:resource] RESULT | 资源变更分析       | added=N;deleted=N;template_gaps=N;rule_gaps=N
+
+上次聚合时的资源状态记录在最后一次聚合报告中
+如果无可比基准（首次聚合），跳过资源变更检测
+```
+
 ### 根因分析流程
 
 ```
