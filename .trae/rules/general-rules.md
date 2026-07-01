@@ -18,6 +18,19 @@ Monorepo 项目，使用 pnpm workspace + turborepo：
 - `apps/frontend` — Nuxt 前端
 - `packages/lint-config` — 共享 lint 配置
 
+## 任务路由
+
+**任何涉及代码变更的任务，必须先执行路由决策，不得直接开始编码。**
+
+路由文件位于 `.trae/runtime/router.md`，按以下流程执行：
+
+1. 读取 `runtime/router.md` 的关键词映射，判断请求所属领域
+2. 如匹配到领域，读取对应 `runtime/{domain}/router.md`，按子任务分类决定 agent 和资源
+3. 如匹配多个领域，按冲突优先级裁决（router.md 中有优先级表）
+4. 如无法匹配任何领域，回退到 agents/ 下 description 匹配或 SOLO Agent 自主判断
+
+> 路由决策的目的不是限制 AI，而是确保每次任务都加载正确的 rules、skills 和 MCP，减少遗漏和错误。
+
 ## 代码风格
 
 - 使用项目已有的工具链（oxlint、oxfmt、prettier）
