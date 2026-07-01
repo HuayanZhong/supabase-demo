@@ -7,16 +7,29 @@ description: 扫描 MCP 和 Skill 资源差异，同步到 governance 文件
 
 ## 1. 读取当前状态
 
-- 读取 `.trae/mcp.json`，提取 `mcpServers` 下所有 key 作为当前 MCP 列表
-- 读取 `.trae/skills/` 目录，列出所有子目录作为当前 Skill 列表（检查每个目录下是否存在 SKILL.md）
+**MCP 来源（两处）：**
+
+- **项目级** — 读取 `.trae/mcp.json`，提取 `mcpServers` 下所有 key
+- **全局级** — 全局 MCP 不写进 mcp.json，需通过 registry.md 中"来源=全局"的条目来识别
+
+将上述合并为**完整 MCP 列表**。
+
+**Skill 来源（两处）：**
+
+- **项目级** — 读取 `.trae/skills/` 目录，列出有 SKILL.md 的子目录
+- **全局级** — 全局 Skill 不在 skills/ 目录中（如 nuxt-ui、supabase、supabase-postgres-best-practices、turborepo），需通过 registry.md 中"来源=全局"的条目来识别
+
+将上述合并为**完整 Skill 列表**。
 
 ## 2. 对比注册表
 
 - 读取 `.trae/resources/registry.md`
 - 标记差异：
-  - 实际有但注册表没有 → **新增资源**
-  - 注册表有但实际已不存在 → **已删除资源**
-  - 实际有也注册了 → **正常**
+  - 真实存在但注册表没有 → **新增资源**
+  - 注册表有但真实已不存在 → **已删除资源**
+  - 两者一致 → **正常**
+
+> 注意：全局资源（Trae IDE 内置）不出现在 mcp.json 或 skills/ 目录中，如果 registry.md 已正确标注其来源为"全局"，则视为已注册。
 
 ## 3. 扫描 router 引用
 
@@ -32,8 +45,8 @@ description: 扫描 MCP 和 Skill 资源差异，同步到 governance 文件
 
 ### 新增资源
 
-- mcp: {name} → 建议加入 {domain}/router.md
-- skill: {name} → 建议加入 {domain}/router.md
+- mcp: {name}（{project/global}）→ 建议加入 {domain}/router.md
+- skill: {name}（{project/global}）→ 建议加入 {domain}/router.md
 
 ### 已删除资源
 
