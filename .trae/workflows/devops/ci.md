@@ -1,5 +1,7 @@
 # CI/CD 流程配置
 
+**对应 Agent：** `devops-architect`
+
 ## 触发条件
 
 - 用户要求「配置 CI/CD」「修改 GitHub Actions」「调整构建流程」等

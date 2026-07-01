@@ -1,5 +1,7 @@
 # Git 钩子配置
 
+**对应 Agent：** `devops-architect`
+
 ## 触发条件
 
 - 用户要求「配置 Git hooks」「设置 husky」「配置 lint-staged」「改 pre-commit」

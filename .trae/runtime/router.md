@@ -125,6 +125,16 @@
 → 拆为 3 个子任务，分别路由
 ```
 
+## 调用 Workflow
+
+子路由分配任务类型后，按以下顺序调用 workflow：
+
+1. 查找 `workflows/{domain}/{task-type}.md` — 如有则按步骤执行
+2. **文件不存在** → 执行 Agent 根据 router.md 的资源映射表和项目 best practice 独立决策
+3. 仍无法决策 → 回退到对应 Agent 的通用能力
+
+> workflow 文件是为高频任务类型提供标准化参考，缺文件不会阻塞执行。Agent 始终以完成任务为目标，workflow 是指导而非约束。
+
 ## 无法分类
 
 关键词不匹配任何领域时，回退到默认逻辑：

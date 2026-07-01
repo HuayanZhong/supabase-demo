@@ -1,5 +1,7 @@
 # 后端代码重构
 
+**对应 Agent：** `backend-architect`
+
 ## 触发条件
 
 - 任务类型匹配：backend → refactor

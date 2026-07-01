@@ -1,5 +1,7 @@
 # 项目配置变更
 
+**对应 Agent：** `devops-architect`
+
 ## 触发条件
 
 - 用户要求「修改配置」「调整 nuxt.config」「改 tsconfig」

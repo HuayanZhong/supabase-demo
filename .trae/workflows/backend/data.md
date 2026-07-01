@@ -72,7 +72,13 @@
   npx mikro-orm migration:up
   ```
 - 验证：
-  - 使用 supabase MCP `execute_sql` 执行 `\d <table_name>` 确认表结构
+  - 使用 supabase MCP `execute_sql` 执行以下 SQL 确认表结构：
+    ```sql
+    SELECT column_name, data_type, is_nullable, column_default
+    FROM information_schema.columns
+    WHERE table_name = '<table_name>'
+    ORDER BY ordinal_position;
+    ```
   - 使用 supabase MCP `list_migrations` 确认迁移已记录
 
 ## 完成检查
