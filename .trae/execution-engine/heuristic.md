@@ -66,3 +66,14 @@ Step 2 subagent 读取 context →
 - 遗留问题（如有）
 - 影响范围（哪些模块/功能会受影响）
 ```
+
+## 完成后触发评估
+
+执行完毕并输出摘要后，**必须触发以下后续流程**：
+
+1. **调用 evaluation** — 读取 `evaluation/{domain}/` 下的约束/启发式/策略，执行质量门禁检查
+2. **输出评估报告** — 按 evaluation/heuristic.md 通用评估流程执行 ①→⑦
+3. **写入经验数据** — 按 evolution/heuristic.md ① 数据收集规范，将本次执行的经验写入 `.trae/experience/`
+4. 如任务属于依赖链的一部分，将执行摘要作为 context 传递给下一步 subagent
+
+不得在未触发评估的情况下直接结束任务。

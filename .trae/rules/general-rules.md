@@ -31,6 +31,31 @@ Monorepo 项目，使用 pnpm workspace + turborepo：
 
 > 路由决策的目的不是限制 AI，而是确保每次任务都加载正确的 rules、skills 和 MCP，减少遗漏和错误。
 
+## 任务完成闭环
+
+**每次任务评估完成后（无论通过/不通过），必须将经验数据写入 evolution。**
+
+完整流程链：
+
+```
+路由 → 工作流 → 执行规划 → 执行引擎 → 评估
+                                         ↓
+                                   通过 / 不通过
+                                         ↓
+                               evolution（元治理 — 收集经验数据）
+                                         ↓
+                               ⏳ 达到阈值后 → 聚合分析 → 改进治理规则
+```
+
+任务完成后，AI 按以下步骤操作：
+
+1. 读取 `.trae/evolution/` 下的 3 个文件（constraint/heuristic/policy）
+2. 按 `evolution/heuristic.md` ① 数据收集 规范，输出经验数据结构
+3. 将经验数据写入 `.trae/experience/{domain}/{task-type}-{date}.json`
+4. 如达到聚合阈值（10 次或 7 天），自动触发进化流程
+
+**这条规则适用于所有任务，不得跳过。**
+
 ## 代码风格
 
 - 使用项目已有的工具链（oxlint、oxfmt、prettier）
