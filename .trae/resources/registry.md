@@ -22,15 +22,15 @@
 
 ## Skill
 
-| 名称                             | 类型  | 来源      | 实际位置                               | 功能域            | 路由资源表引用                      |
-| -------------------------------- | ----- | --------- | -------------------------------------- | ----------------- | ----------------------------------- |
-| ui-ux-pro-max                    | skill | 项目本地  | `skills/ui-ux-pro-max/`（有 SKILL.md） | frontend          | ✅ frontend router.md               |
-| nuxt-ui                          | skill | Trae 内置 | 无可执行目录，系统上下文可用           | frontend          | ✅ frontend router.md               |
-| supabase                         | skill | Trae 内置 | 无可执行目录，系统上下文可用           | backend / quality | ✅ backend/ai router.md             |
-| supabase-postgres-best-practices | skill | Trae 内置 | 无可执行目录，系统上下文可用           | backend           | ✅ backend router.md                |
-| turborepo                        | skill | Trae 内置 | 无可执行目录，系统上下文可用           | devops / shared   | ✅ backend/devops/quality router.md |
+| 名称                             | 类型  | 来源     | 实际位置                                          | 功能域            | 路由资源表引用                      |
+| -------------------------------- | ----- | -------- | ------------------------------------------------- | ----------------- | ----------------------------------- |
+| ui-ux-pro-max                    | skill | 原生目录 | `skills/ui-ux-pro-max/`                           | frontend          | ✅ frontend router.md               |
+| nuxt-ui                          | skill | Junction | `skills/nuxt-ui/` → `.agents/skills/nuxt-ui/`     | frontend          | ✅ frontend router.md               |
+| supabase                         | skill | Junction | `skills/supabase/` → `.agents/skills/supabase/`   | backend / quality | ✅ backend/ai router.md             |
+| supabase-postgres-best-practices | skill | Junction | `skills/supabase-postgres/` → `.agents/skills/`   | backend           | ✅ backend router.md                |
+| turborepo                        | skill | Junction | `skills/turborepo/` → `.agents/skills/turborepo/` | devops / shared   | ✅ backend/devops/quality router.md |
 
-**Skill 统计：** 5 个（local: 1 + global: 4）| 已纳入资源表：5 个 | 未纳入：0 个
+**Skill 统计：** 5 个（原生: 1 + Junction: 4）| 已纳入资源表：5 个 | 未纳入：0 个
 
 ---
 
@@ -60,6 +60,6 @@
 - 此文件是 governance 中所有资源引用的**真实来源（source of truth）**
 - 添加/删除 MCP 或 Skill 后，必须先更新此文件，再通过 `sync.md` 传播到各 router.md
 - 资源按来源分三类：
-  - **项目级** — 在 `.trae/mcp.json` 或 `.trae/skills/` 中有实体文件
+  - **原生目录** — 直接在 `.trae/skills/` 中有实体文件和 SKILL.md
+  - **Junction（符号链接）** — `.trae/skills/` 中是目录符号链接，实际文件在 `.agents/skills/`
   - **全局 MCPS** — 在 `~/.trae-cn/mcps/s_{project}/` 中有注册，Trae IDE 自动注入
-  - **Trae 内置** — 由 Trae IDE 系统上下文提供，无可执行目录
