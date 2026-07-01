@@ -43,6 +43,28 @@
 [ENGINE:done]     END    | 执行完成               | files=3;tools=5;errors=0
 ```
 
+### GUARD — 守卫节点
+
+```
+[GUARD:dedup]     SKIP   | 工具去重触发           | tool=pnpm;hash=a1b2c3;call_count=2
+[GUARD:scope]     BLOCKED| 越界拦截               | file=超出范围文件;scope=限定范围
+[GUARD:tool]      BLOCKED| 非法工具                | tool=未注册工具;allowed=允许列表
+[GUARD:destructive]WARN   | 破坏性操作              | action=命令详情;confirmed=true/false
+[GUARD:context]   FAIL   | 依赖链上下文缺失        | missing_key=缺失字段;required_by=需要方
+```
+
+### SILENT — 静默成功检测
+
+```
+[SILENT:zero]     FAIL   | 文件零字节              | file=文件名;size=0;action=要求重新创建
+[SILENT:unchanged]FAIL   | 文件内容无变更           | file=文件名;before=hash;after=hash;same=true
+[SILENT:empty]    FAIL   | 工具返回空              | tool=工具名;retry=1;action=重试
+[SILENT:noop]     FAIL   | 命令执行无产出          | cmd=命令;exit=0;stdout=空;stderr=空
+[SILENT:git-diff] FAIL   | Git 无 diff             | changed_files=0;expected=N
+[SILENT:mcp]     FAIL   | MCP 静默失败            | mcp=名称;status=success;payload=空
+[SILENT:escalate]BLOCKED | 连续静默失败升级        | count=2;action=升级loop-governance
+```
+
 ### EVAL — 评估层
 
 ```
