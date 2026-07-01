@@ -93,3 +93,73 @@
 3. **循环必记次数** — 所有 RETRY 和 BLOCKED 必须附带 cycle 号
 4. **耗时操作必记** — 超过 5 秒的操作需要 START + END 对
 5. **不得累积** — 每步独立一行，不要合并多步到一条日志
+
+## 最终路径摘要
+
+**任务完成后，必须在输出中附加一条追踪路径摘要**，压缩显示本次任务经历的全链路。
+
+### 格式
+
+```
+任务执行追踪 (task: "<任务简要描述>")
+  路径: [LAYER] → [LAYER] → [LAYER] → ...
+  关键节点:
+    ROUTE → {domain} ({agent})
+    PLAN  → {task-type}
+    ENGINE→ {关键步骤摘要}
+    {LOOP → N 次循环}
+    EVAL  → {评估结果}
+    EVOLVE→ {经验已收集 / 触发进化}
+  总耗时: {循环次数} / {估算耗时}
+  结论: ✅ 通过 / ❌ 不通过 / ⚠️ 人工介入
+```
+
+### 示例
+
+```
+任务执行追踪 (task: "给 dashboard 加 habits 列表")
+  路径: ROUTE → PLAN → ENGINE → EVAL → LOOP → ENGINE → EVAL
+  关键节点:
+    ROUTE → frontend (ui-designer)
+    PLAN  → frontend/create
+    ENGINE→ 创建组件 → 注册导航 → 添加国际化 key
+    EVAL  → ③质量门禁 FAIL (check-types ×2)
+    LOOP  → re-execute ① (修复类型错误) → ② (修复未定义变量)
+    ENGINE→ 修复类型错误
+    EVAL  → ③质量门禁 OK ✅
+  循环: 2 次 re-execute
+  结论: ✅ 通过
+```
+
+```
+任务执行追踪 (task: "配置 GitHub Actions 自动部署")
+  路径: ROUTE → PLAN → ENGINE → EVAL
+  关键节点:
+    ROUTE → devops (devops-architect)
+    PLAN  → devops/ci
+    ENGINE→ 创建 .github/workflows/deploy.yml
+    EVAL  → ①文件完整性 ✅ | ③语义验证 ✅ | ⑤范围检查 ✅
+  循环: 0 次
+  结论: ✅ 通过
+```
+
+```
+任务执行追踪 (task: "接入 DeepSeek 对话模型")
+  路径: ROUTE → PLAN → ENGINE → EVAL → LOOP → LOOP → HUMAN
+  关键节点:
+    ROUTE → ai (ai-integration-engineer)
+    PLAN  → ai/integrate
+    ENGINE→ 创建 service → 配置 provider
+    EVAL  → 密钥硬编码 FAIL → 修复 → EVAL FAIL → 同错误
+    LOOP  → re-execute ① (移动 env) → re-execute ② (仍暴露)
+    LOOP  → 语义循环检测 → re-plan → 仍出同类问题
+    HUMAN → 人工介入
+  循环: 3 次 re-execute → 1 次 re-plan (已超上限)
+  结论: ⚠️ 人工介入
+```
+
+### 应用位置
+
+- 单步任务：在 evaluation 最终结果之后输出
+- 依赖链任务：在整条链完成后输出全链追踪，每步独立输出子追踪
+- 人工介入：在人工报告末尾输出，附带卡住原因
