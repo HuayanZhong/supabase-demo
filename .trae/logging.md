@@ -82,6 +82,20 @@
 [SILENT:escalate]   BLOCKED | 连续静默失败升级        | count=2;action=升级loop-governance
 ```
 
+### MEM — 记忆层
+
+```
+[MEM:bootstrap]   START  | Bootstrap 开始         | phase=1/3
+[MEM:bootstrap]   LOAD   | 阶段 N 完成            | source=sessions;loaded=N
+[MEM:bootstrap]   READY  | 记忆就绪               | available_sources=N/N
+[MEM:retention]   CHECK  | 检查 retention         | path=sessions/;age=Nd;limit=30d
+[MEM:retention]   FOUND  | 发现超期文件           | files=N;oldest=date
+[MEM:retention]   ARCHIVE| 归档超期文件           | target=aggregation/;deleted=N
+[MEM:summary]     CHECK  | 检查摘要缓存           | age=Nd;limit=30d
+[MEM:summary]     REBUILD| 重建摘要               | old_lines=N;new_file=xxx
+[MEM:write]       DONE   | 写入完成               | target=experience/;source=evolution
+```
+
 ### EVAL — 评估层
 
 ```

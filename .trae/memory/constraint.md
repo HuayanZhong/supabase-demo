@@ -23,9 +23,10 @@
 | 写入 sessions/   | 会话结束时统一归档，中间状态不持久化           |
 | 跨会话读取       | 必须先校验数据的时效性（超期数据标记为 stale） |
 
-## 容量约束
+## 容量约束（执行触发点见 policy.md）
 
-- `sessions/` 保留最近 30 天的会话记录
-- `experience/` 保留最近 60 天的经验快照
-- `patterns/` 和 `profile/` 永久保留（可手动清理）
-- 超出保留期的数据压缩为摘要后删除原始文件
+所有保留期策略由 policy.md 定义，检查嵌入在写入操作前：
+
+- sessions/ 30 天 → 写入新 session 前自检
+- experience/ 60 天 → evolution 写入前自检
+- patterns/ 和 profile/ 永久保留，无清理触发点

@@ -107,7 +107,16 @@ Evaluation 输出评估报告
 
 "最近"定义：按文件名中的日期/时间戳倒序，取前 10 个。
 
-聚合摘要：当 sessions > 50 时，对 11~50 名的会话生成摘要（任务类型 + 结果 + 关键文件），不加载详情。摘要缓存在 `.trae/memory/aggregation/sessions-summary-{date}.json`，每 30 天重建。
+聚合摘要：当 sessions > 50 时，对 11~50 名的会话生成摘要（任务类型 + 结果 + 关键文件），不加载详情。摘要缓存在 `.trae/memory/aggregation/sessions-summary-{date}.json`。
+
+**摘要重建时机**：不依赖"每 30 天"的外部调度。而是在 Bootstrap 读取时，检查缓存摘要的创建日期与当前日期之差，超过 30 天则触发重建，否则直接使用缓存。重建后写入新摘要，旧摘要保留在 archive/。
+
+```
+[MEM:summary] CHECK  | 检查 sessions 摘要缓存 | path=aggregation/sessions-summary-{date}.json
+[MEM:summary] OK     | 缓存未过期             | age=5d;limit=30d;action=直接使用
+[MEM:summary] WARN   | 缓存已过期             | age=45d;limit=30d;action=触发重建
+[MEM:summary] REBUILD| 重建完成               | old_lines=40;new_file=sessions-summary-{new-date}.json
+```
 
 ### 权限说明
 

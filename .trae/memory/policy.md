@@ -2,16 +2,44 @@
 
 ## 数据保留策略
 
-| 目录        | 保留期 | 超期处理             | 说明                    |
-| ----------- | ------ | -------------------- | ----------------------- |
-| sessions/   | 30 天  | 压缩为月度摘要后删除 | 会话上下文时效性强      |
-| experience/ | 60 天  | 压缩为聚合摘要后删除 | 与 evolution 保留期对齐 |
-| patterns/   | 永久   | 手动清理             | 成功模式是长期资产      |
-| profile/    | 永久   | 手动清理             | 用户偏好持续有效        |
+| 目录        | 保留期 | 超期处理             | 说明                    | 执行触发点                               |
+| ----------- | ------ | -------------------- | ----------------------- | ---------------------------------------- |
+| sessions/   | 30 天  | 压缩为月度摘要后删除 | 会话上下文时效性强      | 写入新 session **之前**自动检查          |
+| experience/ | 60 天  | 压缩为聚合摘要后删除 | 与 evolution 保留期对齐 | evolution 写入新 experience **之前**自检 |
+| patterns/   | 永久   | 手动清理             | 成功模式是长期资产      | N/A                                      |
+| profile/    | 永久   | 手动清理             | 用户偏好持续有效        | N/A                                      |
 
-## 冲突处理
+## 执行触发机制
 
-### Pattern 冲突
+每次写入新数据前，自动执行保留期检查，非外部定时任务。
+
+### sessions/ 清理（触发点：写入新 session 前）
+
+```
+[SESSION:retention] CHECK  | 检查 sessions 目录     | path=sessions/
+[SESSION:retention] FOUND  | 发现超期文件           | files=3;oldest=2026-05-15;age=48d;limit=30d
+[SESSION:retention] ARCHIVE| 压缩为月度摘要后删除   | compressed_to=aggregation/sessions-monthly-202605.jsonl;deleted=3
+[SESSION:retention] OK     | 无需清理               | age=5d;limit=30d;action=跳过
+```
+
+### experience/ 清理（触发点：evolution 写入新 experience 前）
+
+```
+[EXPERIENCE:retention] CHECK  | 检查 experience 目录 | path=experience/
+[EXPERIENCE:retention] FOUND  | 发现超期文件         | files=2;oldest=2026-04-01;age=92d;limit=60d
+[EXPERIENCE:retention] ARCHIVE| 压缩为聚合摘要后删除 | compressed_to=aggregation/experience-monthly-202606.jsonl;deleted=2
+[EXPERIENCE:retention] OK     | 无需清理             | age=10d;limit=60d;action=跳过
+```
+
+### 不可拆分独立调度
+
+保留策略的检查不应该是"每个月 1 号执行"——那意味着需要外部 cron。正确做法是**绑定到已有的写操作**：写入 session 才检查 session 过期，写入 experience 才检查 experience 过期。没有写操作时不消耗性能。
+
+## 冲突处理（执行触发点）
+
+以下冲突检查在**新 pattern 入库时**和**新 profile 条目写入时**自动执行，非独立调度。
+
+### Pattern 冲突（触发点：新 pattern 入库前）
 
 同一模式被识别到多个变体时：
 
