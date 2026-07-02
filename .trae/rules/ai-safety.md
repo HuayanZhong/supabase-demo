@@ -44,3 +44,22 @@ scope 守卫对 `.trae/` 路径特殊处理：
 - 输出操作计划
 - 等待人工确认
 - 不得通过 AI 自主迭代修改（即使 evolution 也不行）
+
+## 治理系统自激活（GOV-001 修复）
+
+每次开始实质性编码任务前，必须执行以下自检流程激活治理系统：
+
+```
+① 读取 .trae/runtime/router.md
+② 按 router.md 的领域分类规则匹配当前任务意图
+③ 输出 [ROUTE:check] START | task=<任务简述>
+④ 输出 [ROUTE:match] DOMAIN | domain=<匹配领域>;keywords=<命中关键词>
+⑤ 按 Fast-Path 判定条件检查是否走快路径
+⑥ 输出 [ROUTE:fast-path] OK | 走快路径 / FALLBACK | 走完整流程
+⑦ 读取 .trae/rules/README.md 确认需要加载的规则
+```
+
+此流程适用于：
+
+- 创建/修改代码文件（单文件编辑走快路径时可不执行）
+- 涉及多领域或需要新建文件的任务 **必须执行**
