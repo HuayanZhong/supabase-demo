@@ -1,0 +1,84 @@
+{
+  "task_id": "frontend-full-audit",
+  "date": "2026-07-02",
+  "domain": "frontend+quality",
+  "description": "全量检查前端项目规则合规性",
+  "audit_scope": "apps/frontend/app 下 38 个 .vue + 6 个 .ts + packages(i18n/types)",
+  "verification": { "lint": true, "typecheck": true, "format": true },
+  "rules": {
+    "triggered": [
+      "ai-safety",
+      "comments",
+      "code-style",
+      "naming",
+      "frontend-types",
+      "i18n",
+      "styles",
+      "review"
+    ],
+    "relevant": [
+      "ai-safety",
+      "comments",
+      "code-style",
+      "naming",
+      "frontend-types",
+      "i18n",
+      "styles",
+      "review",
+      "document-query",
+      "git-commit-message"
+    ],
+    "unused_relevant": ["document-query", "git-commit-message"],
+    "coverage_pct": 80
+  },
+  "findings": [
+    {
+      "severity": "high",
+      "rule": "i18n",
+      "file": "ProjectAiInsightsTab.vue",
+      "line": 24,
+      "desc": "i18n 参数中硬编码中文 '进展顺利'/'需加快进度'，应使用 t() 或改为模板插值",
+      "status": "open"
+    },
+    {
+      "severity": "high",
+      "rule": "i18n",
+      "file": "ProjectAiInsightsTab.vue",
+      "line": 36,
+      "desc": "回退值硬编码中文 '核心'",
+      "status": "open"
+    },
+    {
+      "severity": "medium",
+      "rule": "i18n",
+      "file": "ProjectAiInsightsTab.vue",
+      "lines": [64, 71, 78, 85],
+      "desc": "recentAnalyses 的 date 字段硬编码中文时间描述",
+      "status": "open"
+    },
+    {
+      "severity": "low",
+      "rule": "i18n",
+      "file": "useProjects.ts",
+      "desc": "mock 数据 60 处硬编码中文（用户名/任务名/描述），作为 demo 数据可接受",
+      "status": "acknowledged"
+    },
+    {
+      "severity": "low",
+      "rule": "i18n",
+      "file": "useLearn.ts",
+      "desc": "mock 数据中硬编码中文标签/标题/作者",
+      "status": "acknowledged"
+    }
+  ],
+  "passes": [
+    "注释规范: 无死代码/无装饰分隔线/无文件头描述注释",
+    "代码风格: 全部 <script setup> lang=ts，无 Options API",
+    "类型导入: 全部使用 import type from @supabase/types",
+    "SVG 绑定: 所有 cx/cy/r 使用 String() 包裹",
+    "文件位置: composables/utils 分工正确",
+    "i18n 同步: 4 语言 104 键完全对齐"
+  ],
+  "outcome": "pass_with_issues",
+  "notes": "高优问题仅有 ProjectAiInsightsTab.vue 的 2 处 i18n 参数硬编码。mock 数据的中文硬编码属于 demo 阶段可接受范畴，生产环境需全部走 i18n。整体合规率估算 ~93%。"
+}

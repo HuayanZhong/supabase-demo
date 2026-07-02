@@ -19,10 +19,10 @@ const insights = computed(() => {
       icon: "i-lucide-trending-up",
       color: "text-info",
       bg: "bg-info/10",
-      text: t("Project AiProgressText", {
-        progress: p.progress,
-        status: p.progress >= 80 ? "进展顺利" : "需加快进度",
-      }),
+      text:
+        p.progress >= 80
+          ? t("Project AiProgressOnTrack", { progress: p.progress })
+          : t("Project AiProgressBehind", { progress: p.progress }),
       detail: `${p.progress}% / 100%`,
       trend: p.progress >= 80 ? "+12%" : "+5%",
     },
@@ -33,7 +33,7 @@ const insights = computed(() => {
       bg: "bg-warning/10",
       text: t("Project AiRiskText", {
         count: highRisk,
-        area: p.tags[0] ?? "核心",
+        area: t("Project AiRiskAreaDefault"),
       }),
       detail: `${highRisk} ${t("Project AiIssues")}`,
       trend: highRisk > 0 ? t("Project AiNeedsAttention") : t("Project AiAllClear"),
@@ -61,28 +61,28 @@ const recommendations = computed(() => {
 // 模拟 AI 近期分析记录
 const recentAnalyses = computed(() => [
   {
-    date: "2 小时前",
+    date: t("Project AiDateHoursAgo", { n: 2 }),
     content: t("Project AiAnalysisCodeQuality"),
     icon: "i-lucide-code",
     bg: "bg-info/10",
     color: "text-info",
   },
   {
-    date: "6 小时前",
+    date: t("Project AiDateHoursAgo", { n: 6 }),
     content: t("Project AiAnalysisProgress"),
     icon: "i-lucide-bar-chart-3",
     bg: "bg-warning/10",
     color: "text-warning",
   },
   {
-    date: "1 天前",
+    date: t("Project AiDateDaysAgo", { n: 1 }),
     content: t("Project AiAnalysisTask"),
     icon: "i-lucide-list-checks",
     bg: "bg-success/10",
     color: "text-success",
   },
   {
-    date: "2 天前",
+    date: t("Project AiDateDaysAgo", { n: 2 }),
     content: t("Project AiAnalysisSchedule"),
     icon: "i-lucide-calendar-clock",
     bg: "bg-muted/20",
