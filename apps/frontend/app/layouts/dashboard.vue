@@ -26,6 +26,11 @@ const navItems: NavigationMenuItem[][] = [
       to: "/dashboard/projects",
       icon: "i-lucide-folder-open",
     },
+    {
+      label: "学习与资料",
+      to: "/dashboard/learn",
+      icon: "i-lucide-brain",
+    },
   ],
 ];
 

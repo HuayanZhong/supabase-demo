@@ -15,3 +15,17 @@ export type {
   ProjectColor,
   Project,
 } from "./project/index.ts";
+
+// 学习与资料
+export type {
+  KnowledgeCategory,
+  KnowledgeStatus,
+  KnowledgeItem,
+  Note,
+  BookmarkSource,
+  Bookmark,
+  LearningRecord,
+  LearnActivityType,
+  LearnActivity,
+  CategoryMeta,
+} from "./learn/index.ts";
