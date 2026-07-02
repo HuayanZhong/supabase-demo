@@ -1,5 +1,6 @@
 ---
-alwaysApply: true
+alwaysApply: false
+description: 语言约束（已合并至 ai-safety.md）
 ---
 
 # 语言

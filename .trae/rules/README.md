@@ -1,99 +1,72 @@
 ---
 alwaysApply: false
-description: 项目中必须遵守的显式规则，包括全局规则和按领域细化的编码规范。
+description: 项目中必须遵守的显式规则索引
 ---
 
 # Rules — 项目规范与规则
 
-## 职责
-
-`rules/` 定义了项目中必须遵守的显式规则。规则必须是**强制约束**（必须/不得/禁止），不含操作指南。
+## 加载层级
 
 ```
-language.md + interaction.md + ai-safety.md (alwaysApply: true)   ← 每次对话自动加载
-                              │
-                              ▼
-                        runtime/router.md                          ← 激活路由流程
-                              │
-                              ▼
-                    rules/{domain}/*.md                            ← 领域特有约束
+ai-safety.md (alwaysApply: true) ← 每次对话自动注入（语言 + 交互 + 安全 + 预检清单）
+         │
+         ▼
+场景规则（agent 按任务关键词自行加载）
+         │
+         ▼
+领域规则（按 frontend/backend/shared/devops/ai/quality 匹配）
 ```
-
----
 
 ## 文件结构
 
 ```
 .trae/rules/
 ├── README.md                 # 本文档
-├── language.md               # 语言约束（alwaysApply）
-├── interaction.md            # 交互方式约束（alwaysApply）
-├── ai-safety.md              # AI 行为安全约束（alwaysApply）
+├── ai-safety.md              # alwaysApply — 语言/交互/安全/预检清单
+├── language.md               # （已合并至 ai-safety.md，保留参考）
+├── interaction.md            # （已合并至 ai-safety.md，保留参考）
 ├── code-style.md             # 代码风格约束
 ├── comments.md               # 注释约束（全项目通用）
 ├── document-query.md         # 文档查询约束
 ├── naming.md                 # 命名规范约束
 ├── review.md                 # 代码审查约束
 ├── git-commit-message.md     # Commit Message 规范
-│
 ├── frontend/
-│   ├── comments.md           # 注释约束
+│   ├── comments.md           # 前端注释约束
 │   ├── frontend-types.md     # 类型定义约束
 │   ├── i18n.md               # 国际化约束
 │   └── styles.md             # 样式约束
-│
 ├── backend/
 │   ├── nestjs.md             # NestJS 开发约束
-│   └── database.md           # 数据库与 MikroORM 约束
-│
+│   └── database.md           # 数据库约束
 ├── devops/
 │   └── pipeline.md           # CI/CD 与部署约束
-│
 ├── quality/
 │   ├── testing.md            # 测试约束
 │   └── security.md           # 安全约束
-│
 ├── ai/
-│   ├── prompt-injection.md  # 提示注入保护
-│   ├── rag-hygiene.md       # RAG 卫生规范
-│   ├── secrets.md           # 密钥安全约束
-│   └── tool-perms.md        # 工具权限约束
-│
-├── backend/
-│   ├── nestjs.md             # NestJS 开发约束
-│   └── database.md           # 数据库与 MikroORM 约束
-│
-├── devops/
-│   └── pipeline.md           # CI/CD 与部署约束
-│
-├── frontend/
-│   ├── comments.md           # 注释约束
-│   ├── frontend-types.md     # 类型定义约束
-│   ├── i18n.md               # 国际化约束
-│   └── styles.md             # 样式约束
-│
-├── quality/
-│   ├── testing.md            # 测试约束
-│   └── security.md           # 安全约束
-│
+│   ├── prompt-injection.md   # 提示注入保护
+│   ├── rag-hygiene.md        # RAG 卫生规范
+│   ├── secrets.md            # 密钥安全约束
+│   └── tool-perms.md         # 工具权限约束
 └── shared/
-    └── monorepo.md           # Monorepo 与依赖管理约束
+    └── monorepo.md           # Monorepo 依赖管理约束
 ```
-
----
 
 ## 规则分层
 
-| 层级                    | 文件                                                                                                   | 作用范围         |
-| ----------------------- | ------------------------------------------------------------------------------------------------------ | ---------------- |
-| **全局（alwaysApply）** | `language.md`、`interaction.md`、`ai-safety.md                                                         | 每次对话自动加载 |
-| **场景触发**            | `code-style.md`、`comments.md`、`document-query.md`、`naming.md`、`review.md`、`git-commit-message.md` | 匹配场景时加载   |
-| **领域约束**            | `frontend/*.md`、`backend/*.md`、`devops/*.md`、`ai/*.md`、`quality/*.md`、`shared/*.md`               | 对应领域任务     |
+| 层级             | 文件                                                                                     | 作用范围         |
+| ---------------- | ---------------------------------------------------------------------------------------- | ---------------- |
+| **全局始终加载** | `ai-safety.md`                                                                           | 每次对话自动注入 |
+| **场景触发**     | `code-style.md`、`comments.md`、`naming.md` 等                                           | 匹配场景时加载   |
+| **领域约束**     | `frontend/*.md`、`backend/*.md`、`devops/*.md`、`ai/*.md`、`quality/*.md`、`shared/*.md` | 对应领域任务     |
 
----
+## 强制门禁
 
-## 行为约束
+`.husky/pre-commit` 在每次 `git commit` 时硬跑：
 
-- `alwaysApply: true` 的文件保持精简（仅 3 个），避免每次对话加载过多内容
-- 各领域规则只约束对应路径的文件
-- 规则不替代 `execution-plan/` 中的约束层，两者互补
+```
+oxfmt --fix → oxlint --fix → pnpm check-types
+```
+
+走不过去就不能提交。这是唯一有 100% 强制力的机制。

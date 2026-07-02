@@ -159,13 +159,12 @@
 [EVOLVE:collect]  OK     | 收集经验数据           | domain=frontend;records=12;period=3天
 [EVOLVE:aggregate]START  | 开始聚合分析           | threshold=10次;trigger=次数达标
 [EVOLVE:analyze]  OK     | 根因分析完成           | top=类型错误;count=4/12;gap=eval遗漏check-types
-[EVOLVE:propose]  OK     | 生成提案               | target=execution-engine/frontend/constraint.md;type=收紧;auto_apply=true
+[EVOLVE:propose]  OK     | 生成提案               | target=rules/frontend/comments.md;type=收紧;auto_apply=false
 [EVOLVE:contradict]OK    | 矛盾检测通过           | checked=12rules;conflict=none
 [EVOLVE:compare]  OK     | 多提案比较完成          | total=2;winner=方案B;reason=影响范围更小
-[EVOLVE:apply]    OK     | 应用变更               | file=execution-plan/frontend/heuristic.md;change=+Agent映射表;auto=true
+[EVOLVE:apply]    OK     | 应用变更               | file=rules/code-style.md;change=+缩进规则;auto=false
 [EVOLVE:verify]   START  | 开始验证               | task_count=0/3;remaining=3
-[EVOLVE:verify]   OK     | 验证完成               | task_count=3/3;passed=3;failed=0;conclusion=保留变更
-[EVOLVE:rollback] OK     | 回滚变更               | file=execution-engine/frontend/constraint.md;revert_to=version-3;reason=验证失败3/3
+[EVOLVE:verify]   OK     | 验证完成
 ```
 
 ## 日志输出规则
