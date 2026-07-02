@@ -35,6 +35,40 @@
 
 保留策略的检查不应该是"每个月 1 号执行"——那意味着需要外部 cron。正确做法是**绑定到已有的写操作**：写入 session 才检查 session 过期，写入 experience 才检查 experience 过期。没有写操作时不消耗性能。
 
+## 经验数量上限策略（防膨胀）
+
+时间阈值（60 天）是下限保障，但高频任务下 60 天内可能积累上百条经验。需要**数量阈值**双重保护：
+
+| 阈值   | 条件                 | 动作                          |
+| ------ | -------------------- | ----------------------------- |
+| 30 条  | single 经验 >= 30    | 合并为月度摘要，保留最近 5 条 |
+| 3 个月 | 最旧经验距今 > 90 天 | 合并为季度摘要，清空原始文件  |
+
+### 合并规则
+
+```
+count >= 30 或 oldest > 90 天
+    ↓
+按月分组 → 每组取共性摘要
+    ↓
+  ├── 同领域 + 同结论 → 合并为 1 条通用经验
+  ├── 同领域 + 不同结论 → 保留为独立条目（标注冲突）
+  └── 不同领域 → 合并为月度聚合 JSON
+    ↓
+写入 memory/aggregation/experience-m-YYYY-MM.jsonl
+    ↓
+删除原始 single 文件（保留最近 5 条作为热缓存）
+```
+
+### 日志
+
+```
+[MEM:merge] TRIGGER | reason=count cap;files=30;limit=30
+[MEM:merge] GROUP   | month=2026-07;files=28;dedup=3;merged_to=aggregation/experience-m-202607.jsonl
+[MEM:merge] KEEP    | hot_cache=5;deleted=23
+[MEM:merge] OK      | total_after=6 (5 hot + 1 agg)
+```
+
 ## 冲突处理（执行触发点）
 
 以下冲突检查在**新 pattern 入库时**和**新 profile 条目写入时**自动执行，非独立调度。
