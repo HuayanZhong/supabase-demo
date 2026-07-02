@@ -45,8 +45,8 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
           </defs>
           <!-- 背景轨道 -->
           <circle
-            :cx="size / 2"
-            :cy="size / 2"
+            :cx="String(size / 2)"
+            :cy="String(size / 2)"
             :r="radius"
             fill="none"
             :stroke-width="strokeWidth"
@@ -54,8 +54,8 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
           />
           <!-- 进度弧 -->
           <circle
-            :cx="size / 2"
-            :cy="size / 2"
+            :cx="String(size / 2)"
+            :cy="String(size / 2)"
             :r="radius"
             fill="none"
             :stroke-width="strokeWidth"
