@@ -18,6 +18,7 @@ alwaysApply: true
 # ⚠️ 编码任务前必须执行
 
 ```
+0. 读取 memory/patterns/ — 检查有无相关历史经验（避免重犯已知错误）
 1. 确认任务领域（frontend/backend/shared/devops/ai/quality）
 2. 分阶段执行，每阶段完成后跑 lint + format + check-types
 3. 全部完成后统一校验
