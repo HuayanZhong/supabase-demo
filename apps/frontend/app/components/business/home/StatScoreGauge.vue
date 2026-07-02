@@ -47,7 +47,7 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
           <circle
             :cx="String(size / 2)"
             :cy="String(size / 2)"
-            :r="radius"
+            :r="String(radius)"
             fill="none"
             :stroke-width="strokeWidth"
             class="stroke-muted/20"
@@ -56,7 +56,7 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
           <circle
             :cx="String(size / 2)"
             :cy="String(size / 2)"
-            :r="radius"
+            :r="String(radius)"
             fill="none"
             :stroke-width="strokeWidth"
             stroke-linecap="round"
