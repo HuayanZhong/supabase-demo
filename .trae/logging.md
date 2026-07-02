@@ -37,6 +37,10 @@
 [ROUTE:chain]     OK     | 依赖链编排完成          | steps=3;order=devops→backend→frontend
 [ROUTE:fast-path] OK     | 走快路径               | reason=低风险;type=重命名
 [ROUTE:fast-path] FALLBACK | 回退完整流程          | reason=含破坏性;type=删除
+[ROUTE:hotfix]    OK     | 走 hotfix 路径         | reason=紧急修复;type=fix
+[ROUTE:split]     OK     | 多任务拆分             | tasks=N;domains=[backend,frontend,devops]
+[ROUTE:schedule]  OK     | 多任务调度             | strategy=parallel_if_no_dep;max_parallel=3
+[ROUTE:rollback]  WARN   | 回滚评估               | failed_step=backend;previous=shared;action=可保留
 [ROUTE:re-route]  COUNT  | 重新路由               | reason=新依赖/冲突;count=N/2;max=2
 [ROUTE:fallback]  SKIP   | 无匹配回退             | reason=无关键词匹配;fallback=solo-agent
 ```
@@ -87,6 +91,8 @@
 [EVAL:step]       FAIL   | ③质量门禁              | check=check-types;errors=2;location=Composable.ts:15
 [EVAL:step]       SKIP   | ④回归验证              | reason=无外部引用方
 [EVAL:step]       OK     | ⑤范围检查              | plan_files=3;actual=3;extras=0
+[EVAL:breaking]   WARN   | breaking change 检测   | api=GET /goals;impact=frontend;affected_files=2
+[EVAL:simplify]   OK     | 简化评估               | skipped=full-eval;kept=门禁+静默;reason=hotfix
 [EVAL:step]       OK     | ⑥输出评估报告          | conclusion=PASS
 [EVAL:step]       OK     | ⑦写入经验数据         | path=.trae/memory/experience/frontend/create-2026-07-01.json
 [EVAL:done]       END    | 评估完成               | conclusion=PASS;passed=6;failed=0;skipped=1

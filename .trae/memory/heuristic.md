@@ -94,6 +94,21 @@ Evaluation 输出评估报告
 [MEM:bootstrap] READY  | Bootstrap 完成         | total_load_time=Nms;available_sources=4/4
 ```
 
+### sessions/ 加载策略（BUG-021 修复）
+
+当 sessions/ 目录文件过多时，按以下策略加载：
+
+| 文件数   | 加载策略                  | 日志                                                                                |
+| -------- | ------------------------- | ----------------------------------------------------------------------------------- |
+| ≤ 10     | 全部加载                  | `[MEM:bootstrap] LOAD \| source=sessions;loaded=N`                                  |
+| 11 ~ 50  | 加载最近 10 个            | `[MEM:bootstrap] WARN \| sessions 过多 \| count=N;loaded=recent_10`                 |
+| > 50     | 加载最近 10 个 + 聚合摘要 | `[MEM:bootstrap] WARN \| sessions 过多 \| count=N;loaded=recent_10;aggregated=true` |
+| 损坏文件 | 跳过该文件，加载其他      | `[MEM:bootstrap] WARN \| sessions 损坏 \| file=xxx;action=跳过`                     |
+
+"最近"定义：按文件名中的日期/时间戳倒序，取前 10 个。
+
+聚合摘要：当 sessions > 50 时，对 11~50 名的会话生成摘要（任务类型 + 结果 + 关键文件），不加载详情。摘要缓存在 `.trae/memory/aggregation/sessions-summary-{date}.json`，每 30 天重建。
+
 ### 权限说明
 
 - `execution-plan` 和 `execution-engine` 阶段应读取 `patterns/` 和 `profile/`

@@ -1,0 +1,117 @@
+{
+  "type": "test_failure_backlog",
+  "timestamp": "2026-07-02T13:30:00Z",
+  "source": "run-003-results.md",
+  "trigger_evolution": true,
+  "test_summary": {
+    "total_cases": 30,
+    "passed": 30,
+    "failed": 0,
+    "bugs_found": 12,
+    "categories": {
+      "dependency_chain": 4,
+      "exception_handling": 3,
+      "process_gap": 3,
+      "log_format": 1,
+      "memory": 1
+    }
+  },
+  "bugs": [
+    {
+      "id": "BUG-011",
+      "severity": "P1",
+      "category": "dependency_chain",
+      "title": "依赖链步骤失败的回滚策略未定义",
+      "description": "router.md 依赖链编排未定义某步骤失败时已执行步骤的回滚规则",
+      "fix_scope": "router.md 增加回滚策略段落"
+    },
+    {
+      "id": "BUG-012",
+      "severity": "P1",
+      "category": "dependency_chain",
+      "title": "依赖链上下文路径契约未定义",
+      "description": "devops 步骤如何获取 backend/frontend 的 build_output 路径未定义",
+      "fix_scope": "router.md 增加路径契约规范"
+    },
+    {
+      "id": "BUG-013",
+      "severity": "P1",
+      "category": "dependency_chain",
+      "title": "并行步骤执行机制未定义",
+      "description": "router.md 只描述串行步骤，没有并行步骤的执行规则",
+      "fix_scope": "router.md 增加并行步骤段落"
+    },
+    {
+      "id": "BUG-014",
+      "severity": "P2",
+      "category": "log_format",
+      "title": "logging.md 缺 [EVAL:breaking] step",
+      "description": "breaking change 检测没有对应日志格式",
+      "fix_scope": "logging.md EVAL 段补 step"
+    },
+    {
+      "id": "BUG-015",
+      "severity": "P1",
+      "category": "dependency_chain",
+      "title": "循环依赖检测算法未定义",
+      "description": "router.md 没有定义循环依赖的检测算法和处置规则",
+      "fix_scope": "router.md 增加循环检测算法"
+    },
+    {
+      "id": "BUG-016",
+      "severity": "P1",
+      "category": "process_gap",
+      "title": "hotfix 简化流程未定义",
+      "description": "router.md 和 execution-plan 都没有 hotfix 简化流程",
+      "fix_scope": "router.md 增加 hotfix 路径"
+    },
+    {
+      "id": "BUG-017",
+      "severity": "P1",
+      "category": "process_gap",
+      "title": "多任务并发调度机制未定义",
+      "description": "router.md 没有多任务并发执行规则",
+      "fix_scope": "router.md 增加多任务调度段落"
+    },
+    {
+      "id": "BUG-018",
+      "severity": "P2",
+      "category": "exception_handling",
+      "title": "工具调用超时阈值未定义",
+      "description": "execution-engine/constraint.md 没有定义超时阈值",
+      "fix_scope": "constraint.md 增加超时阈值"
+    },
+    {
+      "id": "BUG-019",
+      "severity": "P1",
+      "category": "exception_handling",
+      "title": "降级方案库登记机制未定义",
+      "description": "constraint.md 要求强制降级路径但未定义降级方案库维护位置",
+      "fix_scope": "新增 degradation-registry.md 或在 constraint.md 增加段落"
+    },
+    {
+      "id": "BUG-020",
+      "severity": "P2",
+      "category": "exception_handling",
+      "title": "并发上限数值未定义",
+      "description": "constraint.md 并发守卫没有明确 limit 数值",
+      "fix_scope": "constraint.md 增加并发上限"
+    },
+    {
+      "id": "BUG-021",
+      "severity": "P2",
+      "category": "memory",
+      "title": "sessions/ 加载策略未定义",
+      "description": "memory/heuristic.md 没有定义 sessions/ 文件过多时的加载策略",
+      "fix_scope": "heuristic.md 增加加载策略"
+    },
+    {
+      "id": "BUG-022",
+      "severity": "P1",
+      "category": "process_gap",
+      "title": "规则文件修改白名单机制未定义",
+      "description": "AI 在治理任务中需要修改 .trae/，如何区分合法治理修改 vs 越界修改",
+      "fix_scope": "rules/ai-safety.md 增加白名单机制"
+    }
+  ]
+}

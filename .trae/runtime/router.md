@@ -271,6 +271,153 @@ Step 3 — frontend（ui-designer）
 2. **Trae IDE 规则触发**（依赖 IDE 能力）— 在 `.trae/rules/ai-safety.md` 增加"任务开始前必须输出 `[ROUTE:parse] START`"
 3. **会话自检**（最低保障）— 任务完成时输出追踪路径摘要，无 ROUTE 日志则标记为"未走治理流程"
 
+## 依赖链增强（BUG-011/012/013/015 修复）
+
+### 路径契约（BUG-012 修复）
+
+依赖链中每一步必须输出路径契约，供下游步骤消费：
+
+| 步骤     | 输出契约                                 | 消费方           |
+| -------- | ---------------------------------------- | ---------------- |
+| shared   | `packages/types/dist/index.d.ts`         | backend/frontend |
+| backend  | `apps/backend/dist/main.js`              | devops/frontend  |
+| frontend | `apps/frontend/.output/server/index.mjs` | devops           |
+
+路径契约写入 `[ROUTE:chain] OK | path_contract=xxx` 日志，下游步骤通过读取该日志获取路径。
+
+### 并行步骤执行（BUG-013 修复）
+
+当多个步骤无依赖关系时，标记为并行：
+
+```
+[ROUTE:chain] OK | 并行步骤 | parallel=[backend,frontend];depends_on=shared
+```
+
+并行步骤的执行规则：
+
+- 共享 scope 守卫的"父步骤 scope"（如 shared 的 scope）
+- 各自独立的 execution-engine 实例
+- 任一并行步骤失败 → 触发回滚策略
+- 并行步骤的日志用 `parallel_id` 关联
+
+### 回滚策略（BUG-011 修复）
+
+依赖链中某步骤失败时，按以下策略处置已执行步骤：
+
+| 失败位置         | 回滚动作                                                            |
+| ---------------- | ------------------------------------------------------------------- |
+| 步骤 1（shared） | 无需回滚（首个步骤）                                                |
+| 步骤 N（中间）   | 评估步骤 1~N-1 的影响：可保留则标记"待人工确认"；不可保留则逆向回滚 |
+| 步骤最后         | 不回滚前序步骤，仅标记失败步骤                                      |
+
+回滚判定原则：
+
+- **可保留**：前序步骤的产出是通用基础设施（types、配置），后续任务可复用
+- **不可保留**：前序步骤的产出仅服务于失败步骤（如为某 API 专门加的字段）
+
+回滚日志：
+
+```
+[ROUTE:rollback] WARN | 回滚评估 | failed_step=backend;previous=shared;action=可保留
+[ROUTE:rollback] WARN | 回滚执行 | failed_step=backend;previous=shared;action=逆向回滚
+```
+
+### 循环依赖检测（BUG-015 修复）
+
+依赖链编排前必须执行循环检测，算法：
+
+```
+1. 构建依赖图：节点=步骤，边=依赖关系
+2. DFS 遍历，维护 visited 栈
+3. 遇到已在栈中的节点 → 检测到循环
+4. 输出循环路径 → 阻断编排
+```
+
+循环检测日志：
+
+```
+[ROUTE:chain] FAIL | 循环依赖检测 | cycle=A→B→A;action=阻断;fallback=人工介入
+```
+
+处置规则：
+
+- 检测到循环 → 不编排，直接回退到人工介入
+- 不尝试自动打破循环（风险过高）
+
+## Hotfix 路径（BUG-016 修复）
+
+### Hotfix 判定条件
+
+同时满足以下条件时走 hotfix 路径：
+
+- 用户明确说"紧急"/"hotfix"/"线上 bug"/"立即修复"
+- 任务类型为 fix（非 create/modify/refactor）
+- 不涉及架构变更
+
+### Hotfix 流程
+
+```
+[ROUTE:parse]       START  | 解析用户请求 | input=紧急修复 xxx
+[ROUTE:match]       OK     | 匹配领域 | domain=xxx
+[ROUTE:hotfix]      OK     | 走 hotfix 路径 | reason=紧急修复
+[PLAN:simplify]     OK     | 简化规划 | skipped=detailed-plan;kept=scope+guard
+[ENGINE:step]       OK     | 执行修复
+[EVAL:simplify]     OK     | 简化评估 | skipped=full-eval;kept=门禁+静默检测
+[MEM:write]         OK     | 写入会话 | tag=hotfix
+```
+
+### Hotfix 与 Fast-Path 的区别
+
+| 维度     | Fast-Path      | Hotfix                |
+| -------- | -------------- | --------------------- |
+| 任务类型 | 低风险简单任务 | 紧急修复              |
+| 守卫     | 保留           | 保留                  |
+| 规划     | 跳过           | 简化（保留 scope）    |
+| 评估     | 跳过           | 简化（保留门禁+静默） |
+| 日志     | 必须输出       | 必须输出              |
+
+### Hotfix 后续
+
+hotfix 完成后，必须在下一个非 hotfix 任务中补做：
+
+- 完整的 execution-plan（补规划）
+- 完整的 evaluation（补评估）
+- 写入 experience 标记"hotfix 待补评估"
+
+## 多任务调度（BUG-017 修复）
+
+### 多任务识别
+
+当用户输入包含多个独立任务时（如"同时做 3 件事"），按以下规则调度：
+
+```
+[ROUTE:parse]   START  | 解析用户请求 | multi_task=true
+[ROUTE:split]   OK     | 任务拆分 | tasks=N;domains=[...]
+[ROUTE:schedule] OK    | 调度策略 | strategy=parallel_if_no_dep;max_parallel=3
+```
+
+### 调度策略
+
+| 任务关系         | 调度策略               |
+| ---------------- | ---------------------- |
+| 无依赖           | 并行执行（上限 3 个）  |
+| 有依赖           | 按依赖链串行           |
+| 部分依赖部分独立 | 独立的并行，依赖的串行 |
+| 共享文件         | 串行（避免冲突）       |
+
+### 多任务并发守卫
+
+- 单任务内工具调用上限：30（不变）
+- 多任务总并发上限：3（避免资源争用）
+- 共享文件检测：两个任务都修改同一文件 → 强制串行
+
+多任务并发日志：
+
+```
+[GUARD:concurrent] OK   | 多任务调度 | tasks=3;parallel=2;serial=1;reason=依赖关系
+[GUARD:concurrent] WARN  | 共享文件冲突 | file=xxx;action=强制串行
+```
+
 ## 无法分类
 
 关键词不匹配任何领域时，回退到默认逻辑：
