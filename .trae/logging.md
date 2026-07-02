@@ -108,6 +108,9 @@
 [LOOP:converge]   REGRESS| 收益退步               | delta=+20%;action=立即熔断
 [LOOP:returns]    OK     | 有效改进               | delta=-50%;threshold=-10%;consecutive=0
 [LOOP:returns]    WARN   | 收益递减               | delta=-3%;consecutive=2;action=强制熔断
+[LOOP:append]     START  | 检查 JSONL 文件        | path=timer-{id}.jsonl
+[LOOP:append]     OK     | 直接追加               | lines=120;limit=5000;action=无
+[LOOP:append]     WARN   | 触发归档               | yes=line≥5000;trigger=归档
 [LOOP:enter]      START  | 进入循环治理           | task_id=habits-123;trigger=eval-fail
 [LOOP:cycle]      RETRY  | re-execute 第1次       | attempts=1/3;failure=check-types;prior_attempt=❌同错误
 [LOOP:retry-wait] OK     | 退避等待               | wait_ms=4000;jitter=12%
