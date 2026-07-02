@@ -7,10 +7,11 @@ const props = defineProps<{
   project: Project;
 }>();
 
-// AI 洞察数据：基于项目状态推导
 const insights = computed(() => {
   const p = props.project;
-  const statusText = p.progress >= 80 ? "进展顺利" : "需加快进度";
+  const highRisk = p.taskList.filter(
+    (task) => task.priority === "high" && task.status !== "done",
+  ).length;
 
   return [
     {
@@ -20,19 +21,19 @@ const insights = computed(() => {
       bg: "bg-info/10",
       text: t("Project AiProgressText", {
         progress: p.progress,
-        status: statusText,
+        status: p.progress >= 80 ? "进展顺利" : "需加快进度",
       }),
+      detail: `${p.progress}% / 100%`,
+      trend: p.progress >= 80 ? "+12%" : "+5%",
     },
     {
       title: t("Project AiRiskAnalysis"),
       icon: "i-lucide-alert-triangle",
       color: "text-warning",
       bg: "bg-warning/10",
-      text: t("Project AiRiskText", {
-        count: p.taskList.filter((task) => task.priority === "high" && task.status !== "done")
-          .length,
-        area: p.tags[0] ?? "核心",
-      }),
+      text: t("Project AiRiskText", { count: highRisk, area: p.tags[0] ?? "核心" }),
+      detail: `${highRisk} ${t("Project AiIssues")}`,
+      trend: highRisk > 0 ? t("Project AiNeedsAttention") : t("Project AiAllClear"),
     },
     {
       title: t("Project AiSuggestTitle"),
@@ -40,6 +41,8 @@ const insights = computed(() => {
       color: "text-success",
       bg: "bg-success/10",
       text: t("Project AiSuggestText", { percent: 27 }),
+      detail: t("Project AiOptimizationRate"),
+      trend: "+27%",
     },
   ];
 });
@@ -61,16 +64,24 @@ const insights = computed(() => {
       <div
         v-for="insight in insights"
         :key="insight.title"
-        class="rounded-lg border border-default p-4 hover:shadow-sm transition-shadow duration-150"
+        class="rounded-lg border border-default p-4 hover:shadow-sm transition-shadow duration-150 flex flex-col"
       >
-        <div
-          class="flex items-center justify-center size-9 rounded-lg shrink-0 mb-3"
-          :class="insight.bg"
-        >
-          <UIcon :name="insight.icon" class="size-5" :class="insight.color" />
+        <div class="flex items-center gap-3 mb-3">
+          <div
+            class="flex items-center justify-center size-9 rounded-lg shrink-0"
+            :class="insight.bg"
+          >
+            <UIcon :name="insight.icon" class="size-5" :class="insight.color" />
+          </div>
+          <h4 class="text-sm font-semibold text-highlighted">{{ insight.title }}</h4>
         </div>
-        <h4 class="text-sm font-semibold text-highlighted mb-2">{{ insight.title }}</h4>
-        <p class="text-sm text-toned leading-relaxed">{{ insight.text }}</p>
+        <p class="text-sm text-toned leading-relaxed flex-1">{{ insight.text }}</p>
+
+        <!-- 底部数据 -->
+        <div class="flex items-center justify-between mt-4 pt-3 border-t border-default">
+          <span class="text-xs text-muted">{{ insight.detail }}</span>
+          <span class="text-xs font-semibold" :class="insight.color">{{ insight.trend }}</span>
+        </div>
       </div>
     </div>
   </div>
