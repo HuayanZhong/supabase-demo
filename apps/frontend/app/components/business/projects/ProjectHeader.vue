@@ -68,7 +68,7 @@ const tabs = [
       <button
         v-for="tab in tabs"
         :key="tab.id"
-        class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors duration-150 border-b-2 -mb-[1px]"
+        class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors duration-150 border-b-2 -mb-px"
         :class="
           activeTab === tab.id
             ? 'border-primary text-primary'

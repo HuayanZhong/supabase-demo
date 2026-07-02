@@ -1,6 +1,6 @@
 import type { Project, ProjectHealth, ProjectActivity } from "@supabase/types";
 
-// 模拟动态时间描述
+/** 模拟动态时间描述 */
 function timeAgo(minutes: number): string {
   const { t } = useI18n();
   if (minutes < 1) return t("Project ActivityJustNow");
