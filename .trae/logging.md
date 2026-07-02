@@ -1,246 +1,52 @@
-# 日志规范
+# 日志规范 v3（精简版）
 
-## 目的
+## 原则
 
-各关键节点输出结构化日志，便于任务卡住时快速定位断点位置。每个日志条目独立一行，按统一格式输出。
+日志只有两个用途：给用户看的结果、给 agent 用的经验数据。
+v2 的 10 层 180 行格式定义过度设计，v3 砍到只保留追踪路径摘要。
 
-## 日志输出位置
+## 追踪路径摘要
 
-- **主输出** — 所有日志直接输出到对话流（用户可见）
-- **持久化** — 关键日志（FAIL/BLOCKED/escalate）同步写入 `.trae/memory/sessions/{date}-logs.jsonl`，保留 30 天
-- **格式** — JSONL 格式，每行一个 JSON 对象：`{"ts":"2026-07-01T12:00:00","layer":"ROUTE","step":"parse","status":"OK","desc":"解析用户请求","kv":{"input":"..."}}`
-
-## 日志格式
+**任务完成后必须在对话中输出**，格式如下：
 
 ```
-[LAYER:step] STATUS | 描述 | key=value;key=value
-```
-
-各字段说明：
-
-| 字段      | 必填 | 说明           | 可选值                                                                                |
-| --------- | ---- | -------------- | ------------------------------------------------------------------------------------- |
-| LAYER     | 是   | 当前层级       | ROUTE / WORKFLOW / PLAN / ENGINE / EVAL / LOOP / EVOLVE / GUARD / SILENT / MEM / SYNC |
-| step      | 是   | 当前步骤标识   | 见各层细分                                                                            |
-| STATUS    | 是   | 当前状态       | OK / FAIL / START / END / SKIP / RETRY / BLOCKED                                      |
-| 描述      | 是   | 一句话说明     | 自由文本                                                                              |
-| key=value | 否   | 附带的关键数据 | 见各层约定                                                                            |
-
-## 各层日志约定
-
-### ROUTE — 路由层
-
-```
-[ROUTE:parse]     START  | 解析用户请求           | input=给dashboard加组件
-[ROUTE:match]     OK     | 匹配领域               | domain=frontend;agent=ui-designer
-[ROUTE:conflict]  OK     | 无冲突                 | priority=1
-[ROUTE:chain]     OK     | 依赖链编排完成          | steps=3;order=devops→backend→frontend
-[ROUTE:fast-path] OK     | 走快路径               | reason=低风险;type=重命名
-[ROUTE:fast-path] FALLBACK | 回退完整流程          | reason=含破坏性;type=删除
-[ROUTE:hotfix]    OK     | 走 hotfix 路径         | reason=紧急修复;type=fix
-[ROUTE:split]     OK     | 多任务拆分             | tasks=N;domains=[backend,frontend,devops]
-[ROUTE:schedule]  OK     | 多任务调度             | strategy=parallel_if_no_dep;max_parallel=3
-[ROUTE:rollback]  WARN   | 回滚评估               | failed_step=backend;previous=shared;action=可保留
-[ROUTE:re-route]  COUNT  | 重新路由               | reason=新依赖/冲突;count=N/2;max=2
-[ROUTE:fallback]  SKIP   | 无匹配回退             | reason=无关键词匹配;fallback=solo-agent
-```
-
-### ENGINE — 执行层
-
-```
-[ENGINE:start]    START  | 开始执行               | domain=frontend;type=create
-[ENGINE:step]     OK     | 创建组件文件           | file=component.vue;size=120lines
-[ENGINE:tool]     OK     | 调用nuxt-ui MCP       | action=get-component;target=USelectMenu
-[ENGINE:tool]     FAIL   | MCP调用失败            | tool=supabase;error=timeout;retry=1
-[ENGINE:step]     OK     | 注册路由               | file=pages/index.vue;changed=1
-[ENGINE:done]     END    | 执行完成               | files=3;tools=5;errors=0
-[ENGINE:interrupt] START | 用户打断               | step=3/5;task=写API路由
-[ENGINE:checkpoint]SAVE  | 保存检查点             | step=3;files_changed=2
-[ENGINE:checkpoint]DONE  | 已暂停                 | resume_with=/continue TASK-001
-[ENGINE:resume]   START  | 恢复任务               | from_step=4;step_total=5
-[ENGINE:amend]    START  | scope 追加             | amendment=加page参数;compatible=true
-[ENGINE:redirect] START  | 方向变更               | completed=表格;new=卡片;revert=git revert
-[ENGINE:redirect] WARN   | 频繁变更               | changes=3≥3;action=建议先确认
-[ENGINE:shrink]   START  | scope 缩减             | original=CRUD;remaining=R
-[ENGINE:shrink]   DROP   | 放弃超出               | extra=CUD;action=标记废弃
-[ENGINE:scope]    WARN   | 需求膨胀               | current=CRUD;amendment=导出;action=建议新任务
-[ENGINE:partial]  START  | 部分接受               | completed=backend;remaining=frontend
-[ENGINE:partial]  SUBMIT | 提交已完成             | target=backend;action=git commit
-[ENGINE:partial]  DROP   | 放弃未完成             | target=frontend;action=标记废弃
-```
-
-### GUARD — 守卫节点
-
-```
-[GUARD:dedup]     SKIP   | 工具去重触发           | tool=pnpm;hash=a1b2c3;call_count=2
-[GUARD:scope]     BLOCKED| 越界拦截               | file=超出范围文件;scope=限定范围
-[GUARD:tool]      BLOCKED| 非法工具                | tool=未注册工具;allowed=允许列表
-[GUARD:destructive]WARN   | 破坏性操作              | action=命令详情;confirmed=true/false
-[GUARD:context]   FAIL   | 依赖链上下文缺失        | missing_key=缺失字段;required_by=需要方
-[GUARD:override]  LOG    | 用户豁免                | constraint=检查项;reason=用户跳过
-```
-
-### SILENT — 静默成功检测
-
-```
-[SILENT:zero]       FAIL    | 文件零字节              | file=文件名;size=0;action=要求重新创建
-[SILENT:unchanged]  FAIL    | 文件内容无变更           | file=文件名;before=hash;after=hash;same=true
-[SILENT:empty]      FAIL    | 工具返回空              | tool=工具名;retry=1;action=重试
-[SILENT:noop]       FAIL    | 命令执行无产出          | cmd=命令;exit=0;stdout=空;stderr=空
-[SILENT:git-diff]   FAIL    | Git 无 diff             | changed_files=0;expected=N
-[SILENT:mcp]        FAIL    | MCP 静默失败            | mcp=名称;status=success;payload=空
-[SILENT:partial]    FAIL    | 部分成功                | expected=N;actual=M;missing=文件列表
-[SILENT:cache]      FAIL    | 缓存命中掩盖            | cache=hit;task=build;action=--force重跑
-[SILENT:deprecated] WARN    | deprecated 警告         | tool=名称;warning=deprecated;action=记录到经验
-[SILENT:permission] FAIL    | 权限降级返回空          | resource=表名;status=200;rows=0;type=rls;action=检查RLS
-[SILENT:escalate]   BLOCKED | 连续静默失败升级        | count=2;action=升级loop-governance
-```
-
-### MEM — 记忆层
-
-```
-[MEM:bootstrap]   START  | Bootstrap 开始         | phase=1/3
-[MEM:bootstrap]   LOAD   | 阶段 N 完成            | source=sessions;loaded=N
-[MEM:bootstrap]   READY  | 记忆就绪               | available_sources=N/N
-[MEM:retention]   CHECK  | 检查 retention         | path=sessions/;age=Nd;limit=30d
-[MEM:retention]   FOUND  | 发现超期文件           | files=N;oldest=date
-[MEM:retention]   ARCHIVE| 归档超期文件           | target=aggregation/;deleted=N
-[MEM:summary]     CHECK  | 检查摘要缓存           | age=Nd;limit=30d
-[MEM:summary]     REBUILD| 重建摘要               | old_lines=N;new_file=xxx
-[MEM:write]       DONE   | 写入完成               | target=experience/;source=evolution
-[MEM:recover]     START  | 发现 checkpoint        | task_id=TASK-001;step=3/5
-[MEM:recover]     CHECK  | 环境一致性             | lock_hash=匹配;nvmrc=匹配
-[MEM:recover]     WARN   | 环境已变               | pnpm-lock=changed;action=pnpm install
-```
-
-### EVAL — 评估层
-
-```
-[EVAL:start]      START  | 开始评估               | domain=frontend;type=create
-[EVAL:step]       OK     | ①完成检查清单          | checks=4;passed=4
-[EVAL:step]       OK     | ②验证文件完整性        | files=3;expected=3;extra=0
-[EVAL:step]       FAIL   | ③质量门禁              | check=check-types;errors=2;location=Composable.ts:15
-[EVAL:step]       SKIP   | ④回归验证              | reason=无外部引用方
-[EVAL:step]       OK     | ⑤范围检查              | plan_files=3;actual=3;extras=0
-[EVAL:breaking]   WARN   | breaking change 检测   | api=GET /goals;impact=frontend;affected_files=2
-[EVAL:simplify]   OK     | 简化评估               | skipped=full-eval;kept=门禁+静默;reason=hotfix
-[EVAL:step]       OK     | ⑥输出评估报告          | conclusion=PASS
-[EVAL:step]       OK     | ⑦写入经验数据         | path=.trae/memory/experience/frontend/create-2026-07-01.json
-[EVAL:done]       END    | 评估完成               | conclusion=PASS;passed=6;failed=0;skipped=1
-```
-
-### LOOP — 循环治理
-
-```
-[LOOP:sched]      OK     | 注册定时循环           | loop_id=TIMER-001;interval=5m;task=eval last
-[LOOP:timer]      START  | 定时器触发             | loop_id=TIMER-001;cycle=1;next_run=14:05:00
-[LOOP:converge]   OK     | 有效收敛               | failure_reduction=50%;no_progress=0
-[LOOP:converge]   STALL  | 连续无进展             | no_progress=2;action=暂停循环
-[LOOP:converge]   REGRESS| 收益退步               | delta=+20%;action=立即熔断
-[LOOP:returns]    OK     | 有效改进               | delta=-50%;threshold=-10%;consecutive=0
-[LOOP:returns]    WARN   | 收益递减               | delta=-3%;consecutive=2;action=强制熔断
-[LOOP:append]     START  | 检查 JSONL 文件        | path=timer-{id}.jsonl
-[LOOP:append]     OK     | 直接追加               | lines=120;limit=5000;action=无
-[LOOP:append]     WARN   | 触发归档               | yes=line≥5000;trigger=归档
-[LOOP:enter]      START  | 进入循环治理           | task_id=habits-123;trigger=eval-fail
-[LOOP:cycle]      RETRY  | re-execute 第1次       | attempts=1/3;failure=check-types;prior_attempt=❌同错误
-[LOOP:retry-wait] OK     | 退避等待               | wait_ms=4000;jitter=12%
-[LOOP:tool-dedup] SKIP   | 工具调用去重触发        | action=pnpm check-types;hash=a1b2c3;reason=完全相同
-[LOOP:semantic]   BLOCKED| 语义循环检测触发       | pattern=同文件同行号;conclusion=升级re-plan
-[LOOP:context]    OK     | 上下文压缩             | original=34KB;compressed=12KB;kept=cycles+errors+change
-[LOOP:cost]       WARN   | 工具调用数预警          | calls=28/30;limit=30
-[LOOP:anchor]     OK     | 目标锚定通过            | deviation=5%;original=dashboard组件;current=组件+样式
-[LOOP:exit]       END    | 退出循环               | exit_by=上限;cycles=3;result=re-plan→人工;path=.trae/loop-state/task-123-cycle-3.json
-```
-
-### EVOLVE — 元治理（慢循环）
-
-```
-[EVOLVE:collect]  OK     | 收集经验数据           | domain=frontend;records=12;period=3天
-[EVOLVE:aggregate]START  | 开始聚合分析           | threshold=10次;trigger=次数达标
-[EVOLVE:analyze]  OK     | 根因分析完成           | top=类型错误;count=4/12;gap=eval遗漏check-types
-[EVOLVE:propose]  OK     | 生成提案               | target=rules/frontend/comments.md;type=收紧;auto_apply=false
-[EVOLVE:contradict]OK    | 矛盾检测通过           | checked=12rules;conflict=none
-[EVOLVE:compare]  OK     | 多提案比较完成          | total=2;winner=方案B;reason=影响范围更小
-[EVOLVE:apply]    OK     | 应用变更               | file=rules/code-style.md;change=+缩进规则;auto=false
-[EVOLVE:verify]   START  | 开始验证               | task_count=0/3;remaining=3
-[EVOLVE:verify]   OK     | 验证完成
-```
-
-## 日志输出规则
-
-1. **状态切换必记** — START / OK / FAIL / END 每步都必须有日志
-2. **错误必记详情** — FAIL 必须附带 error / location / context 信息
-3. **循环必记次数** — 所有 RETRY 和 BLOCKED 必须附带 cycle 号
-4. **耗时操作必记** — 超过 5 秒的操作需要 START + END 对
-5. **不得累积** — 每步独立一行，不要合并多步到一条日志
-
-## 最终路径摘要
-
-**任务完成后，必须在输出中附加一条追踪路径摘要**，压缩显示本次任务经历的全链路。
-
-### 格式
-
-```
-任务执行追踪 (task: "<任务简要描述>")
-  路径: [LAYER] → [LAYER] → [LAYER] → ...
-  关键节点:
-    ROUTE → {domain} ({agent})
-    PLAN  → {task-type}
-    ENGINE→ {关键步骤摘要}
-    {LOOP → N 次循环}
-    EVAL  → {评估结果}
-    EVOLVE→ {经验已收集 / 触发进化}
-  总耗时: {循环次数} / {估算耗时}
+任务追踪 (task: "{任务描述}")
+  文件: 创建 N 个 / 修改 M 个
+  验证: lint ✅/❌ | typecheck ✅/❌ | format ✅/❌
+  规则: 触发 N 个 / 相关 M 个 ({百分比}%)
   结论: ✅ 通过 / ❌ 不通过 / ⚠️ 人工介入
 ```
 
 ### 示例
 
 ```
-任务执行追踪 (task: "给 dashboard 加 habits 列表")
-  路径: ROUTE → PLAN → ENGINE → EVAL → LOOP → ENGINE → EVAL
-  关键节点:
-    ROUTE → frontend (ui-designer)
-    PLAN  → frontend/create
-    ENGINE→ 创建组件 → 注册导航 → 添加国际化 key
-    EVAL  → ③质量门禁 FAIL (check-types ×2)
-    LOOP  → re-execute ① (修复类型错误) → ② (修复未定义变量)
-    ENGINE→ 修复类型错误
-    EVAL  → ③质量门禁 OK ✅
-  循环: 2 次 re-execute
+任务追踪 (task: "学习与资料页面")
+  文件: 创建 10 个 / 修改 6 个
+  验证: lint ✅ | typecheck ✅ | format ✅
+  规则: 触发 5 / 相关 11 (45%)
   结论: ✅ 通过
 ```
 
-```
-任务执行追踪 (task: "配置 GitHub Actions 自动部署")
-  路径: ROUTE → PLAN → ENGINE → EVAL
-  关键节点:
-    ROUTE → devops (devops-architect)
-    PLAN  → devops/ci
-    ENGINE→ 创建 .github/workflows/deploy.yml
-    EVAL  → ①文件完整性 ✅ | ③语义验证 ✅ | ⑤范围检查 ✅
-  循环: 0 次
-  结论: ✅ 通过
-```
+## 经验数据文件
 
-```
-任务执行追踪 (task: "接入 DeepSeek 对话模型")
-  路径: ROUTE → PLAN → ENGINE → EVAL → LOOP → LOOP → HUMAN
-  关键节点:
-    ROUTE → ai (ai-integration-engineer)
-    PLAN  → ai/integrate
-    ENGINE→ 创建 service → 配置 provider
-    EVAL  → 密钥硬编码 FAIL → 修复 → EVAL FAIL → 同错误
-    LOOP  → re-execute ① (移动 env) → re-execute ② (仍暴露)
-    LOOP  → 语义循环检测 → re-plan → 仍出同类问题
-    HUMAN → 人工介入
-  循环: 3 次 re-execute → 1 次 re-plan (已超上限)
-  结论: ⚠️ 人工介入
-```
+任务完成后写入 `memory/experience/{task-id}.json`，格式规范见 `memory/write-guide.md`。
 
-### 应用位置
+字段摘要：
 
-- 单步任务：在 evaluation 最终结果之后输出
-- 依赖链任务：在整条链完成后输出全链追踪，每步独立输出子追踪
-- 人工介入：在人工报告末尾输出，附带卡住原因
+```json
+{
+  "task_id": "learn-page",
+  "date": "2026-07-02",
+  "domain": "frontend",
+  "files_created": 10,
+  "files_modified": 6,
+  "verification": { "lint": true, "typecheck": true, "format": true },
+  "rules": {
+    "triggered": ["document-query", "frontend-types"],
+    "relevant": ["code-style", "document-query", "frontend-types"],
+    "unused_relevant": ["code-style"],
+    "coverage_pct": 67
+  },
+  "outcome": "pass"
+}
+```
