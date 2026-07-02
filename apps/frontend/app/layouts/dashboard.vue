@@ -21,6 +21,11 @@ const navItems: NavigationMenuItem[][] = [
       to: "/dashboard/goals",
       icon: "i-lucide-folder-kanban",
     },
+    {
+      label: "项目空间",
+      to: "/dashboard/projects",
+      icon: "i-lucide-folder-open",
+    },
   ],
 ];
 
