@@ -101,6 +101,13 @@
 ### LOOP — 循环治理
 
 ```
+[LOOP:sched]      OK     | 注册定时循环           | loop_id=TIMER-001;interval=5m;task=eval last
+[LOOP:timer]      START  | 定时器触发             | loop_id=TIMER-001;cycle=1;next_run=14:05:00
+[LOOP:converge]   OK     | 有效收敛               | failure_reduction=50%;no_progress=0
+[LOOP:converge]   STALL  | 连续无进展             | no_progress=2;action=暂停循环
+[LOOP:converge]   REGRESS| 收益退步               | delta=+20%;action=立即熔断
+[LOOP:returns]    OK     | 有效改进               | delta=-50%;threshold=-10%;consecutive=0
+[LOOP:returns]    WARN   | 收益递减               | delta=-3%;consecutive=2;action=强制熔断
 [LOOP:enter]      START  | 进入循环治理           | task_id=habits-123;trigger=eval-fail
 [LOOP:cycle]      RETRY  | re-execute 第1次       | attempts=1/3;failure=check-types;prior_attempt=❌同错误
 [LOOP:retry-wait] OK     | 退避等待               | wait_ms=4000;jitter=12%
