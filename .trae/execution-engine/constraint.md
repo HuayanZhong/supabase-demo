@@ -101,6 +101,137 @@
 - 降级方案不可用 → 标记"无降级方案"并上报人工（违反 constraint.md L86）
 - 降级方案执行后，必须在日志中标注 `degraded=true`
 
+#### 运行时 MCP 健康检查（新增）
+
+降级方案不仅用于"初始不可用"，也用于"运行时断连"：
+
+```
+[ENGINE:tool]      OK     | MCP 调用成功          | tool=supabase;step=2/3
+[ENGINE:tool]      FAIL   | MCP 断连              | tool=supabase;error=connection_lost
+[ENGINE:degrade]   TRIGGER| 触发运行时降级         | mcp=supabase;fallback=execute_sql
+[ENGINE:degrade]   DONE   | 降级执行成功          | degraded=true;result=成功
+```
+
+**触发点**：每次 MCP 调用失败时自动触发，与初始可用性检查走同一降级方案库。不区分"初始"和"运行时"。
+
+#### Checkpoint 系统（新增）
+
+用于支持用户中断、会话超时恢复、异常后暂停（覆盖 U1、V1、X1）。
+
+**触发点**：以下情况执行 checkpoint：
+
+| 触发条件                          | 动作                              |
+| --------------------------------- | --------------------------------- |
+| 用户明确说"等一下/先停下/暂停"    | 保存 checkpoint → 暂停            |
+| 任务过程中异常（失败/超时）       | 保存 checkpoint → 执行恢复策略    |
+| 用户关闭 IDE（靠 git commit wip） | 工作区 recovery 时读取 checkpoint |
+| 用户说"继续"                      | 读取 checkpoint → 从断点恢复      |
+
+**数据格式**（写入 `.trae/loop-state/checkpoint-{task_id}.json`）：
+
+```json
+{
+  "task_id": "TASK-001",
+  "checkpoint_ts": "2026-07-02T15:00:00Z",
+  "step_current": 3,
+  "step_total": 5,
+  "scope": "backend",
+  "files_changed": ["apps/backend/src/api.ts"],
+  "convergence_state": null,
+  "env_snapshot": {
+    "lock_hash": "sha256_of_pnpm-lock.yaml",
+    "nvmrc": "24"
+  }
+}
+```
+
+**恢复流程**：
+
+```
+[MEM:recover]     START  | 发现 checkpoint        | task_id=TASK-001;step=3/5
+[MEM:recover]     CHECK  | 环境一致性             | lock_hash=匹配;nvmrc=匹配
+[MEM:recover]     OK     | 环境未变               | action=继续 step 4
+[MEM:recover]     WARN   | 环境已变               | pnpm-lock.yaml=changed;action=pnpm install
+[ENGINE:resume]   START  | 恢复任务               | from_step=4;scope=backend
+```
+
+#### 任务中 Scope 变更（新增）
+
+覆盖用户补充（U2）、方向变更（U3）、scope 收缩（W3）、scope 膨胀（W4）。
+
+**触发点**：用户在中途提出新需求或变更方向时。
+
+| 变更类型           | 用户行为           | 框架判断                   | 动作                             |
+| ------------------ | ------------------ | -------------------------- | -------------------------------- |
+| scope 扩展（追加） | "再加一个分页参数" | 评估是否与当前任务兼容     | 兼容→追加；不兼容→建议新任务     |
+| scope 缩减         | "不需要增删改了"   | 标记已完成中超出范围的部分 | 超出部分标记废弃                 |
+| 方向变更（替换）   | "不要表格，要卡片" | 评估已完成的能否保留       | 不能保留→git revert；能保留→保留 |
+| scope 膨胀         | "再加个导出功能"   | 判断是否超当前任务范围     | 超范围→建议新任务                |
+
+**日志格式**：
+
+```
+[ENGINE:amend]   START  | 用户补充需求           | current_step=3;amendment=加page参数
+[ENGINE:amend]   EVAL   | 评估影响               | scope_extend=true
+[ENGINE:redirect] START | 方向变更               | completed=表格;new=卡片;revert=git revert
+[ENGINE:shrink]   START | scope 缩减             | original=CRUD;remaining=R
+[ENGINE:shrink]   DROP   | 放弃超出              | extra=CUD;action=标记废弃
+[ENGINE:scope]    WARN   | 需求膨胀检测          | current=CRUD;amendment=导出;action=建议新任务
+```
+
+#### 频繁变更检测（新增，覆盖 U5）
+
+同一任务内检测用户方向变更次数：
+
+| 连续变更次数 | 动作                           |
+| ------------ | ------------------------------ |
+| 1 次         | 正常处理，记录方向             |
+| 2 次         | 记录，提示"已变更两次"         |
+| ≥ 3 次       | WARN，建议用户先确认需求再继续 |
+
+```
+[ENGINE:redirect] START | 方向变更 #1            | direction=table→card
+[ENGINE:redirect] START | 方向变更 #2            | direction=card→list
+[ENGINE:redirect] WARN  | 频繁变更               | changes=3≥3;action=建议先确认需求
+```
+
+计数器在任务完成后归零。
+
+#### 约束豁免（新增，覆盖 W2）
+
+用户有权显式跳过某个评估约束，但须记录：
+
+| 豁免内容     | 触发方式         | 日志                                                                  |
+| ------------ | ---------------- | --------------------------------------------------------------------- |
+| 跳过测试     | 用户说"不写测试" | `[GUARD:override] START \| constraint=必须写测试;reason=用户明确跳过` |
+| 跳过类型检查 | 用户说"先部署"   | `[GUARD:override] START \| constraint=check-types;reason=部署紧急`    |
+
+**规则**：
+
+- 必须是**用户主动要求**跳过，AI 不得主动建议跳过约束
+- 每次豁免必须记录原因
+- 豁免不改变约束本身，仅在本次任务中跳过
+- 豁免记录写入 experience/，evolution 聚合时分析是否有滥用趋势
+
+#### 部分提交（新增，覆盖 U4）
+
+依赖链任务中，用户可接受链中部分步骤，放弃其余步骤。
+
+```
+[ENGINE:partial]  START | 用户部分接受          | completed=backend;remaining=frontend,test
+[ENGINE:partial]  SUBMIT| 提交已完成            | target=backend;action=git commit
+[ENGINE:partial]  DROP  | 放弃未完成            | target=frontend,test;action=标记废弃
+```
+
+**触发点**：依赖链执行中，用户说"XX 写完了，YY 先不用了"。
+
+**规则**：
+
+- 已完成的步骤提交（git commit）
+- 未完成/放弃的步骤标记废弃（记录到 experience/）
+- 依赖链后续步骤不再执行
+- 下次 evolution 聚合时分析废弃原因
+
 #### 并发上限（BUG-020 修复）
 
 | 场景             | 并发上限 | 说明                                        |

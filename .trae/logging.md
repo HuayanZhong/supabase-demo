@@ -54,6 +54,19 @@
 [ENGINE:tool]     FAIL   | MCP调用失败            | tool=supabase;error=timeout;retry=1
 [ENGINE:step]     OK     | 注册路由               | file=pages/index.vue;changed=1
 [ENGINE:done]     END    | 执行完成               | files=3;tools=5;errors=0
+[ENGINE:interrupt] START | 用户打断               | step=3/5;task=写API路由
+[ENGINE:checkpoint]SAVE  | 保存检查点             | step=3;files_changed=2
+[ENGINE:checkpoint]DONE  | 已暂停                 | resume_with=/continue TASK-001
+[ENGINE:resume]   START  | 恢复任务               | from_step=4;step_total=5
+[ENGINE:amend]    START  | scope 追加             | amendment=加page参数;compatible=true
+[ENGINE:redirect] START  | 方向变更               | completed=表格;new=卡片;revert=git revert
+[ENGINE:redirect] WARN   | 频繁变更               | changes=3≥3;action=建议先确认
+[ENGINE:shrink]   START  | scope 缩减             | original=CRUD;remaining=R
+[ENGINE:shrink]   DROP   | 放弃超出               | extra=CUD;action=标记废弃
+[ENGINE:scope]    WARN   | 需求膨胀               | current=CRUD;amendment=导出;action=建议新任务
+[ENGINE:partial]  START  | 部分接受               | completed=backend;remaining=frontend
+[ENGINE:partial]  SUBMIT | 提交已完成             | target=backend;action=git commit
+[ENGINE:partial]  DROP   | 放弃未完成             | target=frontend;action=标记废弃
 ```
 
 ### GUARD — 守卫节点
@@ -64,6 +77,7 @@
 [GUARD:tool]      BLOCKED| 非法工具                | tool=未注册工具;allowed=允许列表
 [GUARD:destructive]WARN   | 破坏性操作              | action=命令详情;confirmed=true/false
 [GUARD:context]   FAIL   | 依赖链上下文缺失        | missing_key=缺失字段;required_by=需要方
+[GUARD:override]  LOG    | 用户豁免                | constraint=检查项;reason=用户跳过
 ```
 
 ### SILENT — 静默成功检测
@@ -94,6 +108,9 @@
 [MEM:summary]     CHECK  | 检查摘要缓存           | age=Nd;limit=30d
 [MEM:summary]     REBUILD| 重建摘要               | old_lines=N;new_file=xxx
 [MEM:write]       DONE   | 写入完成               | target=experience/;source=evolution
+[MEM:recover]     START  | 发现 checkpoint        | task_id=TASK-001;step=3/5
+[MEM:recover]     CHECK  | 环境一致性             | lock_hash=匹配;nvmrc=匹配
+[MEM:recover]     WARN   | 环境已变               | pnpm-lock=changed;action=pnpm install
 ```
 
 ### EVAL — 评估层
