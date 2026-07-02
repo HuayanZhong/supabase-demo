@@ -1,0 +1,19 @@
+# Git 属性配置 — 跨平台换行符与二进制文件处理
+
+## 换行符：统一 LF（与 .editorconfig 一致）
+* text=auto eol=lf
+
+## 二进制文件：禁止换行符转换和 diff
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.svg    binary
+*.woff   binary
+*.woff2  binary
+*.ttf    binary
+*.eot    binary
+
+## 锁定文件：避免无效 diff
+pnpm-lock.yaml -diff
