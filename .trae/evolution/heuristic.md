@@ -193,31 +193,109 @@ AI 提取关键字段写入经验数据结构
 
 上次聚合时的资源状态记录在最后一次聚合报告中
 如果无可比基准（首次聚合），跳过资源变更检测
+
+### 规则变更检测
+
+在资源变更检测之后，检查 `.trae/rules/` 目录下的规则文件是否发生变化：
+
+```
+
+读取 .trae/rules/ 下所有 .md 文件的路径列表
+↓
+对比上次聚合时的 rules 文件基线
+↓
+扫描 .trae/rules/README.md 中"文件结构"一节的文件树，
+优先以文件树为准（人工维护的权威清单），
+无文件树时回退到实际目录扫描
+↓
+如果存在新增/删除/修改的规则：
+│
+├── 遍历 execution-plan/ 下所有 constraint/heuristic/policy.md：
+│ ├── 新规则是否涉及该领域未覆盖的约束场景？
+│ │ ├── 是 → 建议在该领域的 constraint/heuristic 中补充引用
+│ │ │ → 日志：[EVOLVE:rule] CONSTRAINT_GAP | 约束缺口 | rule={path};target=execution-plan/{domain}/constraint.md;reason=新规则未在约束中引用
+│ │ └── 否 → 跳过
+│ │
+│ ├── 新规则是否与该领域已有的启发式建议重叠或矛盾？
+│ │ ├── 重叠 → 标记"规则重复"，建议移除治理文件中的冗余条目
+│ │ │ → 日志：[EVOLVE:rule] OVERLAP | 规则重叠 | rule={path};target=execution-plan/{domain}/heuristic.md;action=建议简化
+│ │ └── 无重叠 → 跳过
+│ │
+│ └── 输出领域级汇总
+│ → 日志：[EVOLVE:rule] DOMAIN_RESULT | 领域影响 | domain={name};gaps=N;overlaps=N
+│
+├── 遍历 evaluation/ 下所有 constraint/heuristic/policy.md：
+│ ├── 评估检查项是否覆盖了新规则的要求？
+│ │ ├── 未覆盖 → 建议在 evaluation 中增加对应检查项
+│ │ │ → 日志：[EVOLVE:rule] EVAL_GAP | 评估缺口 | rule={path};target=evaluation/{domain}/heuristic.md;reason=评估未覆盖新规则
+│ │ └── 已覆盖 → 跳过
+│ │
+│ └── 输出评估层汇总
+│ → 日志：[EVOLVE:rule] EVAL_RESULT | 评估层影响 | gaps=N
+│
+├── 遍历 workflows/{domain}/ 下相关 task-type：
+│ ├── 对应领域的工作流步骤是否与新规则冲突？
+│ │ ├── 冲突 → 建议更新 workflow 步骤顺序或检查项
+│ │ │ → 日志：[EVOLVE:rule] WORKFLOW_CONFLICT | 工作流冲突 | rule={path};workflow=workflows/{domain}/{task-type}.md;reason=步骤顺序与规则矛盾
+│ │ └── 无冲突 → 跳过
+│ │
+│ └── 输出工作流层汇总
+│ → 日志：[EVOLVE:rule] WORKFLOW_RESULT | 工作流层影响 | conflicts=N
+│
+├── 检查规则是否涉及安全/凭证/部署等高风险领域：
+│ ├── 是 → 标记"高风险规则变更"，在提案中附带完整影响分析
+│ │ → 日志：[EVOLVE:rule] HIGH_RISK | 高风险规则变更 | rule={path};reason=涉及安全/凭证/部署
+│ └── 否 → 跳过
+│
+└── 输出汇总
+→ 日志：[EVOLVE:rule] RESULT | 规则变更分析 | added=N;deleted=N;modified=N;constraint_gaps=N;eval_gaps=N;workflow_conflicts=N;high_risk=N
+
+如果无变更：
+→ 日志：[EVOLVE:rule] OK | 规则无变更
+
+规则文件基线记录在最后一次聚合报告中的 `rules_baseline` 字段：
+
+```json
+{
+  "rules_baseline": {
+    "snapshot_time": "2026-07-02T12:00:00Z",
+    "all_rule_files": [
+      ".trae/rules/language.md",
+      ".trae/rules/interaction.md",
+      ".trae/rules/ai-safety.md",
+      ".trae/rules/code-style.md",
+      ".trae/rules/comments.md",
+      ".trae/rules/naming.md",
+      ".trae/rules/frontend/comments.md",
+      ".trae/rules/backend/nestjs.md",
+      "..."
+    ],
+    "file_count": 23
+  }
+}
+```
+
+如果无可比基线（首次聚合），直接记录当前 rules 文件清单作为基线，不输出变更日志。
+
 ```
 
 ### 根因分析流程
 
 ```
+
 拿到聚合报告
-    ↓
-对于每个"高频失败"：
-    1. 这属于什么类型的失败？（类型/工具/流程/常识）
-    2. 当前治理有没有覆盖这个类型？
-       ─ 有覆盖但没拦住 → 规则太松？执行不到位？
-       ─ 没覆盖 → 治理遗漏
-    3. 应该加什么层级的规则？
-       ─ 需要硬性禁止？→ constraint
-       ─ 需要给建议？→ heuristic
-       ─ 需要决策指引？→ policy
-    4. 目标文件是哪个？
-       ─ 通用？→ {module}/constraint/heuristic/policy.md
-       ─ 领域专用？→ {module}/{domain}/{constraint/heuristic/policy}.md
-    ↓
-对于每个"全通过领域"：
-    1. 该领域的治理是否过于严格？
-    2. 是否有可以放宽的约束？
-    3. 是否可以考虑简化该领域的 workflow？
-    4. 交叉检查 patterns/ 与 profile/ 的记忆反馈：
+↓
+对于每个"高频失败"：1. 这属于什么类型的失败？（类型/工具/流程/常识）2. 当前治理有没有覆盖这个类型？
+─ 有覆盖但没拦住 → 规则太松？执行不到位？
+─ 没覆盖 → 治理遗漏 3. 应该加什么层级的规则？
+─ 需要硬性禁止？→ constraint
+─ 需要给建议？→ heuristic
+─ 需要决策指引？→ policy 4. 目标文件是哪个？
+─ 通用？→ {module}/constraint/heuristic/policy.md
+─ 领域专用？→ {module}/{domain}/{constraint/heuristic/policy}.md
+↓
+对于每个"全通过领域"：1. 该领域的治理是否过于严格？2. 是否有可以放宽的约束？3. 是否可以考虑简化该领域的 workflow？4. 交叉检查 patterns/ 与 profile/ 的记忆反馈：
+
 ```
 
 打开 .trae/memory/patterns/
@@ -241,8 +319,10 @@ AI 提取关键字段写入经验数据结构
 → 日志：[EVOLVE:mem] PROFILE | 无相关偏好 | domain=frontend; action=跳过
 
 ```
+
     5. 汇总记忆参考结果，写入分析输出的 `memory_references` 字段
-```
+
+````
 
 ### 分析输出
 
@@ -329,7 +409,7 @@ AI 提取关键字段写入经验数据结构
     }
   ]
 }
-```
+````
 
 ### 模板一致性检测
 
