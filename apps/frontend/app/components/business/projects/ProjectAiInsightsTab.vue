@@ -29,7 +29,8 @@ const insights = computed(() => {
       color: "text-warning",
       bg: "bg-warning/10",
       text: t("Project AiRiskText", {
-        count: p.taskList.filter((t) => t.priority === "high" && t.status !== "done").length,
+        count: p.taskList.filter((task) => task.priority === "high" && task.status !== "done")
+          .length,
         area: p.tags[0] ?? "核心",
       }),
     },

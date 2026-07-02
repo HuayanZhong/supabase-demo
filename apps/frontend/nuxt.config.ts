@@ -1,5 +1,4 @@
 import { defineNuxtConfig } from "nuxt/config";
-import { langDir } from "@supabase/i18n";
 
 export default defineNuxtConfig({
   modules: ["@nuxt/ui", "@nuxt/fonts", "@nuxt/image", "@nuxtjs/i18n", "@nuxt/test-utils/module"],
@@ -15,7 +14,7 @@ export default defineNuxtConfig({
     },
   },
 
-  // 国际化配置
+  // 国际化配置（langDir 是相对于 srcDir 的路径）
   i18n: {
     locales: [
       { code: "zh-CN", name: "简体中文", file: "zh-CN.json" },
@@ -23,7 +22,7 @@ export default defineNuxtConfig({
       { code: "ja", name: "日本語", file: "ja.json" },
       { code: "ko", name: "한국어", file: "ko.json" },
     ],
-    langDir,
+    langDir: "../../../packages/i18n/locales/",
     strategy: "no_prefix",
     defaultLocale: "zh-CN",
   },
