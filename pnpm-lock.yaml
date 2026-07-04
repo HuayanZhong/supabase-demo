@@ -5,7 +5,50 @@ settings:
   excludeLinksFromLockfile: false
 
 catalogs:
+  backend:
+    '@mikro-orm/cli':
+      specifier: ^7.1.4
+      version: 7.1.5
+    '@mikro-orm/core':
+      specifier: ^7.1.4
+      version: 7.1.5
+    '@mikro-orm/migrations':
+      specifier: ^7.1.4
+      version: 7.1.5
+    '@mikro-orm/nestjs':
+      specifier: ^7.0.2
+      version: 7.0.2
+    '@mikro-orm/postgresql':
+      specifier: ^7.1.4
+      version: 7.1.5
+    '@nestjs/common':
+      specifier: ^11.1.27
+      version: 11.1.27
+    '@nestjs/core':
+      specifier: ^11.1.27
+      version: 11.1.27
+    '@nestjs/platform-express':
+      specifier: ^11.1.27
+      version: 11.1.27
+    reflect-metadata:
+      specifier: ^0.2.2
+      version: 0.2.2
+    rxjs:
+      specifier: ^7.8.2
+      version: 7.8.2
+    tsx:
+      specifier: ^4.22.4
+      version: 4.22.5
   dev:
+    '@supabase/ssr':
+      specifier: ^0.12.0
+      version: 0.12.0
+    '@supabase/supabase-js':
+      specifier: ^2.108.2
+      version: 2.110.0
+    '@types/node':
+      specifier: ^25.9.3
+      version: 25.9.4
     oxfmt:
       specifier: ^0.55.0
       version: 0.55.0
@@ -15,6 +58,65 @@ catalogs:
     typescript:
       specifier: ^6.0.3
       version: 6.0.3
+    zod:
+      specifier: ^4.4.3
+      version: 4.4.3
+  frontend:
+    '@fontsource-variable/public-sans':
+      specifier: ^5.2.7
+      version: 5.2.7
+    '@fontsource/jetbrains-mono':
+      specifier: ^5.2.8
+      version: 5.2.8
+    '@nuxt/fonts':
+      specifier: ^0.14.0
+      version: 0.14.0
+    '@nuxt/image':
+      specifier: ^2.0.0
+      version: 2.0.0
+    '@nuxt/ui':
+      specifier: ^4.9.0
+      version: 4.9.0
+    '@nuxtjs/i18n':
+      specifier: ^10.4.0
+      version: 10.4.0
+    echarts:
+      specifier: ^6.1.0
+      version: 6.1.0
+    nuxt:
+      specifier: ^4.4.8
+      version: 4.4.8
+    tailwindcss:
+      specifier: ^4.3.1
+      version: 4.3.2
+    vue:
+      specifier: ^3.5.38
+      version: 3.5.39
+    vue-echarts:
+      specifier: ^8.0.1
+      version: 8.0.1
+    vue-router:
+      specifier: ^5.1.0
+      version: 5.1.0
+    vue-tsc:
+      specifier: ^3.3.5
+      version: 3.3.6
+  test:
+    '@nuxt/test-utils':
+      specifier: ^4.0.3
+      version: 4.0.3
+    '@vue/test-utils':
+      specifier: ^2.4.11
+      version: 2.4.11
+    happy-dom:
+      specifier: ^20.10.6
+      version: 20.10.6
+    playwright-core:
+      specifier: ^1.61.1
+      version: 1.61.1
+    vitest:
+      specifier: ^4.1.9
+      version: 4.1.9
 
 importers:
 
@@ -244,6 +346,18 @@ importers:
         version: 6.0.3
 
   packages/lint-config:
+    devDependencies:
+      oxfmt:
+        specifier: catalog:dev
+        version: 0.55.0
+      oxlint:
+        specifier: catalog:dev
+        version: 1.72.0
+      typescript:
+        specifier: catalog:dev
+        version: 6.0.3
+
+  packages/tools:
     devDependencies:
       oxfmt:
         specifier: catalog:dev
@@ -10510,7 +10624,7 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 25.9.4
+      '@types/node': 26.1.0
 
   '@types/chai@5.2.3':
     dependencies:
@@ -10519,7 +10633,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 25.9.4
+      '@types/node': 26.1.0
 
   '@types/deep-eql@4.0.2': {}
 
@@ -10539,7 +10653,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.1.1':
     dependencies:
-      '@types/node': 25.9.4
+      '@types/node': 26.1.0
       '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
@@ -10572,12 +10686,12 @@ snapshots:
 
   '@types/send@1.2.1':
     dependencies:
-      '@types/node': 25.9.4
+      '@types/node': 26.1.0
 
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 25.9.4
+      '@types/node': 26.1.0
 
   '@types/web-bluetooth@0.0.20': {}
 
@@ -12496,7 +12610,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 25.9.4
+      '@types/node': 26.1.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
