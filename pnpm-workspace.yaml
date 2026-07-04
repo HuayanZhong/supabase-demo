@@ -20,6 +20,7 @@ catalogs:
     "@types/node": ^25.9.3
     oxfmt: ^0.55.0
     oxlint: ^1.70.0
+    pino: ^10.3.1
     typescript: ^6.0.3
     zod: ^4.4.3
 
@@ -60,3 +61,8 @@ catalogs:
     happy-dom: ^20.10.6
     playwright-core: ^1.61.1
     vitest: ^4.1.9
+
+  # 日志依赖包版本
+  logger:
+    pino: ^10.3.1
+    pino-pretty: ^13.1.3
