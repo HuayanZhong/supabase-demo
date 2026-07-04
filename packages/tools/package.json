@@ -1,0 +1,23 @@
+{
+  "name": "@supabase/tools",
+  "version": "1.0.0",
+  "description": "AI 工具集",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
+  }
+}
