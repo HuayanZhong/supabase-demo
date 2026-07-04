@@ -91,7 +91,13 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
     <template #footer>
       <div class="text-center text-sm">
         <span class="text-toned">{{ $t("Login Description") }}</span>
-        <UButton variant="link" color="primary" size="sm" class="ml-1" @click="current = 'login'">
+        <UButton
+          variant="link"
+          color="primary"
+          size="sm"
+          class="ml-1"
+          @click="void (current = 'login')"
+        >
           {{ $t("Login") }}
         </UButton>
       </div>

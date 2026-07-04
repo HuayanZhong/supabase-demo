@@ -100,7 +100,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
           color="primary"
           size="sm"
           class="ml-1"
-          @click="current = 'register'"
+          @click="void (current = 'register')"
         >
           {{ $t("Register") }}
         </UButton>
