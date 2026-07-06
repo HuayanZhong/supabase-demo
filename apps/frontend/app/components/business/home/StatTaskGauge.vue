@@ -38,18 +38,18 @@ const dashOffset = computed(() => circumference * (1 - progress.value / 100));
         <svg :width="size" :height="size" class="-rotate-90">
           <!-- 背景轨道 -->
           <circle
-            :cx="String(size / 2)"
-            :cy="String(size / 2)"
-            :r="String(radius)"
+            :cx.attr="String(size / 2)"
+            :cy.attr="String(size / 2)"
+            :r.attr="String(radius)"
             fill="none"
             :stroke-width="strokeWidth"
             class="stroke-muted/20"
           />
           <!-- 进度弧 -->
           <circle
-            :cx="String(size / 2)"
-            :cy="String(size / 2)"
-            :r="String(radius)"
+            :cx.attr="String(size / 2)"
+            :cy.attr="String(size / 2)"
+            :r.attr="String(radius)"
             fill="none"
             :stroke-width="strokeWidth"
             stroke-linecap="round"
