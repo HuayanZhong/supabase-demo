@@ -24,8 +24,25 @@ logs
 # Turbo 缓存
 .turbo
 
-# 数据文件
-.data
-
 # 图谱输出
 graphify-out
+
+# Trae 治理架构快照
+.trae/snapshots/
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 密钥文件
+*.pem
+*.key
+credentials.json
+
+# 测试覆盖率
+coverage/
+
+# TypeScript 构建信息
+*.tsbuildinfo
