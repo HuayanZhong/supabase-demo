@@ -1,20 +1,48 @@
 # Trae AI Engineering 治理框架
 
-本项目配备完整的 AI 治理框架，位于 `.trae/` 目录下。所有 AI 任务需按以下流程执行。
+本项目治理框架位于 `.trae/` 目录下。
 
-## 核心规则
-
-- 所有涉及代码变更的任务，必须遵循 v3 治理 5 层闭环（详见 `.trae/ARCHITECTURE.md`）
-- 任务完成后必须执行收尾检查清单（追踪摘要 + 经验写入 + 规则自检）
-- 具体行为规则见 `.trae/rules/` 下的规则文件
-- 治理框架自身通过 `.trae/evolution/` 机制自迭代
-
-## 架构总览
-
-治理框架 v3 5 层闭环：
+## 治理架构
 
 ```
-alwaysApply 注入 → 领域规则匹配 → Pre-commit 门禁 → Post-task 收尾 → Evolution 自迭代
+AGENTS.md               ← 总纲（始终生效）
+  │
+  └─ .trae/rules/       ← 规则体系（按领域生效）
+       ├─ agent-collaboration.md  多智能体协同
+       ├─ language.md            语言约束
+       ├─ naming.md              命名规范
+       ├─ backend/               NestJS + 数据库
+       ├─ frontend/              Nuxt + 样式 + i18n
+       ├─ shared/                Monorepo 治理
+       └─ quality/               测试 + 安全
 ```
 
-详见 `.trae/ARCHITECTURE.md`。
+## 规则体系
+
+| 文件                       | 生效方式 | 适用场景                         |
+| -------------------------- | -------- | -------------------------------- |
+| `agent-collaboration.md`   | 始终生效 | 多智能体分工、技能路由、安全边界 |
+| `language.md`              | 始终生效 | 回答、注释、commit 使用中文      |
+| `naming.md`                | 始终生效 | 文件、变量、类型命名规范         |
+| `comments.md`              | 始终生效 | 注释风格与 JSDoc 约定            |
+| `task-logging.md`          | 始终生效 | 任务日志输出与记录               |
+| `backend/nestjs.md`        | 智能生效 | NestJS Controller/Service/Module |
+| `backend/database.md`      | 智能生效 | MikroORM Entity/Repository/迁移  |
+| `frontend/nuxt.md`         | 智能生效 | Nuxt 组件/页面/数据获取          |
+| `frontend/styles.md`       | 智能生效 | Tailwind / Nuxt UI 样式          |
+| `frontend/i18n.md`         | 智能生效 | 国际化翻译                       |
+| `shared/monorepo.md`       | 智能生效 | 子包创建/依赖管理                |
+| `shared/dependencies.md`   | 智能生效 | 依赖添加与版本管理规范           |
+| `shared/env-vars.md`       | 智能生效 | 环境变量注册与使用规范           |
+| `shared/frontend-types.md` | 智能生效 | ViewModel 与 Entity 职责边界     |
+| `quality/testing.md`       | 智能生效 | 测试编写与运行                   |
+| `quality/security.md`      | 智能生效 | 安全与认证                       |
+| `git-commit-message.md`    | 智能生效 | Commit message 格式              |
+
+## 技能与 MCP
+
+Skills 和 MCP 的调用规则见 `agent-collaboration.md`。
+
+## 任务收尾
+
+任务完成后按 `task-logging.md` 输出结构化日志，包含调用的规则/Skills/MCP、变更清单、验证结果。
