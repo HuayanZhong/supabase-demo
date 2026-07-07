@@ -19,9 +19,19 @@ AGENTS.md               ← 总纲（始终生效）
        │    ├─ database.md       MikroORM Entity/Repository
        │    ├─ error-handling.md 异常处理与错误码
        │    └─ logging.md        日志规范
-       ├─ frontend/              Nuxt + 样式 + i18n
-       ├─ shared/                Monorepo 治理
+       ├─ frontend/              Nuxt + 样式 + 国际化 + 质量
+       │    ├─ nuxt.md           组件、页面、数据获取
+       │    ├─ styles.md         Tailwind / Nuxt UI 样式
+       │    ├─ i18n.md           国际化翻译
+       │    └─ quality.md        a11y、加载状态、性能
+       ├─ shared/                Monorepo 治理 + 类型边界
+       │    ├─ monorepo.md       子包创建、构建配置
+       │    ├─ dependencies.md   catalog 依赖管理
+       │    ├─ env-vars.md       环境变量注册
+       │    └─ frontend-types.md ViewModel/Entity 边界
        └─ quality/               测试 + 安全
+            ├─ testing.md        测试规范
+            └─ security.md       安全与认证
 ```
 
 ## 规则体系
