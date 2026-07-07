@@ -57,34 +57,50 @@ html.dark .shiki span {
 Using [Vercel AI Gateway](https://vercel.com/ai-gateway) (recommended):
 
 ```ts [server/api/chat.post.ts]
-import { streamText, convertToModelMessages } from "ai";
+import {
+  streamText,
+  convertToModelMessages,
+  toUIMessageStream,
+  createUIMessageStreamResponse,
+} from "ai";
 import { gateway } from "@ai-sdk/gateway";
 
 export default defineEventHandler(async (event) => {
   const { messages } = await readBody(event);
 
-  return streamText({
-    model: gateway("anthropic/claude-sonnet-4.6"),
-    system: "You are a helpful assistant.",
+  const result = streamText({
+    model: gateway("anthropic/claude-sonnet-5"),
+    instructions: "You are a helpful assistant.",
     messages: await convertToModelMessages(messages),
-  }).toUIMessageStreamResponse();
+  });
+
+  const stream = toUIMessageStream({ stream: result.stream });
+  return createUIMessageStreamResponse({ stream });
 });
 ```
 
 Or with a direct provider (e.g., `pnpm add @ai-sdk/openai`):
 
 ```ts [server/api/chat.post.ts]
-import { streamText, convertToModelMessages } from "ai";
+import {
+  streamText,
+  convertToModelMessages,
+  toUIMessageStream,
+  createUIMessageStreamResponse,
+} from "ai";
 import { openai } from "@ai-sdk/openai";
 
 export default defineEventHandler(async (event) => {
   const { messages } = await readBody(event);
 
-  return streamText({
+  const result = streamText({
     model: openai("gpt-5-nano"),
-    system: "You are a helpful assistant.",
+    instructions: "You are a helpful assistant.",
     messages: await convertToModelMessages(messages),
-  }).toUIMessageStreamResponse();
+  });
+
+  const stream = toUIMessageStream({ stream: result.stream });
+  return createUIMessageStreamResponse({ stream });
 });
 ```
 
@@ -105,7 +121,7 @@ UDashboardPanel
 ```vue [pages/chat/[id].vue]
 <script setup lang="ts">
 import { isReasoningUIPart, isTextUIPart, isToolUIPart, getToolName } from "ai";
-import { Chat } from "@ai-sdk/vue";
+import { useChat } from "@ai-sdk/vue";
 import { isPartStreaming, isToolStreaming } from "@nuxt/ui/utils/ai";
 import highlight from "@comark/nuxt/plugins/highlight";
 
@@ -113,7 +129,7 @@ definePageMeta({ layout: "dashboard" });
 
 const input = ref("");
 
-const chat = new Chat({
+const { messages, status, error, sendMessage, stop, regenerate } = useChat({
   onError(error) {
     console.error(error);
   },
@@ -121,7 +137,7 @@ const chat = new Chat({
 
 function onSubmit() {
   if (!input.value.trim()) return;
-  chat.sendMessage({ text: input.value });
+  sendMessage({ text: input.value });
   input.value = "";
 }
 </script>
@@ -134,7 +150,7 @@ function onSubmit() {
 
     <template #body>
       <UContainer>
-        <UChatMessages :messages="chat.messages" :status="chat.status">
+        <UChatMessages :messages="messages" :status="status">
           <template #content="{ message }">
             <template
               v-for="(part, index) in message.parts"
@@ -179,12 +195,8 @@ function onSubmit() {
 
     <template #footer>
       <UContainer class="pb-4 sm:pb-6">
-        <UChatPrompt v-model="input" :error="chat.error" @submit="onSubmit">
-          <UChatPromptSubmit
-            :status="chat.status"
-            @stop="chat.stop()"
-            @reload="chat.regenerate()"
-          />
+        <UChatPrompt v-model="input" :error="error" @submit="onSubmit">
+          <UChatPromptSubmit :status="status" @stop="stop()" @reload="regenerate()" />
         </UChatPrompt>
       </UContainer>
     </template>
@@ -208,11 +220,11 @@ function onSubmit() {
 <UModal v-model:open="isOpen">
   <template #content>
     <UChatPalette>
-      <UChatMessages :messages="chat.messages" :status="chat.status" />
+      <UChatMessages :messages="messages" :status="status" />
 
       <template #prompt>
         <UChatPrompt v-model="input" @submit="onSubmit">
-          <UChatPromptSubmit :status="chat.status" />
+          <UChatPromptSubmit :status="status" />
         </UChatPrompt>
       </template>
     </UChatPalette>
@@ -224,7 +236,7 @@ function onSubmit() {
 
 ```vue
 <UChatPrompt v-model="input" @submit="onSubmit">
-  <UChatPromptSubmit :status="chat.status" />
+  <UChatPromptSubmit :status="status" />
 
   <template #footer>
     <USelect
