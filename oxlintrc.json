@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "no-undef": "error",
+    "eqeqeq": "error",
+    "no-empty": "warn"
+  },
+  "ignorePatterns": ["dist", "node_modules", "coverage", ".nuxt", ".output", ".vercel"]
+}
