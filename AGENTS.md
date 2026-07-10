@@ -7,8 +7,9 @@
 ```
 AGENTS.md               ← 总纲（始终生效）
   │
-  └─ .trae/rules/       ← 规则体系（按领域生效）
-       ├─ agent-collaboration.md  多智能体协同
+  └─ .trae/rules/       ← 规则体系（按领域/事件生效）
+       ├─ agent-routing.md        命中规则（路由决策）
+       ├─ agent-catalog.md        Agent 操作目录（按章节注入）
        ├─ language.md            语言约束
        ├─ naming.md              命名规范
        ├─ comments.md            注释风格
@@ -38,7 +39,8 @@ AGENTS.md               ← 总纲（始终生效）
 
 | 文件                        | 生效方式 | 适用场景                           |
 | --------------------------- | -------- | ---------------------------------- |
-| `agent-collaboration.md`    | 始终生效 | 多智能体分工、技能路由、安全边界   |
+| `agent-routing.md`          | 智能生效 | UserPromptSubmit 时注入路由决策    |
+| `agent-catalog.md`          | 智能生效 | 按章节分阶段注入各 hook 事件       |
 | `language.md`               | 始终生效 | 回答、注释、commit 使用中文        |
 | `naming.md`                 | 始终生效 | 文件、变量、类型命名规范           |
 | `comments.md`               | 始终生效 | 注释风格与 JSDoc 约定              |
@@ -59,9 +61,20 @@ AGENTS.md               ← 总纲（始终生效）
 | `quality/security.md`       | 智能生效 | 安全与认证                         |
 | `git-commit-message.md`     | 智能生效 | Commit message 格式                |
 
+## Hooks 生命周期与规则注入
+
+```
+SessionStart   → session-start.ps1     → language.md + monorepo.md + agent-catalog.md（角色与资源）
+UserPromptSubmit→ classify-intent.ps1   → agent-routing.md（路由决策）
+PreToolUse     → enforce-code-standards.ps1 → naming.md + comments.md + agent-catalog.md（安全约束）
+PostToolUse    → remind-logging.ps1     → 提醒输出日志
+Stop           → validate-output.ps1    → task-logging.md + agent-catalog.md（质量验证）
+Notification   → quality-reminder.ps1    → 质量检查清单
+```
+
 ## 技能与 MCP
 
-Skills 和 MCP 的调用规则见 `agent-collaboration.md`。
+Skills 和 MCP 的调用规则见 `agent-catalog.md`（角色与资源章节）。
 
 ## 任务收尾
 

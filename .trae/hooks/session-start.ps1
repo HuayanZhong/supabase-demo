@@ -7,6 +7,7 @@
 请阅读以下规则了解项目基础约束：
 - `.trae/rules/language.md` — 语言约束
 - `.trae/rules/shared/monorepo.md` — Monorepo 结构
+- `.trae/rules/agent-catalog.md`（角色与资源章节）— Agent 职责与可用资源
 "@
 
 $json = @{
