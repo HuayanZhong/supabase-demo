@@ -1,6 +1,7 @@
 ﻿$inputJson = [Console]::In.ReadToEnd()
 $parsed = $inputJson | ConvertFrom-Json
-$sql = $parsed.tool_input.sql
+# execute_sql 的参数名是 query，而非 sql
+$sql = $parsed.tool_input.query
 
 $dangerousPattern = '\b(DROP\s+(TABLE|VIEW|INDEX|SCHEMA|DATABASE)|TRUNCATE\s+TABLE|ALTER\s+.*\s+DROP\s+COLUMN|DELETE\s+FROM)\b'
 

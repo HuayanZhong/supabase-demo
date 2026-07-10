@@ -1,4 +1,4 @@
-$context = @"
+﻿$context = @"
 ## 项目上下文
 项目: supabase-demo | 技术栈: NestJS + Nuxt + Supabase + MikroORM | Monorepo: pnpm + Turborepo
 质量: oxlint + oxfmt | 类型检查: pnpm check-types | 审计: /audit

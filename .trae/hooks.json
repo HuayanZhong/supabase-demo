@@ -1,5 +1,4 @@
 {
-  "version": 1,
   "hooks": {
     "SessionStart": [
       {
@@ -21,7 +20,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Write",
+        "matcher": "DeleteFile|Edit|Write",
         "hooks": [
           {
             "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/protect-mcp-json.ps1"
@@ -42,6 +41,7 @@
     ],
     "PostToolUse": [
       {
+        "matcher": "DeleteFile|Edit|RunCommand|Write",
         "hooks": [
           {
             "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/remind-logging.ps1"
@@ -51,6 +51,7 @@
     ],
     "Stop": [
       {
+        "loop_limit": 3,
         "hooks": [
           {
             "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/validate-output.ps1"
