@@ -12,3 +12,4 @@ description: 注释规范，全项目通用
 - FIXME 标记：`// FIXME: 需要修复的问题`
 - HACK 标记：`// HACK: 临时解决方案，待后续优化`
 - 不写 @author、@date 等冗余标签
+- 修改已有文件时优先使用 SearchReplace 做局部编辑；必须用 Write 全量重写时，需确保已确认保留原文件的所有注释内容

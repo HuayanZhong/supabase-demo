@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// 环境变量解析错误，包含具体的路径和错误信息
+/** 环境变量解析失败错误 */
 export class EnvError extends Error {
   readonly issues: Array<{ path: string; message: string }>;
 
@@ -11,7 +11,7 @@ export class EnvError extends Error {
   }
 }
 
-// 用 Zod schema 解析环境变量，失败时抛出 EnvError
+/** 用 Zod schema 校验环境变量，失败时抛出 EnvError */
 export function parseEnv<TSchema extends z.ZodType>(
   schema: TSchema,
   env: Record<string, unknown>,
@@ -27,37 +27,37 @@ export function parseEnv<TSchema extends z.ZodType>(
   throw new EnvError(`Invalid environment${label}`, issues);
 }
 
-// 环境变量解析器：必填字符串
+/** 必填字符串 */
 export function envString() {
   return z.string().min(1);
 }
 
-// 环境变量解析器：可选字符串
+/** 可选字符串 */
 export function envOptionalString() {
   return z.string().optional();
 }
 
-// 环境变量解析器：URL 字符串
+/** 合法 URL */
 export function envUrlString() {
-  return z.string().url();
+  return z.url();
 }
 
-// 环境变量解析器：host:port 格式（如 "localhost:4000"）
+/** "host:port" 格式字符串 */
 export function envHostPortString() {
   return z.string().regex(/^[a-zA-Z0-9._-]+:\d+$/);
 }
 
-// 环境变量解析器：正整数
+/** 正整数（允许字符串输入，自动转型） */
 export function envIntString() {
   return z.coerce.number().int().positive();
 }
 
-// 环境变量解析器：非负整数
+/** 非负整数（允许字符串输入，自动转型） */
 export function envNonNegativeIntString() {
   return z.coerce.number().int().nonnegative();
 }
 
-// 环境变量解析器：布尔值
+/** 布尔值（允许字符串输入，自动转型） */
 export function envBoolString() {
   return z.coerce.boolean();
 }

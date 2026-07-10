@@ -1,21 +1,18 @@
 import { z } from "zod";
 
-// 项目环境变量统一 Schema 定义
-// 新增环境变量时：1) 在此文件添加定义  2) 在 .env.example 添加占位符
+/** 后端所需环境变量 schema（新增变量时同步更新 .env.example） */
 export const envSchema = z.object({
-  // PostgreSQL
-  DATABASE_URL: z.string().url(),
+  // PostgreSQL 连接串
+  DATABASE_URL: z.url(),
 
-  // Supabase
-  SUPABASE_URL: z.string().url(),
-  SUPABASE_ANON_KEY: z.string().min(1),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+  // 服务监听端口（默认 4000）
+  PORT: z.coerce.number().int().positive().default(4000),
 
-  // Auth
-  JWT_SECRET: z.string().min(32),
+  // Supabase 项目地址
+  SUPABASE_URL: z.url(),
 
-  // LLM / AI（可选）
-  OPENAI_API_KEY: z.string().optional(),
+  // SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),   // 等功能需要时启用
+  // JWT_SECRET: z.string().min(32),                  // 等功能需要时启用
 });
 
 export type EnvVars = z.infer<typeof envSchema>;

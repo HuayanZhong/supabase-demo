@@ -4,11 +4,12 @@ export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
 
   const supabase = useCreateServerSupabase(event);
+  const config = useRuntimeConfig();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.baseUrl}/login`,
+      emailRedirectTo: `${config.public.baseUrl}/login`,
     },
   });
 

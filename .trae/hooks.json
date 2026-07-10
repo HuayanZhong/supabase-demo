@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/session-start.ps1"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/classify-intent.ps1"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/protect-mcp-json.ps1"
+          },
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/enforce-code-standards.ps1"
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__.*__execute_sql",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/protect-sql.ps1"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/remind-logging.ps1"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/validate-output.ps1"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/quality-reminder.ps1"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -10,4 +10,7 @@ export {
   envBoolString,
 } from "./env.ts";
 
+export { envSchema } from "./definitions.ts";
+export type { EnvVars } from "./definitions.ts";
+
 export { normalizeBaseUrl, normalizePrefix, joinUrl } from "./normalize.ts";

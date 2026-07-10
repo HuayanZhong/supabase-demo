@@ -46,3 +46,9 @@ coverage/
 
 # TypeScript 构建信息
 *.tsbuildinfo
+
+# 架构参考图
+architecture
+
+# Trae MCP 配置（含密钥）
+.trae/mcp.json
