@@ -1,5 +1,5 @@
 ---
-alwaysApply: true
+alwaysApply: false
 description: 任务日志规范，每次任务完成后必须在对话末尾输出结构化日志
 ---
 

@@ -1,5 +1,5 @@
 ---
-alwaysApply: true
+alwaysApply: false
 description: 语言约束，所有回答和代码注释使用中文
 ---
 
