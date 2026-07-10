@@ -2,6 +2,7 @@
 packages:
   - "apps/*"
   - "packages/*"
+  - "docs/*"
 
 # 允许构建的依赖包
 allowBuilds:
