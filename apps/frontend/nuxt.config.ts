@@ -45,11 +45,21 @@ export default defineNuxtConfig({
     },
   },
 
+  // 开发服务器配置
   devServer: {
     port: 3000,
   },
 
+  // 路由规则：为 /dashboard/** 路由添加 auth 中间件
+  // 并使用 dashboard 布局
   routeRules: {
     "/dashboard/**": { appLayout: "dashboard", appMiddleware: ["auth"] },
+  },
+
+  // 配置 Vite 优化依赖项，确保在 SSR 中使用 @supabase/ssr 和 zod
+  vite: {
+    optimizeDeps: {
+      include: ["@supabase/ssr", "zod"],
+    },
   },
 });
