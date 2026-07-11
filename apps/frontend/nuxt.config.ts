@@ -61,11 +61,12 @@ export default defineNuxtConfig({
     optimizeDeps: {
       include: [
         "@supabase/ssr",
-        "zod",
         "echarts/charts",
-        "echarts/core",
         "echarts/components",
+        "echarts/core",
         "echarts/renderers",
+        "vue-echarts",
+        "zod",
       ],
     },
   },
