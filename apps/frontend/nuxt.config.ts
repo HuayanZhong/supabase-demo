@@ -59,7 +59,14 @@ export default defineNuxtConfig({
   // 配置 Vite 优化依赖项，确保在 SSR 中使用 @supabase/ssr 和 zod
   vite: {
     optimizeDeps: {
-      include: ["@supabase/ssr", "zod"],
+      include: [
+        "@supabase/ssr",
+        "zod",
+        "echarts/charts",
+        "echarts/core",
+        "echarts/components",
+        "echarts/renderers",
+      ],
     },
   },
 });
