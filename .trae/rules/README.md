@@ -57,14 +57,16 @@ rules/
 
 ## Hooks 注入关系
 
-| 生命周期          | 脚本                         | 注入的规则                                                                                                 |
-| ----------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| SessionStart      | session-start.ps1 →          | `language.md` + `monorepo.md` + `agent-catalog.md`（角色与资源）                                           |
-| UserPromptSubmit  | classify-intent.ps1 →        | `agent-routing.md`（路由决策）                                                                             |
-| PreToolUse(Write) | enforce-code-standards.ps1 → | `naming.md` + `comments.md` + `frontend/comments.md` + `frontend/i18n.md` + `agent-catalog.md`（安全约束） |
-| PostToolUse       | remind-logging.ps1 →         | 提醒按 `task-logging.md` 输出日志                                                                          |
-| Stop              | validate-output.ps1 →        | `task-logging.md` + `agent-catalog.md`（质量验证）                                                         |
-| Notification      | quality-reminder.ps1 →       | 质量检查清单                                                                                               |
+| 生命周期                    | 脚本                                                            | 注入的规则                                                                                                 |
+| --------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| SessionStart                | session-start.ps1 →                                             | `language.md` + `monorepo.md` + `agent-catalog.md`（角色与资源）                                           |
+| UserPromptSubmit            | classify-intent.ps1 →                                           | `agent-routing.md`（路由决策）                                                                             |
+| PreToolUse(Write)           | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 → | `naming.md` + `comments.md` + `frontend/comments.md` + `frontend/i18n.md` + `agent-catalog.md`（安全约束） |
+| PreToolUse(execute_sql)     | protect-sql.ps1 →                                               | SQL 注入拦截（不注入规则文件）                                                                             |
+| PreToolUse(chrome-devtools) | inject-credentials.ps1 →                                        | 本地凭证注入（不注入规则文件）                                                                             |
+| PostToolUse                 | remind-logging.ps1 →                                            | 提醒按 `task-logging.md` 输出日志                                                                          |
+| Stop                        | validate-output.ps1 →                                           | `task-logging.md` + `agent-catalog.md`（质量验证）                                                         |
+| Notification                | quality-reminder.ps1 →                                          | 质量检查清单                                                                                               |
 
 ## 原则
 

@@ -1,4 +1,8 @@
-﻿$context = @"
+﻿# 清理上一会话遗留的状态文件，确保本轮从干净状态开始
+$sessionModeFile = ".trae/.session-mode"
+if (Test-Path $sessionModeFile) { Remove-Item $sessionModeFile -Force }
+
+$context = @"
 ## 项目上下文
 项目: supabase-demo | 技术栈: NestJS + Nuxt + Supabase + MikroORM | Monorepo: pnpm + Turborepo
 质量: oxlint + oxfmt | 类型检查: pnpm check-types | 审计: /audit

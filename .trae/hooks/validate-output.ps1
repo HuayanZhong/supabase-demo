@@ -1,4 +1,4 @@
-﻿$inputJson = [Console]::In.ReadToEnd()
+$inputJson = [Console]::In.ReadToEnd()
 $parsed = $inputJson | ConvertFrom-Json
 $lastMsg = $parsed.last_assistant_message
 
@@ -13,6 +13,10 @@ if (-not $hasTaskLog) {
   Write-Output ($result | ConvertTo-Json -Compress)
   exit 0
 }
+
+# 清理会话状态文件，避免状态泄漏到下一会话
+$sessionModeFile = ".trae/.session-mode"
+if (Test-Path $sessionModeFile) { Remove-Item $sessionModeFile -Force }
 
 # 日志已输出，允许停止
 $result = @{
