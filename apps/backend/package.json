@@ -22,6 +22,7 @@
     "@mikro-orm/postgresql": "catalog:backend",
     "@nestjs/common": "catalog:backend",
     "@nestjs/core": "catalog:backend",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "catalog:backend",
     "@supabase/config": "workspace:*",
     "dotenv": "^17.4.2",
