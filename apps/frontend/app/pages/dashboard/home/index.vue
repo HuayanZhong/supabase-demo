@@ -74,16 +74,16 @@ const today = computed(() =>
       </div>
     </div>
 
-    <!-- 中部区域：今日计划 + 成长雷达（含装饰图标） -->
+    <!-- 中间区域：今日计划 + 成长雷达 -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
       <BusinessHomeTodayPlanCard />
       <div class="relative">
         <div
-          class="pointer-events-none absolute -top-8 -right-8 size-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-full blur-2xl"
+          class="absolute -top-8 -right-8 size-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-full blur-2xl pointer-events-none"
           aria-hidden="true"
         />
         <div
-          class="pointer-events-none absolute -bottom-6 -left-6 size-14 text-primary/5"
+          class="absolute -bottom-6 -left-6 size-14 text-primary/5 pointer-events-none"
           aria-hidden="true"
         >
           <UIcon name="i-lucide-sparkles" class="size-full" />

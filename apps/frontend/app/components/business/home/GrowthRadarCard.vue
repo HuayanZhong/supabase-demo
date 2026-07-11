@@ -68,7 +68,7 @@ const chartOption = computed(() => ({
     </div>
 
     <!-- 雷达图 -->
-    <div class="flex-1 px-3 min-h-[200px]">
+    <div class="flex-1 px-3 min-h-[260px]">
       <ClientOnly>
         <VChart :option="chartOption" autoresize style="width: 100%; height: 100%" />
       </ClientOnly>

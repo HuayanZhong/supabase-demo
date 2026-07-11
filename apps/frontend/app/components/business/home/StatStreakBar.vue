@@ -13,7 +13,11 @@ const { t } = useI18n();
 const chartOption = computed(() => ({
   tooltip: { trigger: "axis", confine: true },
   grid: { left: 4, right: 4, top: 4, bottom: 4 },
-  xAxis: { type: "category", show: false, data: ["一", "二", "三", "四", "五", "六", "日"] },
+  xAxis: {
+    type: "category",
+    show: false,
+    data: ["一", "二", "三", "四", "五", "六", "日"],
+  },
   yAxis: { type: "value", show: false, min: 0 },
   series: [
     {
@@ -45,8 +49,8 @@ const chartOption = computed(() => ({
     <p class="text-3xl font-bold text-highlighted tracking-tight">23</p>
     <p class="text-sm text-toned mt-0.5">{{ t("Stat Streak") }}</p>
 
-    <!-- 图表：自适应填充 -->
-    <div class="flex-1 min-h-[100px] mt-3 -mx-1">
+    <!-- 图表：固定高度，确保柱状图清晰可见 -->
+    <div class="h-[130px] mt-3 -mx-1">
       <ClientOnly>
         <VChart
           :option="chartOption"

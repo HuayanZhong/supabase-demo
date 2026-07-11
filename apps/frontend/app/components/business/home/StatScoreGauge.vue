@@ -7,7 +7,7 @@ const prevScore = 82;
 const diff = score - prevScore;
 
 // SVG 圆环参数
-const size = 140;
+const size = 180;
 const strokeWidth = 10;
 const radius = (size - strokeWidth) / 2;
 const circumference = 2 * Math.PI * radius;

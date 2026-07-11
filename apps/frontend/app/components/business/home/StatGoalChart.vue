@@ -14,7 +14,11 @@ const { textColor, areaColorStart, areaColorEnd } = useChartTheme();
 const chartOption = computed(() => ({
   tooltip: { trigger: "axis", confine: true },
   grid: { left: 4, right: 4, top: 8, bottom: 4 },
-  xAxis: { type: "category", show: false, data: ["一月", "二月", "三月", "四月", "五月", "六月"] },
+  xAxis: {
+    type: "category",
+    show: false,
+    data: ["一月", "二月", "三月", "四月", "五月", "六月"],
+  },
   yAxis: { type: "value", show: false, min: 0 },
   series: [
     {
@@ -60,8 +64,8 @@ const chartOption = computed(() => ({
     <p class="text-3xl font-bold text-highlighted tracking-tight">5</p>
     <p class="text-sm text-toned mt-0.5">{{ t("Stat ActiveGoals") }}</p>
 
-    <!-- 图表：自适应填充剩余空间 -->
-    <div class="flex-1 min-h-[100px] mt-3 -mx-1">
+    <!-- 图表：固定高度，确保图表有足够空间展示 -->
+    <div class="h-[130px] mt-3 -mx-1">
       <ClientOnly>
         <VChart
           :option="chartOption"
