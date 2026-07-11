@@ -26,6 +26,9 @@
     "@nestjs/platform-express": "catalog:backend",
     "@supabase/config": "workspace:*",
     "dotenv": "^17.4.2",
+    "nestjs-pino": "catalog:backend",
+    "pino": "catalog:logger",
+    "pino-http": "catalog:backend",
     "reflect-metadata": "catalog:backend",
     "rxjs": "catalog:backend"
   },
@@ -38,6 +41,7 @@
     "@types/node": "catalog:dev",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
+    "pino-pretty": "catalog:logger",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",

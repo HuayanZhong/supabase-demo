@@ -1,13 +1,17 @@
 import pino from "pino";
 
 const logger = pino({
+  level: process.env.LOG_LEVEL ?? "info",
   transport: {
     target: "pino-pretty",
-    options: { colorize: true },
+    options: {
+      colorize: true,
+      levelFirst: true,
+      customColors: "trace:gray,debug:cyan,info:green,warn:yellow,error:red,fatal:magenta",
+      translateTime: "SYS:HH:MM:ss",
+      ignore: "pid,hostname",
+    },
   },
 });
 
-logger.info("hello world");
-
-const child = logger.child({ a: "property" });
-child.info("hello child!");
+export { logger };

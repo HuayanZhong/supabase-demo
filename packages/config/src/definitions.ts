@@ -11,6 +11,9 @@ export const envSchema = z.object({
   // Supabase 项目地址
   SUPABASE_URL: z.url(),
 
+  // 天气 API Key（和风天气）
+  WEATHER_API_KEY: z.string().min(1),
+
   // SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),   // 等功能需要时启用
   // JWT_SECRET: z.string().min(32),                  // 等功能需要时启用
 });
