@@ -3,6 +3,18 @@ alwaysApply: false
 description: 任务路由决策规则，定义意图分类、Agent 选型和任务摘要，由 classify-intent.ps1 在 UserPromptSubmit 时注入
 ---
 
+## 会话类型判定
+
+**每轮响应前重新评估。** 根据当前用户消息语义判断：
+
+- 消息涉及编码、重构、调试、审查、部署、配置、测试等正式开发任务 → 写入/更新 `.trae/.session-mode`，内容为 `dev`
+- 其他（问候、提问、讨论、闲聊、非任务） → 写入/更新 `.trae/.session-mode`，内容为 `chat`
+
+此文件由下一轮 UserPromptSubmit 的 hooks 读取，决定是否注入路由指令。
+当会话从聊天切换到开发或反之，立即更新文件，下轮生效。
+
+判断完毕后，继续以下路由决策。
+
 ## 任务路由决策
 
 ### 意图分类
