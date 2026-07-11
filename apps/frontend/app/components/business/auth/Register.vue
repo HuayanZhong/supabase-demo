@@ -71,7 +71,9 @@ const handleSubmit = async ({ data }: FormSubmitEvent<AuthSchema>) => {
     <template #header>
       <div class="text-center">
         <h2 class="text-lg font-semibold text-default">{{ $t("Register") }}</h2>
-        <p class="text-sm text-toned mt-1">{{ $t("Register Form Description") }}</p>
+        <p class="text-sm text-toned mt-1">
+          {{ $t("Register Form Description") }}
+        </p>
       </div>
     </template>
 

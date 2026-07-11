@@ -9,7 +9,8 @@ export default defineEventHandler(async (event) => {
     email,
     password,
     options: {
-      emailRedirectTo: `${config.public.baseUrl}/login`,
+      // 验证后跳转到邮箱验证成功提示页
+      emailRedirectTo: `${config.public.baseUrl}/verify-email`,
     },
   });
 
