@@ -1,6 +1,6 @@
 ﻿# .trae/.hooks-mute 抑制提醒（指令执行期或手动压缩上下文时使用）
 # 文件有效期为 10 分钟，超时后自动失效，无需手动删除
-$muteFile = Join-Path $PSScriptRoot ".." ".hooks-mute"
+$muteFile = Join-Path $PSScriptRoot "..\.hooks-mute"
 if (Test-Path $muteFile) {
   $now = Get-Date
   $lastWrite = (Get-Item $muteFile).LastWriteTime
