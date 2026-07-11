@@ -1,3 +1,4 @@
+<!-- AI 对话空间页面，包含对话侧边栏、消息列表和输入框。 -->
 <script setup lang="ts">
 definePageMeta({ title: "AI Space" });
 

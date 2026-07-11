@@ -1,3 +1,4 @@
+// POST /api/auth/login — 邮箱密码登录
 import { useCreateServerSupabase } from "#server/utils/useCreateServerSupabase";
 
 export default defineEventHandler(async (event) => {

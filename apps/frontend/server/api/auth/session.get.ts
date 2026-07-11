@@ -1,3 +1,4 @@
+// GET /api/auth/session — 获取当前用户 session
 import { useCreateServerSupabase } from "#server/utils/useCreateServerSupabase";
 
 export default defineEventHandler(async (event) => {

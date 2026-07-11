@@ -1,10 +1,8 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-// 当前连续打卡天数（静态示例，与首页 streak 联动）
 const streak = 23;
 
-// 本周打卡记录（周一到周日，true=已打卡）
 const weekDays = computed(() => {
   const labels = [
     t("Weekday Mon"),
@@ -25,11 +23,10 @@ const weekDays = computed(() => {
   }));
 });
 
-// 今日打卡状态
-const isCheckedIn = ref(false);
+const isCheckedInRef = ref(false);
 
 function handleCheckin() {
-  isCheckedIn.value = true;
+  isCheckedInRef.value = true;
 }
 </script>
 
@@ -37,26 +34,30 @@ function handleCheckin() {
   <div class="rounded-xl border border-default bg-default overflow-hidden flex flex-col">
     <!-- 头部 -->
     <div class="flex items-center gap-2.5 px-5 pt-5 pb-4">
-      <div class="flex items-center justify-center size-8 rounded-lg bg-warning/10">
+      <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
         <UIcon name="i-lucide-flame" class="size-4 text-warning" />
       </div>
       <span class="font-semibold text-highlighted">{{ t("Checkin Title") }}</span>
     </div>
 
-    <!-- 连续打卡数字 -->
+    <!-- 连续天数 -->
     <div class="px-5 pb-4 flex items-center gap-4">
-      <div class="flex items-center justify-center size-16 rounded-2xl bg-warning/10">
+      <div class="flex items-center justify-center size-16 rounded-2xl bg-elevated">
         <span class="text-2xl font-bold text-warning">{{ streak }}</span>
       </div>
       <div>
-        <p class="text-sm font-semibold text-highlighted">{{ t("Checkin Streak") }}</p>
+        <p class="text-sm font-semibold text-highlighted">
+          {{ t("Checkin Streak") }}
+        </p>
         <p class="text-xs text-muted mt-0.5">{{ t("Checkin StreakDesc") }}</p>
       </div>
     </div>
 
-    <!-- 本周打卡日历 -->
+    <!-- 本周打卡 -->
     <div class="px-5 pb-4">
-      <p class="text-xs text-muted mb-2.5 font-medium">{{ t("Checkin ThisWeek") }}</p>
+      <p class="text-xs text-muted mb-2.5 font-medium">
+        {{ t("Checkin ThisWeek") }}
+      </p>
       <div class="grid grid-cols-7 gap-1.5">
         <div v-for="(day, index) in weekDays" :key="index" class="flex flex-col items-center gap-1">
           <span class="text-[10px] text-muted">{{ day.label }}</span>
@@ -79,10 +80,10 @@ function handleCheckin() {
       </div>
     </div>
 
-    <!-- 打卡按钮 -->
+    <!-- 签到按钮区域 -->
     <div class="px-5 pb-5 mt-auto">
       <UButton
-        v-if="!isCheckedIn"
+        v-if="!isCheckedInRef"
         color="warning"
         variant="solid"
         block
@@ -93,7 +94,7 @@ function handleCheckin() {
       </UButton>
       <div
         v-else
-        class="flex items-center justify-center gap-2 py-2.5 rounded-lg bg-warning/10 text-warning text-sm font-medium"
+        class="flex items-center justify-center gap-2 py-2.5 rounded-lg bg-elevated text-warning text-sm font-medium"
       >
         <UIcon name="i-lucide-circle-check" class="size-4" />
         {{ t("Checkin Done") }}

@@ -2,7 +2,6 @@
 const { t } = useI18n();
 const { stats, recentActivities, categoryDistribution, weeklyTrend, categoryMeta } = useLearn();
 
-// 获取动态图标
 function activityIcon(type: string): string {
   const map: Record<string, string> = {
     knowledge_created: "i-lucide-file-plus",
@@ -13,7 +12,6 @@ function activityIcon(type: string): string {
   return map[type] || "i-lucide-activity";
 }
 
-// 获取动态文案
 function activityLabel(activity: { type: string; content: string }): string {
   const typeKey: Record<string, string> = {
     knowledge_created: "Learn ActivityKnowledgeCreated",
@@ -161,7 +159,7 @@ const maxMinutes = Math.max(...weeklyTrend.map((d) => d.minutes), 1);
               >
                 <span class="text-xs text-muted">{{ day.minutes }}min</span>
                 <div
-                  class="w-full max-w-[28px] rounded-t-md bg-primary/60 transition-all"
+                  class="w-full max-w-[28px] rounded-t-md bg-elevated transition-all"
                   :style="{ height: `${(day.minutes / maxMinutes) * 80}%` }"
                 />
                 <span class="text-xs text-muted">{{ day.day }}</span>

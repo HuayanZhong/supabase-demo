@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-// 项目数据
 const projects = [
   {
     name: t("Goal GrowthOs"),
@@ -67,12 +66,11 @@ const projects = [
 
 type ProjectColor = "success" | "info" | "warning" | "primary";
 
-// 颜色映射
 const colorClass: Record<ProjectColor, { bg: string; text: string }> = {
   success: { bg: "bg-success/10", text: "text-success" },
   info: { bg: "bg-info/10", text: "text-info" },
   warning: { bg: "bg-warning/10", text: "text-warning" },
-  primary: { bg: "bg-primary/10", text: "text-primary" },
+  primary: { bg: "bg-(--ui-bg-elevated)", text: "text-primary" },
 };
 
 const statusLabel = (status: "active" | "archived") =>
@@ -80,7 +78,6 @@ const statusLabel = (status: "active" | "archived") =>
 </script>
 
 <template>
-  <!-- 项目网格：2 列，统一卡片样式 -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
     <div
       v-for="project in projects"
@@ -96,7 +93,9 @@ const statusLabel = (status: "active" | "archived") =>
           </div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-              <h3 class="text-base font-semibold text-highlighted truncate">{{ project.name }}</h3>
+              <h3 class="text-base font-semibold text-highlighted truncate">
+                {{ project.name }}
+              </h3>
               <UBadge
                 :color="project.status === 'active' ? 'success' : 'neutral'"
                 variant="soft"
@@ -107,7 +106,9 @@ const statusLabel = (status: "active" | "archived") =>
             </div>
           </div>
         </div>
-        <p class="text-sm text-toned mt-3 line-clamp-2">{{ project.description }}</p>
+        <p class="text-sm text-toned mt-3 line-clamp-2">
+          {{ project.description }}
+        </p>
       </div>
 
       <!-- 内容区 -->

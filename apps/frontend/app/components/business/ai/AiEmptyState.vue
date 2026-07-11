@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// AI 页面空状态提示
 const { t } = useI18n();
 </script>
 

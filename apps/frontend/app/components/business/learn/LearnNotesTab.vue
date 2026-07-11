@@ -4,19 +4,16 @@ import type { KnowledgeCategory, Note } from "@supabase/types";
 const { t } = useI18n();
 const { notes, categoryMeta } = useLearn();
 
-// 当前筛选分类
 const selectedCategory = ref<KnowledgeCategory | "all">("all");
-// 搜索关键词
-const searchQuery = ref("");
+const searchQueryRef = ref("");
 
-// 过滤笔记
 const filteredNotes = computed<Note[]>(() => {
   let items = notes;
   if (selectedCategory.value !== "all") {
     items = items.filter((n) => n.category === selectedCategory.value);
   }
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.trim().toLowerCase();
+  if (searchQueryRef.value.trim()) {
+    const q = searchQueryRef.value.trim().toLowerCase();
     items = items.filter(
       (n) =>
         n.title.toLowerCase().includes(q) ||
@@ -42,7 +39,7 @@ const filteredNotes = computed<Note[]>(() => {
           class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted"
         />
         <input
-          v-model="searchQuery"
+          v-model="searchQueryRef"
           :placeholder="t('Learn NoteSearch')"
           class="w-full rounded-lg border border-default bg-elevated pl-9 pr-3 py-2 text-sm text-default outline-none focus:border-primary transition-colors placeholder:text-muted"
         />

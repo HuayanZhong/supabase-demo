@@ -1,6 +1,9 @@
+<!--
+邮箱验证成功页面。
+用户在邮箱中点击验证链接后被重定向至此，展示成功确认信息。
+-->
 <template>
   <div class="min-h-dvh flex flex-col items-center justify-center px-6">
-    <!-- 顶栏操作区 -->
     <div class="fixed top-0 left-0 right-0 flex items-center justify-between px-4 h-12">
       <div class="flex items-center gap-2">
         <UIcon name="i-lucide-sprout" class="size-5 text-primary" />
@@ -12,7 +15,6 @@
       </div>
     </div>
 
-    <!-- 成功提示卡片 -->
     <UCard class="max-w-md w-full text-center">
       <div class="flex flex-col items-center gap-4 py-6">
         <div class="size-14 rounded-full bg-success/10 flex items-center justify-center">

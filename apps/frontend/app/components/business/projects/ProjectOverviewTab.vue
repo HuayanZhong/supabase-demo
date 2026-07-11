@@ -16,7 +16,6 @@ const completionRate = computed(() =>
     : 0,
 );
 
-/** 活动图标映射 */
 function activityIcon(type: string): string {
   const map: Record<string, string> = {
     task_completed: "i-lucide-check-circle-2",

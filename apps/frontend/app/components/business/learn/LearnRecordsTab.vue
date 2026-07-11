@@ -4,7 +4,6 @@ import type { LearningRecord } from "@supabase/types";
 const { t } = useI18n();
 const { learningRecords, categoryMeta, weeklyTrend } = useLearn();
 
-// 格式化时长
 function formatDuration(minutes: number): string {
   if (minutes >= 60) {
     return t("Learn RecordDurationHour", { n: Math.floor(minutes / 60) });
@@ -12,13 +11,11 @@ function formatDuration(minutes: number): string {
   return t("Learn RecordDurationMin", { n: minutes });
 }
 
-// 累计总时长
 const totalMinutes = learningRecords.reduce((sum, r) => sum + r.duration, 0);
 const totalHours = (totalMinutes / 60).toFixed(1);
 
 const maxMinutes = Math.max(...weeklyTrend.map((d) => d.minutes), 1);
 
-// 按月分组
 const groupedByMonth = computed(() => {
   const map: Record<string, LearningRecord[]> = {};
   for (const r of learningRecords) {
@@ -49,7 +46,7 @@ const groupedByMonth = computed(() => {
           <div
             v-for="(day, i) in weeklyTrend"
             :key="i"
-            class="flex-1 rounded-t-sm bg-primary/60 transition-all"
+            class="flex-1 rounded-t-sm bg-elevated transition-all"
             :style="{ height: `${(day.minutes / maxMinutes) * 100}%` }"
           />
         </div>

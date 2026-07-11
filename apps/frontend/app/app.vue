@@ -1,3 +1,7 @@
+<!--
+应用根组件。
+配置 Nuxt UI 本地化与全局 Toast 提示时长。
+-->
 <script setup lang="ts">
 import * as locales from "@nuxt/ui/locale";
 

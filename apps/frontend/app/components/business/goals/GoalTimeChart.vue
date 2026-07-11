@@ -10,7 +10,6 @@ use([CanvasRenderer, PieChart, TooltipComponent, LegendComponent]);
 const { t } = useI18n();
 const { textColor, mutedColor, isDark } = useChartTheme();
 
-// 时间范围筛选
 const timeRange = ref<"7d" | "30d" | "90d">("7d");
 const timeRangeOptions = [
   { value: "7d" as const, label: t("TimeRange 7d") },
@@ -18,17 +17,14 @@ const timeRangeOptions = [
   { value: "90d" as const, label: t("TimeRange 90d") },
 ];
 
-// 不同时间范围的工时数据
 const timeRangeData = {
   "7d": [35, 25, 20, 15, 5],
   "30d": [140, 90, 75, 55, 20],
   "90d": [420, 280, 210, 150, 60],
 };
 
-// 总工时
 const totalHours = computed(() => timeRangeData[timeRange.value].reduce((a, b) => a + b, 0));
 
-// 维度标签
 const dimLabels = computed(() => [
   t("Goal Dim Code"),
   t("Goal Dim Design"),
@@ -45,7 +41,6 @@ const dimColors = computed(() => [
   isDark.value ? "#a1a1aa" : "#18181b",
 ]);
 
-// 南丁格尔玫瑰图配置
 const chartOption = computed(() => ({
   tooltip: { confine: true },
   legend: {
@@ -87,7 +82,7 @@ const chartOption = computed(() => ({
     <!-- 头部：标题 + 时间筛选 -->
     <div class="flex items-center justify-between px-5 pt-5 pb-4">
       <div class="flex items-center gap-2.5">
-        <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+        <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
           <UIcon name="i-lucide-pie-chart" class="size-4 text-primary" />
         </div>
         <span class="font-semibold text-highlighted">{{ t("Goal Dim Title") }}</span>
@@ -110,7 +105,7 @@ const chartOption = computed(() => ({
       </div>
     </div>
 
-    <!-- 图表 -->
+    <!-- 图表：min-h 确保图表有最小展示空间，同时允许随容器扩展 -->
     <div class="flex-1 px-3 pb-3 min-h-[320px]">
       <ClientOnly>
         <VChart

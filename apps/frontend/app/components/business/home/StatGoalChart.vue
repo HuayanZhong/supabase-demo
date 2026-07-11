@@ -10,7 +10,6 @@ use([CanvasRenderer, LineChart, TooltipComponent, GridComponent]);
 const { t } = useI18n();
 const { textColor, areaColorStart, areaColorEnd } = useChartTheme();
 
-// 迷你折线面积图配置
 const chartOption = computed(() => ({
   tooltip: { trigger: "axis", confine: true },
   grid: { left: 4, right: 4, top: 8, bottom: 4 },
@@ -56,9 +55,8 @@ const chartOption = computed(() => ({
   <div
     class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default flex flex-col"
   >
-    <!-- 头部：图标 + 趋势 -->
     <div class="flex items-start justify-between mb-3">
-      <div class="flex items-center justify-center size-10 rounded-xl bg-primary/10">
+      <div class="flex items-center justify-center size-10 rounded-xl bg-elevated">
         <UIcon name="i-lucide-target" class="size-5 text-primary" />
       </div>
       <div class="flex items-center gap-1 text-xs">
@@ -67,7 +65,6 @@ const chartOption = computed(() => ({
       </div>
     </div>
 
-    <!-- 数值 -->
     <p class="text-3xl font-bold text-highlighted tracking-tight">5</p>
     <p class="text-sm text-toned mt-0.5">{{ t("Stat ActiveGoals") }}</p>
 

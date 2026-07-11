@@ -1,7 +1,8 @@
 <script setup lang="ts">
+// 日历与天气信息卡片
 const { t } = useI18n();
 
-const calendarDate = ref();
+const calendarDateRef = ref();
 
 const weather = {
   city: t("Weather City"),
@@ -20,14 +21,14 @@ const weather = {
     class="md:col-span-2 lg:col-span-2 rounded-xl border border-default bg-default overflow-hidden"
   >
     <div class="flex items-center gap-2.5 px-5 pt-5 pb-4">
-      <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+      <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
         <UIcon name="i-lucide-calendar" class="size-4 text-primary" />
       </div>
       <span class="font-semibold text-highlighted">{{ t("Calendar") }}</span>
     </div>
     <div class="px-5 pb-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div class="rounded-lg bg-elevated p-3">
-        <UCalendar v-model="calendarDate" size="sm" />
+        <UCalendar v-model="calendarDateRef" size="sm" />
       </div>
       <div class="flex flex-col gap-3">
         <div class="rounded-lg bg-elevated p-4 flex-1">
@@ -47,7 +48,9 @@ const weather = {
             <div class="text-center space-y-1">
               <UIcon name="i-lucide-droplets" class="size-4 text-info mx-auto" />
               <p class="text-xs text-muted">{{ weather.humidity }}%</p>
-              <p class="text-[10px] text-muted/70">{{ t("Weather Humidity") }}</p>
+              <p class="text-[10px] text-muted/70">
+                {{ t("Weather Humidity") }}
+              </p>
             </div>
             <div class="text-center space-y-1">
               <UIcon name="i-lucide-wind" class="size-4 text-muted mx-auto" />
@@ -62,7 +65,9 @@ const weather = {
           </div>
         </div>
         <div class="rounded-lg border border-dashed border-default p-4">
-          <p class="text-xs text-muted mb-1.5 font-medium">{{ t("DailyQuote") }}</p>
+          <p class="text-xs text-muted mb-1.5 font-medium">
+            {{ t("DailyQuote") }}
+          </p>
           <p class="text-sm text-default italic leading-relaxed">"{{ t("DailyQuoteText") }}"</p>
         </div>
       </div>

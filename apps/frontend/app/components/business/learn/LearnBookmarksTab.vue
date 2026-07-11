@@ -4,10 +4,8 @@ import type { Bookmark } from "@supabase/types";
 const { t } = useI18n();
 const { bookmarks } = useLearn();
 
-// 搜索关键词
-const searchQuery = ref("");
+const searchQueryRef = ref("");
 
-// 来源配置
 const sourceConfig: Record<string, { icon: string; color: string; label: string }> = {
   external: {
     icon: "i-lucide-globe",
@@ -36,10 +34,9 @@ const sourceConfig: Record<string, { icon: string; color: string; label: string 
   },
 };
 
-// 过滤收藏
 const filteredBookmarks = computed<Bookmark[]>(() => {
-  if (!searchQuery.value.trim()) return bookmarks;
-  const q = searchQuery.value.trim().toLowerCase();
+  if (!searchQueryRef.value.trim()) return bookmarks;
+  const q = searchQueryRef.value.trim().toLowerCase();
   return bookmarks.filter(
     (b) =>
       b.title.toLowerCase().includes(q) ||
@@ -48,7 +45,6 @@ const filteredBookmarks = computed<Bookmark[]>(() => {
   );
 });
 
-// 外部链接打开
 function openLink(url: string) {
   window.open(url, "_blank", "noopener,noreferrer");
 }
@@ -64,7 +60,7 @@ function openLink(url: string) {
           class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted"
         />
         <input
-          v-model="searchQuery"
+          v-model="searchQueryRef"
           :placeholder="t('Learn BookmarkSearch')"
           class="w-full rounded-lg border border-default bg-elevated pl-9 pr-3 py-2 text-sm text-default outline-none focus:border-primary transition-colors placeholder:text-muted"
         />

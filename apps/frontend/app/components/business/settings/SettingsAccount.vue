@@ -3,7 +3,7 @@ const { t } = useI18n();
 const { accountSettings } = useSettings();
 
 function handleChangePassword() {
-  // TODO: 集成 Supabase Auth 密码修改
+  // TODO(owner): 集成 Supabase Auth 密码修改
 }
 </script>
 

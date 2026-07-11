@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 最近对话列表卡片
 const { t } = useI18n();
 
 const chats = [
@@ -29,7 +30,7 @@ const chats = [
 <template>
   <div class="rounded-xl border border-default bg-default overflow-hidden">
     <div class="flex items-center gap-2.5 px-5 pt-5 pb-4">
-      <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+      <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
         <UIcon name="i-lucide-message-circle" class="size-4 text-primary" />
       </div>
       <span class="font-semibold text-highlighted">{{ t("RecentChats") }}</span>
@@ -45,7 +46,9 @@ const chats = [
         </UChip>
         <div class="flex-1 min-w-0">
           <div class="flex items-center justify-between">
-            <p class="text-sm font-medium text-default truncate">{{ chat.name }}</p>
+            <p class="text-sm font-medium text-default truncate">
+              {{ chat.name }}
+            </p>
             <span class="text-xs text-muted shrink-0 ml-2">{{ chat.time }}</span>
           </div>
           <p class="text-xs text-muted truncate mt-0.5">{{ chat.message }}</p>

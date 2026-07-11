@@ -1,15 +1,12 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-// 今日计划任务数据（静态示例）
 const tasks = [{ done: true }, { done: true }, { done: true }, { done: false }, { done: false }];
 
-// 完成进度百分比
 const progress = computed(() =>
   Math.round((tasks.filter((task) => task.done).length / tasks.length) * 100),
 );
 
-// SVG 圆环参数
 const size = 180;
 const strokeWidth = 10;
 const radius = (size - strokeWidth) / 2;
@@ -21,7 +18,6 @@ const dashOffset = computed(() => circumference * (1 - progress.value / 100));
   <div
     class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default"
   >
-    <!-- 头部：图标 + 标题 -->
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
         <div class="flex items-center justify-center size-8 rounded-lg bg-success/10">
@@ -32,7 +28,6 @@ const dashOffset = computed(() => circumference * (1 - progress.value / 100));
       <span class="text-xs text-muted">{{ t("Trend ThisWeek") }} +15%</span>
     </div>
 
-    <!-- SVG 圆环 + 中心文字 -->
     <div class="flex items-center justify-center gap-6">
       <div class="relative shrink-0">
         <svg :width="size" :height="size" class="-rotate-90">

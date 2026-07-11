@@ -1,9 +1,20 @@
 <script setup lang="ts">
+// 工作空间列表卡片
 const { t } = useI18n();
 
 const workspaces = [
-  { name: t("Workspace Frontend"), icon: "i-lucide-code-2", members: 3, color: "primary" as const },
-  { name: t("Workspace Design"), icon: "i-lucide-palette", members: 2, color: "info" as const },
+  {
+    name: t("Workspace Frontend"),
+    icon: "i-lucide-code-2",
+    members: 3,
+    color: "primary" as const,
+  },
+  {
+    name: t("Workspace Design"),
+    icon: "i-lucide-palette",
+    members: 2,
+    color: "info" as const,
+  },
   {
     name: t("Workspace Learning"),
     icon: "i-lucide-graduation-cap",
@@ -16,7 +27,7 @@ const workspaces = [
 <template>
   <div class="rounded-xl border border-default bg-default overflow-hidden">
     <div class="flex items-center gap-2.5 px-5 pt-5 pb-4">
-      <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+      <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
         <UIcon name="i-lucide-layout-grid" class="size-4 text-primary" />
       </div>
       <span class="font-semibold text-highlighted">{{ t("MyWorkspace") }}</span>
@@ -30,7 +41,7 @@ const workspaces = [
         <div
           class="flex items-center justify-center size-10 rounded-lg shrink-0"
           :class="{
-            'bg-primary/10': ws.color === 'primary',
+            'bg-elevated': ws.color === 'primary',
             'bg-info/10': ws.color === 'info',
             'bg-success/10': ws.color === 'success',
           }"

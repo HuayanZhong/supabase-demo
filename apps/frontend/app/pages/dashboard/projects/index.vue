@@ -6,7 +6,7 @@ definePageMeta({
 const { t } = useI18n();
 const { currentProject, setCurrentProject } = useProjects();
 
-const activeTab = ref("overview");
+const activeTabRef = ref("overview");
 
 function handleSwitchProject(id: string) {
   setCurrentProject(id);
@@ -17,38 +17,38 @@ function handleSwitchProject(id: string) {
   <div class="space-y-6">
     <BusinessProjectsProjectHeader
       :project="currentProject"
-      :active-tab="activeTab"
-      @update:active-tab="activeTab = $event"
+      :active-tab="activeTabRef"
+      @update:active-tab="activeTabRef = $event"
       @switch-project="handleSwitchProject"
     />
 
-    <!-- 概览 -->
-    <BusinessProjectsProjectOverviewTab v-if="activeTab === 'overview'" :project="currentProject" />
+    <BusinessProjectsProjectOverviewTab
+      v-if="activeTabRef === 'overview'"
+      :project="currentProject"
+    />
 
-    <!-- 进展 -->
     <BusinessProjectsProjectProgressTab
-      v-else-if="activeTab === 'progress'"
+      v-else-if="activeTabRef === 'progress'"
       :project="currentProject"
     />
 
-    <!-- 任务 -->
-    <BusinessProjectsProjectTasksTab v-else-if="activeTab === 'tasks'" :project="currentProject" />
+    <BusinessProjectsProjectTasksTab
+      v-else-if="activeTabRef === 'tasks'"
+      :project="currentProject"
+    />
 
-    <!-- 文档 -->
     <BusinessProjectsProjectDocumentsTab
-      v-else-if="activeTab === 'documents'"
+      v-else-if="activeTabRef === 'documents'"
       :project="currentProject"
     />
 
-    <!-- AI 洞察 -->
     <BusinessProjectsProjectAiInsightsTab
-      v-else-if="activeTab === 'ai'"
+      v-else-if="activeTabRef === 'ai'"
       :project="currentProject"
     />
 
-    <!-- 设置 -->
     <BusinessProjectsProjectSettingsTab
-      v-else-if="activeTab === 'settings'"
+      v-else-if="activeTabRef === 'settings'"
       :project="currentProject"
     />
   </div>

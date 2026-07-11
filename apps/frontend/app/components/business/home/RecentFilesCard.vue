@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 最近文件列表卡片
 const { t } = useI18n();
 
 const files = [
@@ -36,7 +37,7 @@ const files = [
 <template>
   <div class="rounded-xl border border-default bg-default overflow-hidden">
     <div class="flex items-center gap-2.5 px-5 pt-5 pb-4">
-      <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+      <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
         <UIcon name="i-lucide-folder-open" class="size-4 text-primary" />
       </div>
       <span class="font-semibold text-highlighted">{{ t("RecentFiles") }}</span>
@@ -50,7 +51,7 @@ const files = [
         <div
           class="flex items-center justify-center size-10 rounded-lg shrink-0"
           :class="{
-            'bg-primary/10': file.color === 'primary',
+            'bg-elevated': file.color === 'primary',
             'bg-warning/10': file.color === 'warning',
             'bg-info/10': file.color === 'info',
             'bg-success/10': file.color === 'success',
@@ -68,7 +69,9 @@ const files = [
           />
         </div>
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-default truncate">{{ file.name }}</p>
+          <p class="text-sm font-medium text-default truncate">
+            {{ file.name }}
+          </p>
           <div class="flex items-center gap-1.5 text-xs text-muted mt-0.5">
             <span>{{ file.time }}</span>
             <span class="text-muted/50">·</span>

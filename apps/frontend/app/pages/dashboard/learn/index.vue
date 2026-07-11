@@ -1,28 +1,27 @@
+<!--
+学习空间页面，包含概览、知识库、笔记、收藏、学习记录等标签页。
+通过 activeTabRef 控制当前显示的标签页内容。
+-->
 <script setup lang="ts">
 definePageMeta({
   title: "Learn Space",
 });
 
-const activeTab = ref("overview");
+const activeTabRef = ref("overview");
 </script>
 
 <template>
   <div class="space-y-6">
-    <BusinessLearnHeader :active-tab="activeTab" @update:active-tab="activeTab = $event" />
+    <BusinessLearnHeader :active-tab="activeTabRef" @update:active-tab="activeTabRef = $event" />
 
-    <!-- 概览 -->
-    <BusinessLearnOverviewTab v-if="activeTab === 'overview'" />
+    <BusinessLearnOverviewTab v-if="activeTabRef === 'overview'" />
 
-    <!-- 知识库 -->
-    <BusinessLearnKnowledgeTab v-else-if="activeTab === 'knowledge'" />
+    <BusinessLearnKnowledgeTab v-else-if="activeTabRef === 'knowledge'" />
 
-    <!-- 笔记 -->
-    <BusinessLearnNotesTab v-else-if="activeTab === 'notes'" />
+    <BusinessLearnNotesTab v-else-if="activeTabRef === 'notes'" />
 
-    <!-- 收藏 -->
-    <BusinessLearnBookmarksTab v-else-if="activeTab === 'bookmarks'" />
+    <BusinessLearnBookmarksTab v-else-if="activeTabRef === 'bookmarks'" />
 
-    <!-- 学习记录 -->
-    <BusinessLearnRecordsTab v-else-if="activeTab === 'records'" />
+    <BusinessLearnRecordsTab v-else-if="activeTabRef === 'records'" />
   </div>
 </template>

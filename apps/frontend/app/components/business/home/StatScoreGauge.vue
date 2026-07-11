@@ -1,12 +1,10 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-// 评分数据（静态示例）
 const score = 87;
 const prevScore = 82;
 const diff = score - prevScore;
 
-// SVG 圆环参数
 const size = 180;
 const strokeWidth = 10;
 const radius = (size - strokeWidth) / 2;
@@ -18,7 +16,6 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
   <div
     class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default"
   >
-    <!-- 头部：图标 + 趋势 -->
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-2">
         <div class="flex items-center justify-center size-8 rounded-lg bg-info/10">
@@ -32,7 +29,6 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
       </div>
     </div>
 
-    <!-- SVG 圆环 + 中心文字 -->
     <div class="flex items-center justify-center gap-6">
       <div class="relative shrink-0">
         <svg :width="size" :height="size" class="-rotate-90">
@@ -72,7 +68,7 @@ const dashOffset = computed(() => circumference * (1 - score / 100));
         </div>
       </div>
 
-      <!-- 右侧详情 -->
+      <!-- 右侧：对比数据 -->
       <div class="space-y-2">
         <div>
           <p class="text-xs text-muted">{{ t("Trend ComparedLastWeek") }}</p>

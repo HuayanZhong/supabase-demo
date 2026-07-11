@@ -1,3 +1,8 @@
+<!--
+登录表单组件。
+用户在点击"提交"按钮时通过 $fetch 发送 POST /api/auth/login 请求。
+$fetch 优于 useFetch：该请求由点击事件触发，非 SSR 初始化数据获取。
+-->
 <script setup lang="ts">
 import type { AuthFormField, FormSubmitEvent } from "@nuxt/ui";
 import { authSchema, type AuthSchema } from "@supabase/types";
@@ -6,10 +11,9 @@ const current = defineModel<"login" | "register">();
 
 const { t } = useI18n();
 const toast = useToast();
-const loading = ref(false);
+const loadingRef = ref(false);
 const { setAuthed } = useAuth();
 
-// 登录表单字段
 const fields = computed<AuthFormField[]>(() => [
   {
     name: "email",
@@ -27,14 +31,13 @@ const fields = computed<AuthFormField[]>(() => [
   },
 ]);
 
-// 登录表单验证规则
 const schema = computed(() => authSchema);
 
-// 发送登录请求
 async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
-  loading.value = true;
+  loadingRef.value = true;
 
   try {
+    // POST /api/auth/login 由点击事件触发，$fetch 比 useFetch 更适合事件处理场景
     const res = await $fetch("/api/auth/login", {
       method: "POST",
       body: data,
@@ -55,7 +58,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
       color: "success",
     });
 
-    // 登录成功，刷新客户端 session 后跳转仪表盘
+    // 登录成功后刷新客户端 session 后跳转仪表盘
     await setAuthed();
     await navigateTo("/dashboard/home");
   } catch (error) {
@@ -65,7 +68,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
       color: "error",
     });
   } finally {
-    loading.value = false;
+    loadingRef.value = false;
   }
 }
 </script>
@@ -87,7 +90,7 @@ async function handleSubmit({ data }: FormSubmitEvent<AuthSchema>) {
         color: 'primary',
         variant: 'solid',
         block: true,
-        loading: loading,
+        loading: loadingRef,
       }"
       @submit="handleSubmit"
     />

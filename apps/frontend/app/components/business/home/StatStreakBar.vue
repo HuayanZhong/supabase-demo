@@ -9,7 +9,6 @@ use([CanvasRenderer, BarChart, TooltipComponent, GridComponent]);
 
 const { t } = useI18n();
 
-// 竖向柱状图配置（本周每日成长记录）
 const chartOption = computed(() => ({
   tooltip: { trigger: "axis", confine: true },
   grid: { left: 4, right: 4, top: 4, bottom: 4 },
@@ -45,7 +44,6 @@ const chartOption = computed(() => ({
   <div
     class="rounded-xl border border-default bg-default p-4 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 cursor-default flex flex-col"
   >
-    <!-- 头部：图标 + 天数 -->
     <div class="flex items-start justify-between mb-3">
       <div class="flex items-center justify-center size-10 rounded-xl bg-warning/10">
         <UIcon name="i-lucide-flame" class="size-5 text-warning" />
@@ -53,7 +51,6 @@ const chartOption = computed(() => ({
       <span class="text-xs text-muted font-medium">23 {{ t("Trend Days") }}</span>
     </div>
 
-    <!-- 数值 -->
     <p class="text-3xl font-bold text-highlighted tracking-tight">23</p>
     <p class="text-sm text-toned mt-0.5">{{ t("Stat Streak") }}</p>
 

@@ -4,26 +4,22 @@ import type { KnowledgeCategory, KnowledgeItem } from "@supabase/types";
 const { t } = useI18n();
 const { knowledgeItems, categoryMeta } = useLearn();
 
-// 当前筛选分类
 const selectedCategory = ref<KnowledgeCategory | "all">("all");
-// 搜索关键词
-const searchQuery = ref("");
+const searchQueryRef = ref("");
 
-// 状态配置
 const statusConfig: Record<string, { color: string; label: string }> = {
   draft: { color: "warning", label: t("Learn KnowledgeStatusDraft") },
   published: { color: "success", label: t("Learn KnowledgeStatusPublished") },
   archived: { color: "neutral", label: t("Learn KnowledgeStatusArchived") },
 };
 
-// 过滤条目
 const filteredItems = computed<KnowledgeItem[]>(() => {
   let items = knowledgeItems;
   if (selectedCategory.value !== "all") {
     items = items.filter((k) => k.category === selectedCategory.value);
   }
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.trim().toLowerCase();
+  if (searchQueryRef.value.trim()) {
+    const q = searchQueryRef.value.trim().toLowerCase();
     items = items.filter(
       (k) =>
         k.title.toLowerCase().includes(q) ||
@@ -45,7 +41,7 @@ const filteredItems = computed<KnowledgeItem[]>(() => {
           class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted"
         />
         <input
-          v-model="searchQuery"
+          v-model="searchQueryRef"
           :placeholder="t('Learn KnowledgeSearch')"
           class="w-full rounded-lg border border-default bg-elevated pl-9 pr-3 py-2 text-sm text-default outline-none focus:border-primary transition-colors placeholder:text-muted"
         />

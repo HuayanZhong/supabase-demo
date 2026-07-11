@@ -11,7 +11,7 @@ const { userProfile } = useSettings();
 
     <!-- 头像 -->
     <div class="flex items-center gap-4 mb-6">
-      <div class="flex items-center justify-center size-16 rounded-full bg-primary/10 shrink-0">
+      <div class="flex items-center justify-center size-16 rounded-full bg-elevated shrink-0">
         <UIcon :name="userProfile.avatar" class="size-8 text-primary" />
       </div>
       <div>

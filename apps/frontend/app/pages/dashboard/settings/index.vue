@@ -1,8 +1,12 @@
+<!--
+设置页面，包含 profile/account/notifications 三个标签页。
+通过 activeTabRef 控制当前显示的设置面板。
+-->
 <script setup lang="ts">
 definePageMeta({ title: "Settings" });
 
 const { t } = useI18n();
-const activeTab = ref("profile");
+const activeTabRef = ref("profile");
 
 const tabs = [
   { id: "profile", label: t("Settings TabProfile"), icon: "i-lucide-user" },
@@ -17,7 +21,6 @@ const tabs = [
 
 <template>
   <div class="space-y-6">
-    <!-- 页面头部 -->
     <div>
       <h1 class="text-2xl font-bold text-highlighted">
         {{ t("Settings Title") }}
@@ -25,27 +28,25 @@ const tabs = [
       <p class="text-sm text-toned mt-1">{{ t("Settings Description") }}</p>
     </div>
 
-    <!-- Tab 导航 -->
     <div class="flex items-center gap-1 border-b border-default pb-0">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         class="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-t-lg transition-colors duration-150 border-b-2 -mb-px"
         :class="
-          activeTab === tab.id
+          activeTabRef === tab.id
             ? 'border-primary text-primary'
             : 'border-transparent text-muted hover:text-default hover:border-default'
         "
-        @click="activeTab = tab.id"
+        @click="activeTabRef = tab.id"
       >
         <UIcon :name="tab.icon" class="size-4" />
         {{ tab.label }}
       </button>
     </div>
 
-    <!-- Tab 内容 -->
-    <BusinessSettingsProfile v-if="activeTab === 'profile'" />
-    <BusinessSettingsAccount v-else-if="activeTab === 'account'" />
-    <BusinessSettingsNotifications v-else-if="activeTab === 'notifications'" />
+    <BusinessSettingsProfile v-if="activeTabRef === 'profile'" />
+    <BusinessSettingsAccount v-else-if="activeTabRef === 'account'" />
+    <BusinessSettingsNotifications v-else-if="activeTabRef === 'notifications'" />
   </div>
 </template>

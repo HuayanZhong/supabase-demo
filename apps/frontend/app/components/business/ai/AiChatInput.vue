@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// AI 聊天输入框组件
 const { t } = useI18n();
 const { status, sendMessage } = useAi();
 

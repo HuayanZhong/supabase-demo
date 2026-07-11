@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// AI 对话历史侧边栏
 import type { NavigationMenuItem } from "@nuxt/ui";
 
 const { t } = useI18n();

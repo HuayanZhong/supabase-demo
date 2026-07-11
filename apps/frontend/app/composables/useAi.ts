@@ -44,7 +44,7 @@ function generateId(): string {
 }
 
 /** 模拟 AI 回复 */
-function mockAiReply(userContent: string): string {
+function mockAiReply(_userContent: string): string {
   const replies = [
     "这是一个很好的问题。基于我的分析，我建议你从以下几个方面考虑：首先，明确你的核心目标；其次，分解为可执行的小步骤；最后，定期复盘调整。",
     "根据目前的信息，我认为可以采取以下方案：第一，优先级排序，确保关键事项先行；第二，合理分配资源，避免过度集中；第三，设置检查点，及时发现偏差。",

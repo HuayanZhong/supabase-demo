@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// 今日计划卡片
 const { t } = useI18n();
 
 const tasks = [
@@ -53,7 +54,7 @@ const progress = computed(() =>
   <div class="lg:col-span-2 rounded-xl border border-default bg-default overflow-hidden">
     <div class="flex items-center justify-between px-5 pt-5 pb-4">
       <div class="flex items-center gap-2.5">
-        <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+        <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
           <UIcon name="i-lucide-calendar-check" class="size-4 text-primary" />
         </div>
         <span class="font-semibold text-highlighted">{{ t("TodayPlan") }}</span>

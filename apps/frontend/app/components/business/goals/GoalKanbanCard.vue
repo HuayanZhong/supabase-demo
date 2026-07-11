@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-// 目标数据，按看板状态分组
 const columns = computed(() => [
   {
     key: "todo",
@@ -69,7 +68,6 @@ const columns = computed(() => [
   },
 ]);
 
-// 列头颜色
 const columnStyles: Record<string, string> = {
   todo: "border-t-neutral",
   doing: "border-t-primary",
@@ -112,10 +110,12 @@ const columnStyles: Record<string, string> = {
         >
           <!-- 卡片头部 -->
           <div class="flex items-center gap-2 mb-2">
-            <div class="flex items-center justify-center size-7 rounded-md bg-primary/10 shrink-0">
+            <div class="flex items-center justify-center size-7 rounded-md bg-elevated shrink-0">
               <UIcon :name="item.icon" class="size-3.5 text-primary" />
             </div>
-            <h4 class="text-sm font-medium text-highlighted truncate">{{ item.name }}</h4>
+            <h4 class="text-sm font-medium text-highlighted truncate">
+              {{ item.name }}
+            </h4>
           </div>
 
           <!-- 标签 -->

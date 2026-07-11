@@ -50,7 +50,6 @@ const insights = computed(() => {
   ];
 });
 
-// 从高优先级未完成任务提取 AI 操作建议
 const recommendations = computed(() => {
   const p = props.project;
   return p.taskList
@@ -58,7 +57,6 @@ const recommendations = computed(() => {
     .slice(0, 4);
 });
 
-// 模拟 AI 近期分析记录
 const recentAnalyses = computed(() => [
   {
     date: t("Project AiDateHoursAgo", { n: 2 }),
@@ -96,7 +94,7 @@ const recentAnalyses = computed(() => [
     <!-- 第一部分：AI 洞察概览 -->
     <div class="rounded-xl border border-default bg-default p-6">
       <div class="flex items-center gap-3 mb-6">
-        <div class="flex items-center justify-center size-10 rounded-xl bg-primary/10">
+        <div class="flex items-center justify-center size-10 rounded-xl bg-elevated">
           <UIcon name="i-lucide-sparkles" class="size-5 text-primary" />
         </div>
         <div>

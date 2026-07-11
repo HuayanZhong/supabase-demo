@@ -1,7 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
-// 视图切换：网格 / 看板
 const viewMode = ref<"grid" | "kanban">("grid");
 const viewOptions = [
   { value: "grid" as const, icon: "i-lucide-layout-grid" },

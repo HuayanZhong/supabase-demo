@@ -2,7 +2,6 @@
 const { t } = useI18n();
 const { notificationSettings, updateNotification } = useSettings();
 
-/** 切换通知开关 */
 function handleToggle(key: "emailNotifications" | "pushNotifications" | "weeklyDigest") {
   updateNotification(key, !notificationSettings.value[key]);
 }

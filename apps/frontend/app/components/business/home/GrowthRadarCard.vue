@@ -8,10 +8,8 @@ import VChart from "vue-echarts";
 use([CanvasRenderer, RadarChart, TooltipComponent, RadarComponent]);
 
 const { t } = useI18n();
-const { textColor, mutedColor, gridColor, radarAreaColor, radarLineColor, radarBorderColor } =
-  useChartTheme();
+const { mutedColor, gridColor, radarAreaColor, radarLineColor, radarBorderColor } = useChartTheme();
 
-// 成长维度数据（静态示例）
 const dimensions = [
   { key: "focus", label: t("Radar Focus"), value: 75, icon: "i-lucide-brain" },
   {
@@ -40,7 +38,6 @@ const dimensions = [
   },
 ];
 
-// 雷达图配置
 const chartOption = computed(() => ({
   tooltip: { confine: true },
   radar: {
@@ -79,9 +76,8 @@ const chartOption = computed(() => ({
 
 <template>
   <div class="rounded-xl border border-default bg-default overflow-hidden flex flex-col">
-    <!-- 头部：图标 + 标题 -->
     <div class="flex items-center gap-2.5 px-5 pt-5 pb-2">
-      <div class="flex items-center justify-center size-8 rounded-lg bg-primary/10">
+      <div class="flex items-center justify-center size-8 rounded-lg bg-elevated">
         <UIcon name="i-lucide-sparkles" class="size-4 text-primary" />
       </div>
       <span class="font-semibold text-highlighted">{{ t("GrowthInsight") }}</span>
@@ -94,7 +90,7 @@ const chartOption = computed(() => ({
       </ClientOnly>
     </div>
 
-    <!-- 底部维度详情：每个维度一行，图标 + 标签 + 进度条 -->
+    <!-- 底部：每个维度一行，图标 + 标签 + 进度条 -->
     <div class="px-5 pb-4 pt-1 space-y-2">
       <div v-for="dim in dimensions" :key="dim.key" class="flex items-center gap-2">
         <UIcon :name="dim.icon" class="size-3.5 text-muted shrink-0" />
