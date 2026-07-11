@@ -14,10 +14,30 @@ const { textColor, mutedColor, gridColor, radarAreaColor, radarLineColor, radarB
 // 成长维度数据（静态示例）
 const dimensions = [
   { key: "focus", label: t("Radar Focus"), value: 75, icon: "i-lucide-brain" },
-  { key: "reading", label: t("Radar Reading"), value: 40, icon: "i-lucide-book-open" },
-  { key: "skills", label: t("Radar Skills"), value: 60, icon: "i-lucide-puzzle" },
-  { key: "exercise", label: t("Radar Exercise"), value: 80, icon: "i-lucide-heart" },
-  { key: "efficiency", label: t("Radar Efficiency"), value: 70, icon: "i-lucide-zap" },
+  {
+    key: "reading",
+    label: t("Radar Reading"),
+    value: 40,
+    icon: "i-lucide-book-open",
+  },
+  {
+    key: "skills",
+    label: t("Radar Skills"),
+    value: 60,
+    icon: "i-lucide-puzzle",
+  },
+  {
+    key: "exercise",
+    label: t("Radar Exercise"),
+    value: 80,
+    icon: "i-lucide-heart",
+  },
+  {
+    key: "efficiency",
+    label: t("Radar Efficiency"),
+    value: 70,
+    icon: "i-lucide-zap",
+  },
 ];
 
 // 雷达图配置
@@ -25,11 +45,11 @@ const chartOption = computed(() => ({
   tooltip: { confine: true },
   radar: {
     shape: "circle",
-    radius: "68%",
+    radius: "78%",
     center: ["50%", "50%"],
     indicator: dimensions.map((d) => ({ name: d.label, max: 100 })),
     splitNumber: 4,
-    axisName: { color: mutedColor.value, fontSize: 11 },
+    axisName: { color: mutedColor.value, fontSize: 12 },
     splitLine: { lineStyle: { color: gridColor.value } },
     splitArea: { show: false },
     axisLine: { lineStyle: { color: gridColor.value } },
@@ -67,8 +87,8 @@ const chartOption = computed(() => ({
       <span class="font-semibold text-highlighted">{{ t("GrowthInsight") }}</span>
     </div>
 
-    <!-- 雷达图 -->
-    <div class="flex-1 px-3 min-h-[260px]">
+    <!-- 雷达图：固定高度，确保雷达图展示空间 -->
+    <div class="h-[340px] px-3">
       <ClientOnly>
         <VChart :option="chartOption" autoresize style="width: 100%; height: 100%" />
       </ClientOnly>
