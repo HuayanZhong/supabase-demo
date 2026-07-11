@@ -61,3 +61,6 @@ architecture
 
 # Trae spec 文件夹
 .trae/specs
+
+# Trae 本地凭证（不提交）
+.trae/local-credentials.json

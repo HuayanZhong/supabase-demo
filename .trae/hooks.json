@@ -37,6 +37,14 @@
             "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/protect-sql.ps1"
           }
         ]
+      },
+      {
+        "matcher": "mcp_chrome-devtools__.*",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-credentials.ps1"
+          }
+        ]
       }
     ],
     "PostToolUse": [
