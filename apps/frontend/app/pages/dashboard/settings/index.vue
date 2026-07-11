@@ -1,10 +1,7 @@
 <script setup lang="ts">
-definePageMeta({
-  title: "Settings",
-});
+definePageMeta({ title: "Settings" });
 
 const { t } = useI18n();
-
 const activeTab = ref("profile");
 
 const tabs = [
@@ -16,17 +13,6 @@ const tabs = [
     icon: "i-lucide-bell",
   },
 ];
-
-// 显式导入子组件（Nuxt 自动导入在特定情况下可能不生效）
-import SettingsProfile from "~/components/business/settings/SettingsProfile.vue";
-import SettingsAccount from "~/components/business/settings/SettingsAccount.vue";
-import SettingsNotifications from "~/components/business/settings/SettingsNotifications.vue";
-
-const tabComponents: Record<string, Component> = {
-  profile: SettingsProfile,
-  account: SettingsAccount,
-  notifications: SettingsNotifications,
-};
 </script>
 
 <template>
@@ -58,6 +44,8 @@ const tabComponents: Record<string, Component> = {
     </div>
 
     <!-- Tab 内容 -->
-    <component :is="tabComponents[activeTab]" />
+    <BusinessSettingsProfile v-if="activeTab === 'profile'" />
+    <BusinessSettingsAccount v-else-if="activeTab === 'account'" />
+    <BusinessSettingsNotifications v-else-if="activeTab === 'notifications'" />
   </div>
 </template>

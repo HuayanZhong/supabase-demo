@@ -26,50 +26,32 @@ const { userProfile } = useSettings();
         <label class="text-sm font-medium text-default mb-1.5 block">
           {{ t("Settings Name") }}
         </label>
-        <div class="relative">
-          <input
-            :value="userProfile.name"
-            class="w-full rounded-lg border border-default bg-elevated px-4 py-2.5 pr-10 text-sm text-default outline-none focus:border-primary transition-colors"
-            readonly
-          />
-          <UIcon
-            name="i-lucide-pencil"
-            class="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted cursor-pointer hover:text-primary transition-colors"
-          />
-        </div>
+        <input
+          :value="userProfile.name"
+          class="w-full rounded-lg border border-default bg-elevated px-4 py-2.5 text-sm text-default outline-none focus:border-primary transition-colors"
+          readonly
+        />
       </div>
       <div>
         <label class="text-sm font-medium text-default mb-1.5 block">
           {{ t("Settings Email") }}
         </label>
-        <div class="relative">
-          <input
-            :value="userProfile.email"
-            class="w-full rounded-lg border border-default bg-elevated px-4 py-2.5 pr-10 text-sm text-default outline-none focus:border-primary transition-colors"
-            readonly
-          />
-          <UIcon
-            name="i-lucide-pencil"
-            class="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted cursor-pointer hover:text-primary transition-colors"
-          />
-        </div>
+        <input
+          :value="userProfile.email"
+          class="w-full rounded-lg border border-default bg-elevated px-4 py-2.5 text-sm text-default outline-none focus:border-primary transition-colors"
+          readonly
+        />
       </div>
       <div class="lg:col-span-2">
         <label class="text-sm font-medium text-default mb-1.5 block">
           {{ t("Settings Bio") }}
         </label>
-        <div class="relative">
-          <textarea
-            :value="userProfile.bio"
-            rows="3"
-            class="w-full rounded-lg border border-default bg-elevated px-4 py-2.5 pr-10 text-sm text-default outline-none focus:border-primary transition-colors resize-none"
-            readonly
-          />
-          <UIcon
-            name="i-lucide-pencil"
-            class="absolute right-3 top-3 size-4 text-muted cursor-pointer hover:text-primary transition-colors"
-          />
-        </div>
+        <textarea
+          :value="userProfile.bio"
+          rows="3"
+          class="w-full rounded-lg border border-default bg-elevated px-4 py-2.5 text-sm text-default outline-none focus:border-primary transition-colors resize-none"
+          readonly
+        />
       </div>
     </div>
   </div>

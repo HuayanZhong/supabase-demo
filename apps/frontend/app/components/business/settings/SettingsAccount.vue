@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const { accountSettings } = useSettings();
+
+function handleChangePassword() {
+  // TODO: 集成 Supabase Auth 密码修改
+}
 </script>
 
 <template>
@@ -68,7 +72,13 @@ const { accountSettings } = useSettings();
           {{ t("Settings ChangePasswordDesc") }}
         </p>
       </div>
-      <UButton color="primary" variant="soft" size="sm" class="shrink-0">
+      <UButton
+        color="primary"
+        variant="soft"
+        size="sm"
+        class="shrink-0"
+        @click="handleChangePassword"
+      >
         {{ t("Settings ChangePassword") }}
       </UButton>
     </div>
