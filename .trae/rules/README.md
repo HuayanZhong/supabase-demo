@@ -26,7 +26,14 @@ rules/
 │   ├── nuxt.md                # 组件/页面/数据获取
 │   ├── styles.md              # Tailwind / Nuxt UI 样式
 │   ├── i18n.md                # 国际化翻译
-│   └── quality.md             # a11y/加载状态/性能
+│   ├── quality.md             # a11y/加载状态/性能
+│   ├── components.md          # 组件提取与架构
+│   ├── dashboard-layout.md    # Dashboard 布局模式
+│   ├── echarts.md             # ECharts 集成规范
+│   ├── layout-bfc.md          # Flex + BFC 滚动规则
+│   ├── no-decoration.md       # 禁止无效装饰
+│   ├── task-stability.md      # 长任务稳定性与多任务并行
+│   └── delivery-checklist.md  # 交付前自检清单
 │
 ├── shared/                    # 跨包共享
 │   ├── monorepo.md            # 子包创建/构建配置

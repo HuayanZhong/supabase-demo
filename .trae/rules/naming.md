@@ -14,4 +14,11 @@ description: 命名规范，全项目通用
 - REST API 路径：kebab-case（`/api/user-profiles`）
 - 类型声明文件：多类型时用 `*.types.ts`（如 `user.types.ts`），单个类型直接导出在所在模块文件中
 - CSS 自定义类名：kebab-case（`.card-wrapper`、`.section-header`）
-- 例外：约定俗成的文件名（`index.ts`、`main.ts`、`app.vue`）不受上述规则约束
+- 异常：约定俗成的文件名（`index.ts`、`main.ts`、`app.vue`）不受上述规则约束
+
+## Nuxt 组件自动导入命名
+
+- 组件路径到自动导入名的映射规则：`components/{domain}/{subdomain}/{Name}.vue` → `<{Domain}{Subdomain}{Name}>`
+- 示例：`components/business/ai/AiConversationSidebar.vue` → `<BusinessAiConversationSidebar>`
+- 示例：`components/business/home/StatGoalChart.vue` → `<BusinessHomeStatGoalChart>`
+- **创建新组件时，必须确认自动导入名与现有组件一致的前缀模式**

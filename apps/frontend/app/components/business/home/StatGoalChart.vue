@@ -17,7 +17,14 @@ const chartOption = computed(() => ({
   xAxis: {
     type: "category",
     show: false,
-    data: ["一月", "二月", "三月", "四月", "五月", "六月"],
+    data: [
+      t("Month Jan"),
+      t("Month Feb"),
+      t("Month Mar"),
+      t("Month Apr"),
+      t("Month May"),
+      t("Month Jun"),
+    ],
   },
   yAxis: { type: "value", show: false, min: 0 },
   series: [

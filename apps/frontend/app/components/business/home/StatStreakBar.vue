@@ -16,7 +16,15 @@ const chartOption = computed(() => ({
   xAxis: {
     type: "category",
     show: false,
-    data: ["一", "二", "三", "四", "五", "六", "日"],
+    data: [
+      t("Weekday Mon"),
+      t("Weekday Tue"),
+      t("Weekday Wed"),
+      t("Weekday Thu"),
+      t("Weekday Fri"),
+      t("Weekday Sat"),
+      t("Weekday Sun"),
+    ],
   },
   yAxis: { type: "value", show: false, min: 0 },
   series: [
