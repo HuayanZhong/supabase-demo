@@ -50,10 +50,9 @@ export default defineNuxtConfig({
     port: 3000,
   },
 
-  // 路由规则：为 /dashboard/** 路由添加 auth 中间件
-  // 并使用 dashboard 布局
+  // 路由规则：为 /dashboard/** 路由使用 dashboard 布局
   routeRules: {
-    "/dashboard/**": { appLayout: "dashboard", appMiddleware: ["auth"] },
+    "/dashboard/**": { appLayout: "dashboard" },
   },
 
   // 配置 Vite 优化依赖项，确保在 SSR 中使用 @supabase/ssr 和 zod

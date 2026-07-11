@@ -6,8 +6,10 @@ const { clearAuth } = useAuth();
 const supabase = useCreateSupabase();
 const toast = useToast();
 
+// 用户邮箱
 const userEmail = ref<string | null>(null);
 
+// 导航栏
 const navItems: NavigationMenuItem[][] = [
   [
     {
@@ -45,6 +47,7 @@ const navItems: NavigationMenuItem[][] = [
   ],
 ];
 
+// 处理登出
 async function handleLogout() {
   await clearAuth();
   await navigateTo("/");
@@ -54,6 +57,7 @@ async function handleLogout() {
   });
 }
 
+// 初始化用户邮箱
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();
   userEmail.value = data.session?.user?.email ?? null;
