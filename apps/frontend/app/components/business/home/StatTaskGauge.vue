@@ -10,7 +10,7 @@ const progress = computed(() =>
 );
 
 // SVG 圆环参数
-const size = 120;
+const size = 140;
 const strokeWidth = 10;
 const radius = (size - strokeWidth) / 2;
 const circumference = 2 * Math.PI * radius;

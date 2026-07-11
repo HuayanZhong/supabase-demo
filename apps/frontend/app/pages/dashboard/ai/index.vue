@@ -5,16 +5,27 @@ definePageMeta({
 
 const { t } = useI18n();
 const {
+  messages,
+  status,
   conversations,
   activeConversationId,
   hasMessages,
+  sendMessage,
   startNewConversation,
   switchConversation,
 } = useAi();
 
-// 显式导入子组件（Nuxt 自动导入在特定情况下可能不生效）
-import AiChat from "~/components/business/ai/AiChat.vue";
-import AiInput from "~/components/business/ai/AiInput.vue";
+// 显式导入子组件
+import AiSuggestions from "~/components/business/ai/AiSuggestions.vue";
+
+const inputText = ref("");
+
+function handleSend() {
+  const text = inputText.value.trim();
+  if (!text) return;
+  sendMessage(text);
+  inputText.value = "";
+}
 
 // 初始化默认对话
 if (conversations.value.length === 0) {
@@ -82,13 +93,54 @@ if (conversations.value.length === 0) {
 
     <!-- 对话主区域 -->
     <div class="flex-1 flex flex-col min-w-0 bg-background">
-      <!-- 消息列表 -->
       <ClientOnly>
-        <AiChat />
+        <!-- 空状态 -->
+        <div v-if="!hasMessages" class="flex-1 flex flex-col items-center justify-center px-6">
+          <div class="size-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+            <UIcon name="i-lucide-sparkles" class="size-8 text-primary" />
+          </div>
+          <h3 class="text-lg font-semibold text-highlighted">
+            {{ t("AI EmptyTitle") }}
+          </h3>
+          <p class="text-sm text-muted mt-1 max-w-xs text-center">
+            {{ t("AI EmptyDesc") }}
+          </p>
+        </div>
+
+        <!-- 消息列表 -->
+        <UChatMessages
+          v-else
+          :messages="messages"
+          :status="status"
+          should-auto-scroll
+          :assistant="{
+            avatar: { icon: 'i-lucide-bot' },
+          }"
+          :user="{
+            avatar: { icon: 'i-lucide-user' },
+          }"
+        />
       </ClientOnly>
 
-      <!-- 输入区 -->
-      <AiInput />
+      <!-- 底部输入区 -->
+      <div class="border-t border-default bg-elevated px-4 py-3">
+        <!-- 快捷提示词：只在没有消息时显示 -->
+        <div v-if="!hasMessages" class="mb-3">
+          <AiSuggestions />
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+          <UChatPrompt
+            v-model="inputText"
+            :placeholder="t('AI InputPlaceholder')"
+            @submit="handleSend"
+          >
+            <template #trailing>
+              <UChatPromptSubmit :status="status" />
+            </template>
+          </UChatPrompt>
+        </div>
+      </div>
     </div>
   </div>
 </template>

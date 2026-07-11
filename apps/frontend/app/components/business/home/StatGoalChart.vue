@@ -61,7 +61,7 @@ const chartOption = computed(() => ({
     <p class="text-sm text-toned mt-0.5">{{ t("Stat ActiveGoals") }}</p>
 
     <!-- 图表：自适应填充剩余空间 -->
-    <div class="flex-1 min-h-[80px] mt-3 -mx-1">
+    <div class="flex-1 min-h-[100px] mt-3 -mx-1">
       <ClientOnly>
         <VChart
           :option="chartOption"

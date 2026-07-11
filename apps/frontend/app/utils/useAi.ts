@@ -1,10 +1,9 @@
 // ── 类型定义 ──
 
-export interface AiMessage {
+export interface Message {
   id: string;
   role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
+  parts: { type: "text"; text: string }[];
 }
 
 export interface Conversation {
@@ -20,9 +19,12 @@ export interface Suggestion {
   icon: string;
 }
 
+type ChatStatus = "ready" | "streaming" | "submitted" | "error";
+
 // ── 本地状态（模块级单例） ──
 
-const messages = ref<AiMessage[]>([]);
+const messages = ref<Message[]>([]);
+const status = ref<ChatStatus>("ready");
 const conversations = ref<Conversation[]>([]);
 const activeConversationId = ref<string | null>(null);
 
@@ -64,11 +66,12 @@ export function useAi() {
     const trimmed = text.trim();
     if (!trimmed) return;
 
-    const userMsg: AiMessage = {
+    status.value = "submitted";
+
+    const userMsg: Message = {
       id: generateId(),
       role: "user",
-      content: trimmed,
-      timestamp: new Date(),
+      parts: [{ type: "text", text: trimmed }],
     };
     messages.value = [...messages.value, userMsg];
 
@@ -82,17 +85,18 @@ export function useAi() {
     // 模拟 AI 回复
     setTimeout(
       () => {
-        const aiMsg: AiMessage = {
+        const aiMsg: Message = {
           id: generateId(),
           role: "assistant",
-          content: mockAiReply(trimmed),
-          timestamp: new Date(),
+          parts: [{ type: "text", text: mockAiReply(trimmed) }],
         };
         messages.value = [...messages.value, aiMsg];
+        status.value = "ready";
 
         // 更新对话最后消息摘要
-        if (activeConv) {
-          activeConv.lastMessage = aiMsg.content.slice(0, 30) + "…";
+        const conv = conversations.value.find((c) => c.id === activeConversationId.value);
+        if (conv) {
+          conv.lastMessage = (aiMsg.parts[0]?.text ?? "").slice(0, 30) + "...";
         }
       },
       800 + Math.random() * 600,
@@ -111,24 +115,31 @@ export function useAi() {
     conversations.value = [conv, ...conversations.value];
     activeConversationId.value = id;
     messages.value = [];
+    status.value = "ready";
   }
 
   /** 切换对话 */
   function switchConversation(id: string) {
     activeConversationId.value = id;
-    // 模拟加载该对话的消息（这里简化处理，清空后加占位）
+    // 模拟加载该对话的消息
     messages.value = [
       {
         id: "history-demo",
         role: "assistant",
-        content: `这是对话「${conversations.value.find((c) => c.id === id)?.title}」的历史消息。`,
-        timestamp: new Date(),
+        parts: [
+          {
+            type: "text",
+            text: `这是对话「${conversations.value.find((c) => c.id === id)?.title}」的历史消息。`,
+          },
+        ],
       },
     ];
+    status.value = "ready";
   }
 
   return {
     messages,
+    status,
     suggestions,
     conversations,
     activeConversationId,
