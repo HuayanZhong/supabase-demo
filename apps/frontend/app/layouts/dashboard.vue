@@ -32,6 +32,18 @@ const navItems: NavigationMenuItem[][] = [
       icon: "i-lucide-brain",
     },
   ],
+  [
+    {
+      label: "AI 助手",
+      to: "/dashboard/ai",
+      icon: "i-lucide-sparkles",
+    },
+    {
+      label: "个人设置",
+      to: "/dashboard/settings",
+      icon: "i-lucide-settings",
+    },
+  ],
 ];
 
 /** 退出登录 */

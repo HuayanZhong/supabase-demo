@@ -58,3 +58,6 @@ architecture
 
 # Trae session 模式标记（AI 写入，hooks 读取）
 .trae/.session-mode
+
+# Trae spec 文件夹
+.trae/specs

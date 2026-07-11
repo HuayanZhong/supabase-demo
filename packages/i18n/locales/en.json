@@ -332,5 +332,21 @@
   "Learn RecordDurationHour": "{n}h",
   "Learn RecordTotalHours": "Total Learning",
   "Learn RecordThisMonth": "This Month",
-  "Learn RecordLastWeek": "Last Week"
+  "Learn RecordLastWeek": "Last Week",
+
+  "AI Space": "AI Assistant",
+  "AI SpaceDesc": "Smart chat assistant to help with your work and study",
+  "AI NewConversation": "New Conversation",
+  "AI Send": "Send",
+  "AI InputPlaceholder": "Type your question...",
+  "AI EmptyTitle": "Start a new conversation",
+  "AI EmptyDesc": "Ask me anything about work or study",
+  "AI ConversationHistory": "Conversation History",
+  "AI NoConversations": "No conversations yet",
+  "AI Suggestion1": "Set weekly goals for me",
+  "AI Suggestion2": "Analyze project progress",
+  "AI Suggestion3": "Summarize today's work",
+  "AI Suggestion4": "Recommend learning resources",
+  "AI AssistantName": "AI Assistant",
+  "AI UserName": "You"
 }
