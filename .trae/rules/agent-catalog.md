@@ -86,6 +86,8 @@ description: Agent 操作目录，按章节分阶段注入到对应 hook 事件
 - 如认为应降级（不使用推荐 Agent），**必须先确认降级条件成立**（见 agent-routing.md 降级条件），并在任务日志中注明
 - 同一任务有多家 Agent 可选时（如 `ui-designer` / `frontend-architect`），主智能体任选其一即可
 
+**违规后果**：质量验证环节的"Agent 选型合规"项未通过（未使用推荐 Agent 且未注明降级原因）时，主智能体必须返工 — 使用正确的 Agent 重新执行对应子任务。禁止跳过此项验证。
+
 ### 需求澄清前置
 
 涉及以下场景时，**必须在编码前先用 `AskUserQuestion` 确认设计方向**：
@@ -115,7 +117,7 @@ description: Agent 操作目录，按章节分阶段注入到对应 hook 事件
 
 ---
 
-## 文档检索 ← 由对应 hook 在 PreToolUse（搜索前）注入
+## 文档检索 ← 自生效（无需 hook，AI 执行搜索任务时自行加载）
 
 **必须调用 MCP / 搜索的场景**：
 

@@ -15,8 +15,9 @@ AGENTS.md               ← 总纲（始终生效）
        ├─ comments.md            注释风格
        ├─ task-logging.md        任务日志输出
        ├─ git-commit-message.md  Commit 格式
-       ├─ backend/               NestJS + 数据库 + 异常处理
+       ├─ backend/               NestJS + 数据库 + 注释 + 异常处理 + 日志
        │    ├─ nestjs.md         Controller/Service/Module
+       │    ├─ comments.md       注释规范（JSDoc 模板）
        │    ├─ database.md       MikroORM Entity/Repository
        │    ├─ error-handling.md 异常处理与错误码
        │    └─ logging.md        日志规范
@@ -54,6 +55,7 @@ AGENTS.md               ← 总纲（始终生效）
 | `comments.md`                    | 始终生效  | 注释风格与 JSDoc 约定              |
 | `task-logging.md`                | 始终生效  | 任务日志输出与记录                 |
 | `backend/nestjs.md`              | 智能生效  | NestJS Controller/Service/Module   |
+| `backend/comments.md`            | 智能生效  | 后端注释规范（JSDoc 模板）         |
 | `backend/database.md`            | 智能生效  | MikroORM Entity/Repository/迁移    |
 | `backend/error-handling.md`      | 智能生效  | 异常处理、错误码、Exception Filter |
 | `backend/logging.md`             | 智能生效  | 日志级别、结构化日志、请求追踪     |
@@ -83,7 +85,7 @@ AGENTS.md               ← 总纲（始终生效）
 SessionStart   → session-start.ps1     → language.md + monorepo.md + agent-catalog.md（角色与资源）
 UserPromptSubmit→ classify-intent.ps1   → agent-routing.md（路由决策）
 PreToolUse(Write)     → protect-mcp-json.ps1（安全拦截）
-               → enforce-code-standards.ps1 → naming.md + comments.md + frontend/comments.md + frontend/i18n.md + agent-catalog.md（安全约束）
+               → enforce-code-standards.ps1 → naming.md + comments.md + （backend/comments.md 或 frontend/comments.md，按文件路径智能选择） + frontend/i18n.md + agent-catalog.md（安全约束）
 PreToolUse(execute_sql) → protect-sql.ps1（安全拦截）
 PreToolUse(chrome-devtools) → inject-credentials.ps1 → 本地凭证注入
 PostToolUse    → remind-logging.ps1     → 提醒按 task-logging.md 输出日志

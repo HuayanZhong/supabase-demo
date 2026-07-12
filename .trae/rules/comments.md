@@ -34,8 +34,3 @@ description: 注释规范，全项目通用。始终生效，新增/修改文件
 | 新文件完全没有注释                                        | 违反 MANDATORY      | 添加文件级说明注释       |
 
 ## 好的注释示范
-
-- `// SSR：使用 useRequestFetch 确保 cookie 正确传播到内部 API 路由` — 解释特殊场景的为什么
-- `// 需要响应主题变化，所以用 computed 而非普通变量` — 解释了设计决策
-- `// 由 routeRules.appMiddleware 指定匹配路径，无需在这里判断` — 解释了看似为空的函数
-- `// TODO(zhang): 待 Supabase Auth 的 updateUser API 兼容后改用标准方法` — 有责任人+原因

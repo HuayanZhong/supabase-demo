@@ -2,7 +2,7 @@ $inputJson = [Console]::In.ReadToEnd()
 $parsed = $inputJson | ConvertFrom-Json
 $lastMsg = $parsed.last_assistant_message
 
-$hasTaskLog = $lastMsg -match '任务日志'
+$hasTaskLog = $lastMsg -match '#+\s*任务日志'
 
 if (-not $hasTaskLog) {
   $result = @{
