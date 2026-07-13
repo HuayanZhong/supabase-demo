@@ -43,4 +43,10 @@ export default defineConfig({
       "pgbouncer",
     ],
   },
+
+  // 迁移配置
+  migrations: {
+    path: "src/migrations",
+    pathTs: "src/migrations",
+  },
 });
