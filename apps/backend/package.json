@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@mikro-orm/core": "catalog:backend",
+    "@mikro-orm/decorators": "catalog:backend",
     "@mikro-orm/migrations": "catalog:backend",
     "@mikro-orm/nestjs": "catalog:backend",
     "@mikro-orm/postgresql": "catalog:backend",
@@ -26,6 +27,8 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "catalog:backend",
     "@supabase/config": "workspace:*",
+    "class-transformer": "catalog:backend",
+    "class-validator": "catalog:backend",
     "dotenv": "^17.4.2",
     "nestjs-pino": "catalog:backend",
     "pino": "catalog:logger",

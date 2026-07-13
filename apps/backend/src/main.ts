@@ -5,6 +5,7 @@ import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
 import { parseEnv, envSchema } from "@supabase/config";
 import { config } from "dotenv";
 import { Logger } from "nestjs-pino";
+import { ValidationPipe } from "@nestjs/common";
 
 // 加载环境变量（必须放在 parseEnv 之前）
 config();
@@ -24,6 +25,17 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
   // 全局异常过滤器
   app.useGlobalFilters(new AllExceptionsFilter());
+  // 全局验证管道
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
   // 启动应用
   await app.listen(process.env.PORT ?? 4000);
 }
