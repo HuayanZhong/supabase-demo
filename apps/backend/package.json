@@ -20,6 +20,7 @@
     "@mikro-orm/migrations": "catalog:backend",
     "@mikro-orm/nestjs": "catalog:backend",
     "@mikro-orm/postgresql": "catalog:backend",
+    "@mikro-orm/reflection": "catalog:backend",
     "@nestjs/common": "catalog:backend",
     "@nestjs/core": "catalog:backend",
     "@nestjs/mapped-types": "*",

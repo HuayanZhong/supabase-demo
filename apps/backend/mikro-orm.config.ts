@@ -1,6 +1,7 @@
 import { defineConfig } from "@mikro-orm/postgresql";
 import { Migrator } from "@mikro-orm/migrations";
 import { config } from "dotenv";
+import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
 
 config({ path: ".env" });
 
@@ -16,6 +17,9 @@ export default defineConfig({
 
   // 启用的扩展
   extensions: [Migrator],
+
+  // 启用反射元数据提供程序
+  metadataProvider: TsMorphMetadataProvider,
 
   // 开启调试模式，记录SQL查询和发现信息
   debug: true,
