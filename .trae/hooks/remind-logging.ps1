@@ -21,7 +21,20 @@ if (Test-Path $muteFile) {
   }
 }
 
-$reminder = "> 工具已执行，请在 Stop 阶段按 .trae/rules/task-logging.md 输出结构化日志"
+# 增强的任务日志提醒
+$reminder = @"
+> ⚠️ 任务完成提醒：请在最终回复前输出完整的任务日志（按 .trae/rules/task-logging.md 格式）
+>
+> 任务日志必须包含：
+> 1. 领域和任务描述
+> 2. 资源覆盖率（规则命中、Skills 调用、MCP 使用）
+> 3. 调用链路（规则、Skills、MCP、子智能体）
+> 4. 变更清单（创建/修改/删除的文件）
+> 5. 验证结果（lint/format/typecheck）
+> 6. 耗时对比（预估 vs 实际）
+>
+> 未输出任务日志将导致 Stop hook 阻止结束！
+"@
 
 $result = @{
   hookSpecificOutput = @{
