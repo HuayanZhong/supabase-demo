@@ -64,3 +64,12 @@ architecture
 
 # Trae 本地凭证（不提交）
 .trae/local-credentials.json
+
+# 临时文件
+temp/
+
+# 数据库迁移文件
+migrations/
+
+# 数据库迁移快照
+.snapshot-postgres.json
