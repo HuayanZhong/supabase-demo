@@ -3,6 +3,7 @@ import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
+import { Location } from "./entities/location.entity";
 
 @Injectable()
 export class LocationsService {
