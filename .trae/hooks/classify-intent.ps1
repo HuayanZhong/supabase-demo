@@ -1,4 +1,4 @@
-﻿$sessionModeFile = ".trae/.session-mode"
+$sessionModeFile = ".trae/.session-mode"
 
 if (Test-Path $sessionModeFile) {
     $mode = Get-Content $sessionModeFile -Raw | ForEach-Object { $_.Trim() }
@@ -7,6 +7,12 @@ if (Test-Path $sessionModeFile) {
         exit 0
     }
     # dev 模式：继续注入路由指令
+}
+
+# 清理提醒状态文件（每次用户消息开始时重置）
+$reminderStateFile = ".trae/.task-log-reminder-shown"
+if (Test-Path $reminderStateFile) {
+    Remove-Item $reminderStateFile -Force
 }
 
 # 首次（无文件）或 dev 模式：注入路由指令

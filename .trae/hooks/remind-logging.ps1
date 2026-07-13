@@ -1,24 +1,28 @@
 ﻿# .trae/.hooks-mute 抑制提醒（指令执行期或手动压缩上下文时使用）
-# 文件有效期为 10 分钟，超时后自动失效，无需手动删除
 $muteFile = Join-Path $PSScriptRoot "..\.hooks-mute"
 if (Test-Path $muteFile) {
-  $now = Get-Date
-  $lastWrite = (Get-Item $muteFile).LastWriteTime
-  $ageMinutes = ($now - $lastWrite).TotalMinutes
-  if ($ageMinutes -le 10) {
-    # 文件在有效期内 → 抑制提醒
-    $result = @{
-      hookSpecificOutput = @{
-        hookEventName     = 'PostToolUse'
-        additionalContext = ""
-      }
+  $result = @{
+    hookSpecificOutput = @{
+      hookEventName     = 'PostToolUse'
+      additionalContext = ""
     }
-    Write-Output ($result | ConvertTo-Json -Compress)
-    exit
-  } else {
-    # 文件已过期（超过 10 分钟）→ 自动清理
-    Remove-Item $muteFile -Force
   }
+  Write-Output ($result | ConvertTo-Json -Compress)
+  exit
+}
+
+# 检查是否已经提醒过（每次用户消息只提醒一次）
+$reminderStateFile = Join-Path $PSScriptRoot "..\.task-log-reminder-shown"
+if (Test-Path $reminderStateFile) {
+  # 已提醒过，不再重复
+  $result = @{
+    hookSpecificOutput = @{
+      hookEventName     = 'PostToolUse'
+      additionalContext = ""
+    }
+  }
+  Write-Output ($result | ConvertTo-Json -Compress)
+  exit
 }
 
 # 增强的任务日志提醒
@@ -35,6 +39,9 @@ $reminder = @"
 >
 > 未输出任务日志将导致 Stop hook 阻止结束！
 "@
+
+# 标记已提醒（Stop hook 会清理此文件）
+Set-Content -Path $reminderStateFile -Value "reminded"
 
 $result = @{
   hookSpecificOutput = @{

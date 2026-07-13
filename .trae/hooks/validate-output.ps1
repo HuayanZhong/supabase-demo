@@ -3,8 +3,8 @@ try {
     $parsed = $inputJson | ConvertFrom-Json
     $lastMsg = $parsed.last_assistant_message
 
-    # 检查是否包含任务日志（支持中英文）
-    $hasTaskLog = $lastMsg -match '(?m)^#+\s*(Task Log|任务日志)'
+    # 检查是否包含任务日志（支持中英文，不区分大小写）
+    $hasTaskLog = $lastMsg -imatch '(任务日志|task log)'
 
     if (-not $hasTaskLog) {
         $result = @{
