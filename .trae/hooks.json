@@ -47,16 +47,7 @@
         ]
       }
     ],
-    "PostToolUse": [
-      {
-        "matcher": "DeleteFile|Edit|RunCommand|Write",
-        "hooks": [
-          {
-            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/remind-logging.ps1"
-          }
-        ]
-      }
-    ],
+    "PostToolUse": [],
     "Stop": [
       {
         "loop_limit": 3,
