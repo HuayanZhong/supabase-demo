@@ -163,6 +163,19 @@ npx mikro-orm cache:generate
 npx mikro-orm discovery:export
 ```
 
+### Seeding 相关
+
+```bash
+# 运行默认 seeder（DatabaseSeeder）
+npx mikro-orm seeder:run
+
+# 运行指定 seeder
+npx mikro-orm seeder:run --class=LocationSeeder
+
+# 创建新的 seeder 文件
+npx mikro-orm seeder:create LocationSeeder
+```
+
 ### 注意事项
 
 - 迁移文件存放在 `src/migrations` 目录

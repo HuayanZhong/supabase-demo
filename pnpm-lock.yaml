@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   backend:
+    '@faker-js/faker':
+      specifier: ^10.5.0
+      version: 10.5.0
     '@mikro-orm/cli':
       specifier: ^7.1.4
       version: 7.1.5
@@ -25,6 +28,9 @@ catalogs:
       specifier: ^7.1.4
       version: 7.1.5
     '@mikro-orm/reflection':
+      specifier: ^7.1.5
+      version: 7.1.5
+    '@mikro-orm/seeder':
       specifier: ^7.1.5
       version: 7.1.5
     '@nestjs/common':
@@ -168,6 +174,9 @@ importers:
 
   apps/backend:
     dependencies:
+      '@faker-js/faker':
+        specifier: catalog:backend
+        version: 10.5.0
       '@mikro-orm/core':
         specifier: catalog:backend
         version: 7.1.5
@@ -184,6 +193,9 @@ importers:
         specifier: catalog:backend
         version: 7.1.5(@mikro-orm/core@7.1.5)
       '@mikro-orm/reflection':
+        specifier: catalog:backend
+        version: 7.1.5(@mikro-orm/core@7.1.5)
+      '@mikro-orm/seeder':
         specifier: catalog:backend
         version: 7.1.5(@mikro-orm/core@7.1.5)
       '@nestjs/common':
@@ -1209,6 +1221,10 @@ packages:
     resolution: {integrity: sha512-+CNAzxglkrpNf/kKywqQfk74QjtceuOE7Qm+AF8miRvPF/wmmK5+OJOgVh3AVTT3RP2mH3+FOaxlE5v72owk0A==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
+  '@faker-js/faker@10.5.0':
+    resolution: {integrity: sha512-bsxD8WLS5lIj7aaoCx1YJkktqYj5vlBUE6HWzu2Q51ksrGJ0H737ECCKlFU7Yf8Br45z9t99frBp/J7kzbMPAg==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
+
   '@fastify/accept-negotiator@2.0.1':
     resolution: {integrity: sha512-/c/TW2bO/v9JeEgoD/g1G5GxGeCF1Hafdf79WPmUlgYiBXummY0oX3VVq4yFkKKVBKDNlaDUYoab7g38RpPqCQ==}
 
@@ -1739,6 +1755,12 @@ packages:
 
   '@mikro-orm/reflection@7.1.5':
     resolution: {integrity: sha512-9FuBPK2+uRW9gG0ZEJ3XGEvTEb+KJOGk+KIlr9sHWUM8YpFIBr+6ZND3upU0L5HyT4cqRWkcZYtayOxHUB2oLg==}
+    engines: {node: '>= 22.17.0'}
+    peerDependencies:
+      '@mikro-orm/core': 7.1.5
+
+  '@mikro-orm/seeder@7.1.5':
+    resolution: {integrity: sha512-wz+XkMHZ/Ske5TotOhAISYJbUF2AATmEXJRE0ai61SbGigbcjeU7rsfKJkfQaaZOogP/KYmmfEjbmkFvyxsYlg==}
     engines: {node: '>= 22.17.0'}
     peerDependencies:
       '@mikro-orm/core': 7.1.5
@@ -8479,6 +8501,8 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
+  '@faker-js/faker@10.5.0': {}
+
   '@fastify/accept-negotiator@2.0.1':
     optional: true
 
@@ -8976,6 +9000,10 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 7.1.5
       ts-morph: 28.0.0
+
+  '@mikro-orm/seeder@7.1.5(@mikro-orm/core@7.1.5)':
+    dependencies:
+      '@mikro-orm/core': 7.1.5
 
   '@mikro-orm/sql@7.1.5(@mikro-orm/core@7.1.5)':
     dependencies:

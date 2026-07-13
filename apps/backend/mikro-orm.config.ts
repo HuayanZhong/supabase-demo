@@ -2,6 +2,7 @@ import { defineConfig } from "@mikro-orm/postgresql";
 import { Migrator } from "@mikro-orm/migrations";
 import { config } from "dotenv";
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
+import { SeedManager } from "@mikro-orm/seeder";
 
 config({ path: ".env" });
 
@@ -17,7 +18,7 @@ export default defineConfig({
   entitiesTs: ["src/**/*.entity.ts"],
 
   // 启用的扩展
-  extensions: [Migrator],
+  extensions: [Migrator, SeedManager],
 
   // 启用反射元数据提供程序
   metadataProvider: TsMorphMetadataProvider,
@@ -48,5 +49,12 @@ export default defineConfig({
   migrations: {
     path: "src/migrations",
     pathTs: "src/migrations",
+  },
+
+  // 数据库种子配置
+  seeder: {
+    path: "dist/seeders", // 编译后的 JS 文件目录
+    pathTs: "src/seeders", // TypeScript 源文件目录
+    defaultSeeder: "DatabaseSeeder", // 默认 seeder 类名
   },
 });
