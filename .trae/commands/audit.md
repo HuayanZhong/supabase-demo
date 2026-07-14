@@ -62,9 +62,48 @@ Three-way 约束：`AGENTS.md` 生命周期图 == `hooks/README.md` 生命周期
 
 ## 并行执行策略
 
-- **步骤 1-7**（Skills、MCP、规则、Hooks、交叉引用、配置、验证）：可并行执行
-- **步骤 8**（语义检查）：串行执行
-- **步骤 9**（输出报告）：串行执行
+### 阶段一：并行审计（步骤 1-6）
+
+使用 **Task 工具** 分派 6 个子 agent 并行执行，每个子 agent 负责一个独立审计步骤：
+
+```
+主 agent 同时发起 6 个 Task 调用：
+├─ Task(subagent_type=general_purpose_task) → 步骤 1: Skills 审计
+├─ Task(subagent_type=general_purpose_task) → 步骤 2: MCP 审计
+├─ Task(subagent_type=general_purpose_task) → 步骤 3: 规则审计
+├─ Task(subagent_type=general_purpose_task) → 步骤 4: Hooks 审计
+├─ Task(subagent_type=general_purpose_task) → 步骤 5: 交叉引用审计
+└─ Task(subagent_type=general_purpose_task) → 步骤 6: 配置审计
+
+每个子 agent 返回：{步骤号, 摘要, 发现的问题, 修复建议}
+```
+
+**子 agent 职责**：
+- 读取对应的 `audit/{NN}-*.md` 详细指令
+- 执行审计逻辑，记录发现的问题
+- 可自动修复的问题立即修复（幂等操作）
+- 返回结构化摘要（按各步骤的输出摘要格式）
+
+### 阶段二：修复验证（步骤 7）
+
+主 agent 汇总阶段一的修复结果，执行验证：
+- 重新检查已修复项
+- 确认修复幂等性
+- 输出验证摘要
+
+### 阶段三：语义检查（步骤 8）
+
+主 agent 串行执行：
+- 读取 `audit/08-semantic-check.md`
+- 检查 Markdown 一致性、脚本路径、matcher 正则、Skills 和规则文件
+- 输出语义检查摘要
+
+### 阶段四：输出报告（步骤 9）
+
+主 agent 串行执行：
+- 汇总所有步骤的统计结果
+- 按 `audit/09-report.md` 模板生成完整报告
+- 输出最终审计报告
 
 ## 执行步骤
 

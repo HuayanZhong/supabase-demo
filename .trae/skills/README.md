@@ -35,12 +35,12 @@ Agent 使用技能辅助执行
 | ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------- |
 | **supabase**                         | 全栈 Supabase（Auth、Realtime、Edge Functions、Storage、Vectors、Cron、Queues） | 数据库操作、认证、迁移、RLS、CLI        |
 | **supabase-postgres-best-practices** | PostgreSQL 最佳实践（索引、连接池、锁、安全、监控）                             | 慢查询、死锁、连接池、批量操作          |
+| **mikro-orm-docs**                   | MikroORM 最新文档 API 用法（Entity、Repository、Migration、Query）              | Entity 定义、Repository 查询、迁移操作  |
+| **mikro-orm-seeder**                 | MikroORM 数据种子与实体工厂使用指南                                             | 创建测试数据、初始化数据库、编写 Seeder |
 | **turborepo**                        | Turborepo 缓存、pipeline、remote cache、filtering、CI 优化                      | turbo.json 配置、任务编排、monorepo     |
 | **nuxt-ui**                          | Nuxt UI v4 组件使用（布局、表单、对话框、表格）                                 | 组件选型、布局搭建、主题定制            |
 | **nuxt**                             | Nuxt 3 核心（路由、数据获取、SSR、模块、组合式函数）                            | pages、middleware、composables、deploy  |
 | **typescript-advanced-types**        | TS 高级类型、泛型、条件类型、映射类型、类型体操                                 | 类型定义、Schema 设计、复杂泛型         |
-| **mikro-orm-docs**                   | MikroORM 最新文档 API 用法（Entity、Repository、Migration、Query）              | Entity 定义、Repository 查询、迁移操作  |
-| **mikro-orm-seeder**                 | MikroORM 数据种子与实体工厂使用指南                                             | 创建测试数据、初始化数据库、编写 Seeder |
 
 ### 后端
 

@@ -1,5 +1,5 @@
 ---
-alwaysApply: false
+alwaysApply: true
 description: 命名规范，全项目通用
 ---
 

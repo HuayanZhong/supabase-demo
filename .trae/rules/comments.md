@@ -1,5 +1,5 @@
 ---
-alwaysApply: false
+alwaysApply: true
 description: 注释规范，全项目通用。始终生效，新增/修改文件时强制执行。
 ---
 
