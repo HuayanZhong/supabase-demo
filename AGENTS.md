@@ -80,8 +80,8 @@ AGENTS.md               ← 总纲（始终生效）
 ## Hooks 生命周期
 
 ```
-PreToolUse(Write)           → protect-mcp-json.ps1（安全拦截）
-                           → enforce-code-standards.ps1（安全拦截）
+PreToolUse(DeleteFile|Edit|Write) → protect-mcp-json.ps1（安全拦截）
+                                 → enforce-code-standards.ps1（安全拦截）
 PreToolUse(execute_sql)     → protect-sql.ps1（安全拦截）
 PreToolUse(chrome-devtools) → inject-credentials.ps1（本地凭证注入）
 ```
