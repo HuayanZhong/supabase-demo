@@ -1,4 +1,4 @@
-# Step 9: 语义检查
+# Step 8: 语义检查
 
 检查项目中的语法错误、语义错误和不一致之处，确保治理架构的准确性和一致性。
 
@@ -165,5 +165,5 @@ foreach ($ruleFile in $ruleFiles) {
 ## 输出摘要
 
 ```
-[{步骤9 语义检查}] Markdown一致性 {N} \| 脚本路径 {N} \| matcher {N} \| Skills {N} \| 规则 {N}
+[{步骤8 语义检查}] Markdown一致性 {N} \| 脚本路径 {N} \| matcher {N} \| Skills {N} \| 规则 {N}
 ```

@@ -13,7 +13,6 @@ rules/
 ├── language.md                # 语言约束：回答/注释/commit 用中文
 ├── naming.md                  # 命名规范：文件/变量/类型命名
 ├── comments.md                # 注释风格（全项目通用）
-├── task-logging.md            # 任务日志输出格式
 ├── git-commit-message.md      # Commit message 格式
 │
 ├── backend/                   # 后端领域
@@ -52,7 +51,7 @@ rules/
 
 | 方式          | 说明                                                                                                       | 文件                                                                        |
 | ------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| **始终生效**  | Session 期间始终存在                                                                                       | `language.md`、`naming.md`、`comments.md`、`task-logging.md`                |
+| **始终生效**  | Session 期间始终存在                                                                                       | `language.md`、`naming.md`、`comments.md`                                   |
 | **Hook 注入** | 由 hooks 在对应生命周期指向                                                                                | `agent-routing.md`、`agent-catalog.md`                                      |
 | **智能生效**  | 任务涉及对应领域时自动触发；`enforce-code-standards.ps1` 在 PreToolUse 按文件路径智能指向后端/前端注释规则 | `backend/*`、`frontend/*`、`shared/*`、`quality/*`、`git-commit-message.md` |
 
@@ -65,9 +64,7 @@ rules/
 | PreToolUse(Write)           | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 → | `naming.md` + `comments.md` + （`backend/comments.md` 或 `frontend/comments.md`，按文件路径智能选择） + `frontend/i18n.md` + `agent-catalog.md`（安全约束） |
 | PreToolUse(execute_sql)     | protect-sql.ps1 →                                               | SQL 注入拦截（不注入规则文件）                                                                                                                              |
 | PreToolUse(chrome-devtools) | inject-credentials.ps1 →                                        | 本地凭证注入（不注入规则文件）                                                                                                                              |
-| PostToolUse                 | remind-logging.ps1 →                                            | 提醒按 `task-logging.md` 输出日志                                                                                                                           |
-| Stop                        | validate-output.ps1 →                                           | `task-logging.md` + `agent-catalog.md`（质量验证）                                                                                                          |
-| Notification                | quality-reminder.ps1 →                                          | 质量检查清单                                                                                                                                                |
+| Stop                        | validate-output.ps1 →                                           | `agent-catalog.md`（质量验证）                                                                                                                              |
 
 ## 原则
 
