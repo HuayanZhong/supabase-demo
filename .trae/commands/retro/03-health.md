@@ -37,25 +37,11 @@ Notification(idle)  → 预期触发: 不统计（异步事件）
 | agent-routing.md | UserPromptSubmit                 | —            | —        |
 | naming.md        | PreToolUse(Write)                | —            | —        |
 | comments.md      | PreToolUse(Write)                | —            | —        |
-| task-logging.md  | PostToolUse + Stop               | —            | —        |
 | agent-catalog.md | SessionStart + PreToolUse + Stop | —            | —        |
 
 **输出**：覆盖率 < 100% 的规则，标注缺失场景。
 
-### 3.3 任务日志完整度
-
-评估本会话中任务质量：
-
-| 指标               | 评估标准                             |
-| ------------------ | ------------------------------------ |
-| **任务日志存在性** | 每次有变更的任务后是否输出了任务日志 |
-| **资源覆盖率填写** | 规则命中、Skills、MCP 数据是否准确   |
-| **质量验证完整性** | 6 项校验是否全部填写                 |
-| **日志格式合规**   | 是否符合 task-logging.md 模板        |
-
-**输出**：格式合规率，缺失/不合规的日志列表。
-
-### 3.4 治理盲区探测
+### 3.3 治理盲区探测
 
 识别本会话中暴露出的治理设计盲区：
 

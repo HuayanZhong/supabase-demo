@@ -4,8 +4,6 @@
 
 ## 执行
 
-> hooks-mute 已由编排器 `audit.md` 在步骤 0 创建，此处不再重复创建。
-
 - 如果前置准备中 `.agents/skills/` 或 `.trae/skills/` 标记为"跳过"，此步骤直接跳过
 - 读取 `.agents/skills/` 下所有子目录（每个子目录为一个技能包），记录技能包名称列表 `$installed`
 - 读取 `.trae/skills/` 下所有 junction，记录 junction 名称列表 `$junction_list`

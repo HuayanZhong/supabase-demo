@@ -53,9 +53,6 @@ architecture
 # Trae MCP 配置（含密钥）
 .trae/mcp.json
 
-# Trae hooks 瞬态标记文件
-.trae/.hooks-mute
-
 # Trae session 模式标记（AI 写入，hooks 读取）
 .trae/.session-mode
 
