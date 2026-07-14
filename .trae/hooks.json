@@ -1,23 +1,7 @@
 {
   "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/session-start.ps1"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/classify-intent.ps1"
-          }
-        ]
-      }
-    ],
+    "SessionStart": [],
+    "UserPromptSubmit": [],
     "PreToolUse": [
       {
         "matcher": "DeleteFile|Edit|Write",
@@ -48,15 +32,6 @@
       }
     ],
     "PostToolUse": [],
-    "Stop": [
-      {
-        "loop_limit": 3,
-        "hooks": [
-          {
-            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/validate-output.ps1"
-          }
-        ]
-      }
-    ]
+    "Stop": []
   }
 }

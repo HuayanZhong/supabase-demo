@@ -45,49 +45,48 @@ AGENTS.md               ← 总纲（始终生效）
 
 ## 规则体系
 
-| 文件                             | 生效方式  | 适用场景                           |
-| -------------------------------- | --------- | ---------------------------------- |
-| `agent-routing.md`               | Hook 注入 | UserPromptSubmit 时注入路由决策    |
-| `agent-catalog.md`               | Hook 注入 | 按章节分阶段注入各 hook 事件       |
-| `language.md`                    | 始终生效  | 回答、注释、commit 使用中文        |
-| `naming.md`                      | 始终生效  | 文件、变量、类型命名规范           |
-| `comments.md`                    | 始终生效  | 注释风格与 JSDoc 约定              |
-| `backend/nestjs.md`              | 智能生效  | NestJS Controller/Service/Module   |
-| `backend/comments.md`            | 智能生效  | 后端注释规范（JSDoc 模板）         |
-| `backend/database.md`            | 智能生效  | MikroORM Entity/Repository/迁移    |
-| `backend/error-handling.md`      | 智能生效  | 异常处理、错误码、Exception Filter |
-| `backend/logging.md`             | 智能生效  | 日志级别、结构化日志、请求追踪     |
-| `frontend/nuxt.md`               | 智能生效  | Nuxt 组件/页面/数据获取            |
-| `frontend/styles.md`             | 智能生效  | Tailwind / Nuxt UI 样式            |
-| `frontend/i18n.md`               | 智能生效  | 国际化翻译                         |
-| `frontend/quality.md`            | 智能生效  | a11y、加载状态、性能约定           |
-| `frontend/comments.md`           | 智能生效  | Vue / composable 注释规范          |
-| `frontend/components.md`         | 智能生效  | 组件提取、拆分、复用               |
-| `frontend/dashboard-layout.md`   | 智能生效  | Dashboard 布局约束                 |
-| `frontend/delivery-checklist.md` | 智能生效  | 前端交付前自检                     |
-| `frontend/echarts.md`            | 智能生效  | ECharts 图表规范                   |
-| `frontend/layout-bfc.md`         | 智能生效  | Flex + BFC 滚动约束                |
-| `frontend/no-decoration.md`      | 智能生效  | 禁止无效装饰                       |
-| `frontend/task-stability.md`     | 智能生效  | 长任务稳定性与多任务并行           |
-| `shared/monorepo.md`             | 智能生效  | 子包创建/依赖管理                  |
-| `shared/dependencies.md`         | 智能生效  | 依赖添加与版本管理规范             |
-| `shared/env-vars.md`             | 智能生效  | 环境变量注册与使用规范             |
-| `shared/frontend-types.md`       | 智能生效  | ViewModel 与 Entity 职责边界       |
-| `quality/testing.md`             | 智能生效  | 测试编写与运行                     |
-| `quality/security.md`            | 智能生效  | 安全与认证                         |
-| `git-commit-message.md`          | 智能生效  | Commit message 格式                |
+| 文件                             | 生效方式 | 适用场景                           |
+| -------------------------------- | -------- | ---------------------------------- |
+| `agent-routing.md`               | 智能生效 | 意图分类、Agent 选型时自动触发     |
+| `agent-catalog.md`               | 智能生效 | 按章节分阶段注入各 hook 事件       |
+| `language.md`                    | 始终生效 | 回答、注释、commit 使用中文        |
+| `naming.md`                      | 始终生效 | 文件、变量、类型命名规范           |
+| `comments.md`                    | 始终生效 | 注释风格与 JSDoc 约定              |
+| `backend/nestjs.md`              | 智能生效 | NestJS Controller/Service/Module   |
+| `backend/comments.md`            | 智能生效 | 后端注释规范（JSDoc 模板）         |
+| `backend/database.md`            | 智能生效 | MikroORM Entity/Repository/迁移    |
+| `backend/error-handling.md`      | 智能生效 | 异常处理、错误码、Exception Filter |
+| `backend/logging.md`             | 智能生效 | 日志级别、结构化日志、请求追踪     |
+| `frontend/nuxt.md`               | 智能生效 | Nuxt 组件/页面/数据获取            |
+| `frontend/styles.md`             | 智能生效 | Tailwind / Nuxt UI 样式            |
+| `frontend/i18n.md`               | 智能生效 | 国际化翻译                         |
+| `frontend/quality.md`            | 智能生效 | a11y、加载状态、性能约定           |
+| `frontend/comments.md`           | 智能生效 | Vue / composable 注释规范          |
+| `frontend/components.md`         | 智能生效 | 组件提取、拆分、复用               |
+| `frontend/dashboard-layout.md`   | 智能生效 | Dashboard 布局约束                 |
+| `frontend/delivery-checklist.md` | 智能生效 | 前端交付前自检                     |
+| `frontend/echarts.md`            | 智能生效 | ECharts 图表规范                   |
+| `frontend/layout-bfc.md`         | 智能生效 | Flex + BFC 滚动约束                |
+| `frontend/no-decoration.md`      | 智能生效 | 禁止无效装饰                       |
+| `frontend/task-stability.md`     | 智能生效 | 长任务稳定性与多任务并行           |
+| `shared/monorepo.md`             | 智能生效 | 子包创建/依赖管理                  |
+| `shared/dependencies.md`         | 智能生效 | 依赖添加与版本管理规范             |
+| `shared/env-vars.md`             | 智能生效 | 环境变量注册与使用规范             |
+| `shared/frontend-types.md`       | 智能生效 | ViewModel 与 Entity 职责边界       |
+| `quality/testing.md`             | 智能生效 | 测试编写与运行                     |
+| `quality/security.md`            | 智能生效 | 安全与认证                         |
+| `git-commit-message.md`          | 智能生效 | Commit message 格式                |
 
-## Hooks 生命周期与规则注入
+## Hooks 生命周期
 
 ```
-SessionStart   → session-start.ps1     → language.md + monorepo.md + agent-catalog.md（角色与资源）
-UserPromptSubmit→ classify-intent.ps1   → agent-routing.md（路由决策）
-PreToolUse(Write)     → protect-mcp-json.ps1（安全拦截）
-               → enforce-code-standards.ps1 → naming.md + comments.md + （backend/comments.md 或 frontend/comments.md，按文件路径智能选择） + frontend/i18n.md + agent-catalog.md（安全约束）
-PreToolUse(execute_sql) → protect-sql.ps1（安全拦截）
-PreToolUse(chrome-devtools) → inject-credentials.ps1 → 本地凭证注入
-Stop           → validate-output.ps1    → agent-catalog.md（质量验证）
+PreToolUse(Write)           → protect-mcp-json.ps1（安全拦截）
+                           → enforce-code-standards.ps1（安全拦截）
+PreToolUse(execute_sql)     → protect-sql.ps1（安全拦截）
+PreToolUse(chrome-devtools) → inject-credentials.ps1（本地凭证注入）
 ```
+
+> 规则注入由 Trae IDE 内置机制处理，通过 `alwaysApply` 字段控制始终生效或按意图匹配。
 
 ## 技能与 MCP
 

@@ -52,19 +52,17 @@ rules/
 | 方式          | 说明                                                                                                       | 文件                                                                        |
 | ------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | **始终生效**  | Session 期间始终存在                                                                                       | `language.md`、`naming.md`、`comments.md`                                   |
-| **Hook 注入** | 由 hooks 在对应生命周期指向                                                                                | `agent-routing.md`、`agent-catalog.md`                                      |
 | **智能生效**  | 任务涉及对应领域时自动触发；`enforce-code-standards.ps1` 在 PreToolUse 按文件路径智能指向后端/前端注释规则 | `backend/*`、`frontend/*`、`shared/*`、`quality/*`、`git-commit-message.md` |
 
-## Hooks 注入关系
+## Hooks 安全拦截
 
-| 生命周期                    | 脚本                                                            | 注入的规则                                                                                                                                                  |
-| --------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| SessionStart                | session-start.ps1 →                                             | `language.md` + `monorepo.md` + `agent-catalog.md`（角色与资源）                                                                                            |
-| UserPromptSubmit            | classify-intent.ps1 →                                           | `agent-routing.md`（路由决策）                                                                                                                              |
-| PreToolUse(Write)           | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 → | `naming.md` + `comments.md` + （`backend/comments.md` 或 `frontend/comments.md`，按文件路径智能选择） + `frontend/i18n.md` + `agent-catalog.md`（安全约束） |
-| PreToolUse(execute_sql)     | protect-sql.ps1 →                                               | SQL 注入拦截（不注入规则文件）                                                                                                                              |
-| PreToolUse(chrome-devtools) | inject-credentials.ps1 →                                        | 本地凭证注入（不注入规则文件）                                                                                                                              |
-| Stop                        | validate-output.ps1 →                                           | `agent-catalog.md`（质量验证）                                                                                                                              |
+| 生命周期                    | 脚本                                                            | 作用           |
+| --------------------------- | --------------------------------------------------------------- | -------------- |
+| PreToolUse(Write)           | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1   | 保护敏感文件   |
+| PreToolUse(execute_sql)     | protect-sql.ps1 →                                               | SQL 注入拦截   |
+| PreToolUse(chrome-devtools) | inject-credentials.ps1 →                                        | 本地凭证注入   |
+
+> 规则注入由 Trae IDE 内置机制处理，通过 `alwaysApply` 字段控制始终生效或按意图匹配。
 
 ## 原则
 
