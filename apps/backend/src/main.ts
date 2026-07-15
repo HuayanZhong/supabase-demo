@@ -17,7 +17,9 @@ async function bootstrap() {
   // 启动时校验环境变量，缺失必填项立即报错
   parseEnv(envSchema, process.env, { label: "backend" });
 
+  // 创建 Nest 应用实例
   const app = await NestFactory.create(AppModule, {
+    // 开启日志缓冲，避免在生产环境中直接打印日志
     bufferLogs: true,
   });
   // 配置日志记录器
