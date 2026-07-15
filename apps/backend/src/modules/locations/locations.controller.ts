@@ -27,6 +27,7 @@ export class LocationsController {
   @Get(":id")
   @ApiOperation({ summary: "获取单个位置" })
   @ApiResponse({ status: 200, description: "获取成功", type: Location })
+  @ApiResponse({ status: 404, description: "位置不存在" })
   findOne(@Param("id", ParseIntPipe) id: number) {
     return this.locationsService.findOne(id);
   }
@@ -34,6 +35,7 @@ export class LocationsController {
   @Patch(":id")
   @ApiOperation({ summary: "更新位置" })
   @ApiResponse({ status: 200, description: "更新成功", type: Location })
+  @ApiResponse({ status: 404, description: "位置不存在" })
   update(@Param("id", ParseIntPipe) id: number, @Body() updateLocationDto: UpdateLocationDto) {
     return this.locationsService.update(id, updateLocationDto);
   }
@@ -41,6 +43,7 @@ export class LocationsController {
   @Delete(":id")
   @ApiOperation({ summary: "删除位置" })
   @ApiResponse({ status: 200, description: "删除成功" })
+  @ApiResponse({ status: 404, description: "位置不存在" })
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.locationsService.remove(id);
   }

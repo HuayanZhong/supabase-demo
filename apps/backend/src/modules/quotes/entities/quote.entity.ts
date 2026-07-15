@@ -1,3 +1,4 @@
+import { OptionalProps } from "@mikro-orm/core";
 import { Entity, PrimaryKey, Property } from "@mikro-orm/decorators/legacy";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
@@ -8,6 +9,9 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
  */
 @Entity()
 export class Quote {
+  // 标记由 ORM 自动填充的可选属性，repository.create() 时无需传入
+  [OptionalProps]?: "createdAt" | "updatedAt" | "id";
+
   /** 自增主键 */
   @ApiProperty({ description: "名言 ID" })
   @PrimaryKey()

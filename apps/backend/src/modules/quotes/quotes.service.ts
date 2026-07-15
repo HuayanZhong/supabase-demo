@@ -23,8 +23,7 @@ export class QuotesService {
    */
   async create(createQuoteDto: CreateQuoteDto): Promise<Quote> {
     this.logger.debug({ content: createQuoteDto.content }, "创建名言");
-    const quote = new Quote();
-    this.em.assign(quote, createQuoteDto);
+    const quote = this.quoteRepo.create(createQuoteDto);
     await this.em.persist(quote).flush();
     this.logger.debug({ id: quote.id }, "名言创建成功");
     return quote;
