@@ -19,13 +19,18 @@
 
 .trae/rules/                   # 规则文件（由 Trae IDE 内置机制注入）
 ├── README.md                  # 规则体系总览
-├── agent-routing.md           # 命中规则：路由决策 + 冲突解决
-├── agent-catalog.md           # Agent 操作目录（按章节分阶段注入）
-├── language.md
-├── naming.md
-├── comments.md
-├── git-commit-message.md
-├── shared/monorepo.md
+├── language.md                # 语言约束
+├── naming.md                  # 命名规范
+├── comments.md                # 注释风格
+├── git-commit-message.md      # Commit 格式
+├── agent/                     # Agent 治理
+│   ├── routing.md             # 任务路由决策
+│   ├── roles.md               # 角色与资源
+│   ├── execution.md           # 执行规范
+│   ├── search.md              # 文档检索
+│   ├── safety.md              # 安全约束
+│   └── quality.md             # 质量验证
+├── tool/                      # MCP 工具规则（10 个文件）
 ├── backend/                   # 后端领域规则
 ├── frontend/                  # 前端领域规则
 ├── shared/                    # 跨包共享规则
@@ -38,8 +43,8 @@
 Session 创建
   │
   ▼
-PreToolUse(Write) ─────→ protect-mcp-json.ps1（安全拦截）
-  │                   └─ enforce-code-standards.ps1（安全拦截）
+PreToolUse(DeleteFile|Edit|Write) ─────→ protect-mcp-json.ps1（安全拦截）
+  │                                   └─ enforce-code-standards.ps1（安全拦截）
   │
 PreToolUse(execute_sql) → protect-sql.ps1（安全拦截）
   │
@@ -51,12 +56,12 @@ PreToolUse(chrome-devtools) → inject-credentials.ps1（注入本地凭证）
 
 ## 事件明细
 
-| 事件                        | Hook 脚本                  | 类型     | 作用                                         | 说明         |
-| --------------------------- | -------------------------- | -------- | -------------------------------------------- | ------------ |
-| PreToolUse(Write)           | protect-mcp-json.ps1       | 安全拦截 | 拦截 `.trae/mcp.json` 写入，含明文 Token     | 写文件前     |
-| PreToolUse(Write)           | enforce-code-standards.ps1 | 安全拦截 | 允许写入（规则注入由 Trae IDE 内置机制处理） | 写代码前     |
-| PreToolUse(execute_sql)     | protect-sql.ps1            | 安全拦截 | 拦截 DROP/TRUNCATE/DELETE 等破坏性 SQL       | 执行 SQL 前  |
-| PreToolUse(chrome-devtools) | inject-credentials.ps1     | 注入凭证 | 读取本地凭证文件注入到 AI 上下文             | 浏览器操作前 |
+| 事件                                | Hook 脚本                  | 类型     | 作用                                         | 说明         |
+| ----------------------------------- | -------------------------- | -------- | -------------------------------------------- | ------------ |
+| PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1       | 安全拦截 | 拦截 `.trae/mcp.json` 写入，含明文 Token     | 写文件前     |
+| PreToolUse(DeleteFile\|Edit\|Write) | enforce-code-standards.ps1 | 安全拦截 | 允许写入（规则注入由 Trae IDE 内置机制处理） | 写代码前     |
+| PreToolUse(execute_sql)             | protect-sql.ps1            | 安全拦截 | 拦截 DROP/TRUNCATE/DELETE 等破坏性 SQL       | 执行 SQL 前  |
+| PreToolUse(chrome-devtools)         | inject-credentials.ps1     | 注入凭证 | 读取本地凭证文件注入到 AI 上下文             | 浏览器操作前 |
 
 ## 规则注入机制
 

@@ -73,11 +73,11 @@ rules/
 
 ## Hooks 安全拦截
 
-| 生命周期                    | 脚本                                                          | 作用         |
-| --------------------------- | ------------------------------------------------------------- | ------------ |
-| PreToolUse(Write)           | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 | 保护敏感文件 |
-| PreToolUse(execute_sql)     | protect-sql.ps1 →                                             | SQL 注入拦截 |
-| PreToolUse(chrome-devtools) | inject-credentials.ps1 →                                      | 本地凭证注入 |
+| 生命周期                            | 脚本                                                          | 作用         |
+| ----------------------------------- | ------------------------------------------------------------- | ------------ |
+| PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 | 保护敏感文件 |
+| PreToolUse(execute_sql)             | protect-sql.ps1 →                                             | SQL 注入拦截 |
+| PreToolUse(chrome-devtools)         | inject-credentials.ps1 →                                      | 本地凭证注入 |
 
 > 规则注入由 Trae IDE 内置机制处理，通过 `alwaysApply` 字段控制始终生效或按意图匹配。
 

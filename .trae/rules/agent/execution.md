@@ -51,10 +51,10 @@ description: 执行规范，UserPromptSubmit 时注入
 
 ## Agent 选型合规
 
-主智能体在选择 Agent 时，必须遵循 `agent-routing.md` 的选型约束：
+主智能体在选择 Agent 时，必须遵循 `routing.md` 的选型约束：
 
 - 路由规则推荐了专用 Agent 的任务，**必须先调用对应 Agent** 执行核心工作
-- 如认为应降级（不使用推荐 Agent），**必须先确认降级条件成立**（见 agent-routing.md 降级条件），并在任务日志中注明
+- 如认为应降级（不使用推荐 Agent），**必须先确认降级条件成立**（见 routing.md 降级条件），并在任务日志中注明
 - 同一任务有多家 Agent 可选时，主智能体任选其一即可
 
 **违规后果**：质量验证环节的"Agent 选型合规"项未通过时，主智能体必须返工。
