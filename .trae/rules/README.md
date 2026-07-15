@@ -71,15 +71,19 @@ rules/
 | **始终生效** | Session 期间始终存在                                                                                       | `language.md`、`naming.md`、`comments.md`                                                        |
 | **智能生效** | 任务涉及对应领域时自动触发；`enforce-code-standards.ps1` 在 PreToolUse 按文件路径智能指向后端/前端注释规则 | `agent/*`、`tool/*`、`backend/*`、`frontend/*`、`shared/*`、`quality/*`、`git-commit-message.md` |
 
-## Hooks 安全拦截
+## Hooks 生命周期
 
-| 生命周期                            | 脚本                                                          | 作用         |
-| ----------------------------------- | ------------------------------------------------------------- | ------------ |
-| PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 | 保护敏感文件 |
-| PreToolUse(execute_sql)             | protect-sql.ps1 →                                             | SQL 注入拦截 |
-| PreToolUse(chrome-devtools)         | inject-credentials.ps1 →                                      | 本地凭证注入 |
+| 生命周期                            | 脚本                                                          | 作用                |
+| ----------------------------------- | ------------------------------------------------------------- | ------------------- |
+| SessionStart                        | inject-agent-roles.ps1 →                                      | 角色定义注入        |
+| UserPromptSubmit                    | inject-agent-routing.ps1 →                                    | 路由 + 执行规范注入 |
+| PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 | 保护敏感文件        |
+| PreToolUse(execute_sql)             | protect-sql.ps1 →                                             | SQL 注入拦截        |
+| PreToolUse(chrome-devtools)         | inject-credentials.ps1 →                                      | 本地凭证注入        |
+| PreToolUse(MCP 工具)                | inject-tool-rules.ps1 →                                       | 工具规则注入        |
+| Stop                                | inject-quality-rules.ps1 →                                    | 质量验证注入        |
 
-> 规则注入由 Trae IDE 内置机制处理，通过 `alwaysApply` 字段控制始终生效或按意图匹配。
+> 规则注入通过 Hooks 指针注入，AI 自行读取规则文件。`alwaysApply: true` 的规则由 IDE 内置机制始终生效。
 
 ## 原则
 

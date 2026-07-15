@@ -1,7 +1,23 @@
 {
   "hooks": {
-    "SessionStart": [],
-    "UserPromptSubmit": [],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-agent-roles.ps1"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-agent-routing.ps1"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "DeleteFile|Edit|Write",
@@ -29,9 +45,25 @@
             "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-credentials.ps1"
           }
         ]
+      },
+      {
+        "matcher": "mcp_chrome-devtools__.*|mcp_supabase__.*|mcp_Filesystem__.*|mcp_Sequential_Thinking__.*|mcp_context7__.*|mcp_tavily_search__.*|mcp_nuxt-ui__.*|mcp_github__.*|mcp_windows-cli__.*|mcp_autoglm.*|mcp_aminer.*|integrated_code_mode__.*",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-tool-rules.ps1"
+          }
+        ]
       }
     ],
     "PostToolUse": [],
-    "Stop": []
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-quality-rules.ps1"
+          }
+        ]
+      }
+    ]
   }
 }
