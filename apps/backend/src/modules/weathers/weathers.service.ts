@@ -3,7 +3,7 @@ import { ConfigService } from "@nestjs/config";
 import { LRUCache } from "lru-cache";
 import { WeatherVo } from "./vo/weather.vo";
 import { QWeatherNow, QWeatherResponse, CacheEntry } from "./types/weather.types";
-import { Logger } from "@nestjs/common";
+import { Logger } from "nestjs-pino";
 
 /**
  * 天气服务
@@ -17,10 +17,10 @@ export class WeathersService {
   /** 缓存有效期：30 分钟（毫秒） */
   private readonly CACHE_TTL_MS = 30 * 60 * 1000;
 
-  /** 日志记录器 */
-  private readonly logger = new Logger(WeathersService.name);
-
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: Logger,
+  ) {
     this.cache = new LRUCache<string, CacheEntry>({
       max: 100, // 最多缓存 100 个城市
       ttl: this.CACHE_TTL_MS, // 30 分钟过期
