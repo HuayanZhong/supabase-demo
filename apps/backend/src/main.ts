@@ -21,6 +21,11 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   // 设置全局路由缀
   app.setGlobalPrefix("api");
+  // 配置 CORS，允许前端跨域请求
+  app.enableCors({
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    credentials: true,
+  });
   // 全局响应拦截器
   app.useGlobalInterceptors(new TransformInterceptor());
   // 全局异常过滤器

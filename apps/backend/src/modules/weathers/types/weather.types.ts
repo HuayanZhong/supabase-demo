@@ -44,10 +44,8 @@ export interface QWeatherResponse {
   now: QWeatherNow;
 }
 
-/** 内存缓存条目 */
+/** 缓存条目（LRUCache 自动管理过期） */
 export interface CacheEntry {
   /** 缓存的天气数据 */
   data: WeatherVo;
-  /** 过期时间戳 */
-  expiresAt: number;
 }

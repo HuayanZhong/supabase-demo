@@ -1,4 +1,6 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { LRUCache } from "lru-cache";
 import { WeatherVo } from "./vo/weather.vo";
 import { QWeatherNow, QWeatherResponse, CacheEntry } from "./types/weather.types";
 import { Logger } from "@nestjs/common";
@@ -9,8 +11,8 @@ import { Logger } from "@nestjs/common";
  */
 @Injectable()
 export class WeathersService {
-  /** 内存缓存，key 为城市名，value 为天气数据 + 过期时间戳 */
-  private readonly cache = new Map<string, CacheEntry>();
+  /** LRU 缓存，最多存储 100 个城市，自动淘汰最久未使用的缓存 */
+  private readonly cache: LRUCache<string, CacheEntry>;
 
   /** 缓存有效期：30 分钟（毫秒） */
   private readonly CACHE_TTL_MS = 30 * 60 * 1000;
@@ -18,25 +20,32 @@ export class WeathersService {
   /** 日志记录器 */
   private readonly logger = new Logger(WeathersService.name);
 
+  constructor(private readonly configService: ConfigService) {
+    this.cache = new LRUCache<string, CacheEntry>({
+      max: 100, // 最多缓存 100 个城市
+      ttl: this.CACHE_TTL_MS, // 30 分钟过期
+    });
+  }
+
   /**
    * 获取指定城市的实时天气
    *
    * 优先返回缓存数据。缓存未命中或已过期时，调用和风天气 API 获取，
-   * 并将结果写入缓存后返回。
+   * 并将结果写入缓存后返回。LRUCache 自动处理过期和淘汰。
    *
    * @param city - 城市名称（如 "武汉"）
    * @returns 天气视图对象
    */
   async getWeather(city: string): Promise<WeatherVo> {
     const cached = this.cache.get(city);
-    if (cached && Date.now() < cached.expiresAt) {
+    if (cached) {
       this.logger.debug({ city }, "天气缓存命中");
       return cached.data;
     }
 
     this.logger.debug({ city }, "天气缓存未命中，请求和风天气 API");
     const data = await this.fetchWeather(city);
-    this.cache.set(city, { data, expiresAt: Date.now() + this.CACHE_TTL_MS });
+    this.cache.set(city, { data });
     return data;
   }
 
@@ -51,7 +60,7 @@ export class WeathersService {
    * @throws 当 API Key 未配置、HTTP 请求失败或 API 返回错误码时抛出
    */
   private async fetchWeather(city: string): Promise<WeatherVo> {
-    const apiKey = process.env.WEATHER_API_KEY;
+    const apiKey = this.configService.get<string>("WEATHER_API_KEY");
     if (!apiKey) {
       this.logger.error("WEATHER_API_KEY 未配置");
       throw new Error("WEATHER_API_KEY 未配置");
