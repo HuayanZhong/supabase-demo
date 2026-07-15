@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException, BadGatewayException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { LRUCache } from "lru-cache";
 import { WeatherVo } from "./vo/weather.vo";
@@ -63,7 +63,7 @@ export class WeathersService {
     const apiKey = this.configService.get<string>("WEATHER_API_KEY");
     if (!apiKey) {
       this.logger.error("WEATHER_API_KEY 未配置");
-      throw new Error("WEATHER_API_KEY 未配置");
+      throw new InternalServerErrorException("天气服务配置错误");
     }
 
     const url = `https://devapi.qweather.com/v7/weather/now?location=${encodeURIComponent(city)}&key=${apiKey}`;
@@ -72,14 +72,14 @@ export class WeathersService {
 
     if (!res.ok) {
       this.logger.error({ city, status: res.status }, "和风天气 API 请求失败");
-      throw new Error(`和风天气 API 请求失败: ${res.status}`);
+      throw new BadGatewayException(`天气服务请求失败: ${res.status}`);
     }
 
     const body: QWeatherResponse = await res.json();
 
     if (body.code !== "200") {
       this.logger.error({ city, code: body.code }, "和风天气 API 返回错误");
-      throw new Error(`和风天气 API 返回错误: code=${body.code}`);
+      throw new BadGatewayException(`天气服务返回错误: ${body.code}`);
     }
 
     this.logger.log({ city, temp: body.now.temp, condition: body.now.text }, "天气数据获取成功");
