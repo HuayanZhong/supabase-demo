@@ -23,10 +23,10 @@ $toolRuleMap = @{
   "integrated_code_mode" = "tool/integrated-code-mode.md"
 }
 
-# 匹配工具名前缀
+# 匹配工具名前缀（使用 [regex]::Escape 转义防止正则注入）
 $matchedRule = $null
 foreach ($prefix in $toolRuleMap.Keys) {
-  if ($toolName -match "^$prefix") {
+  if ($toolName -match ('^' + [regex]::Escape($prefix))) {
     $matchedRule = $toolRuleMap[$prefix]
     break
   }
