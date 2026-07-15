@@ -6,6 +6,7 @@ import { parseEnv, envSchema } from "@supabase/config";
 import { config } from "dotenv";
 import { Logger } from "nestjs-pino";
 import { ValidationPipe } from "@nestjs/common";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 // 加载环境变量（必须放在 parseEnv 之前）
 config();
@@ -41,6 +42,16 @@ async function bootstrap() {
       },
     }),
   );
+
+  // 配置 Swagger 文档
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle("Supabase Demo API")
+    .setDescription("后端 API 文档")
+    .setVersion("1.0")
+    .build();
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup("api/docs", app, document);
+
   // 启动应用
   await app.listen(process.env.PORT ?? 4000);
 }

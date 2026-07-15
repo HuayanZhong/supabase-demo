@@ -44,6 +44,7 @@
     "@mikro-orm/cli": "catalog:backend",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
+    "@nestjs/swagger": "catalog:backend",
     "@supabase/lint-config": "workspace:*",
     "@types/express": "^5.0.0",
     "@types/node": "catalog:dev",
