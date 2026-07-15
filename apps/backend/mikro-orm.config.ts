@@ -4,7 +4,12 @@ import { config } from "dotenv";
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
 import { SeedManager } from "@mikro-orm/seeder";
 
+// 根据 NODE_ENV 加载对应的 .env 文件
+const nodeEnv = process.env.NODE_ENV || "development";
 config({ path: ".env" });
+config({ path: `.env.${nodeEnv}`, override: true });
+
+const isDev = process.env.NODE_ENV !== "production";
 
 export default defineConfig({
   // 数据库名称
@@ -23,8 +28,8 @@ export default defineConfig({
   // 启用反射元数据提供程序
   metadataProvider: TsMorphMetadataProvider,
 
-  // 开启调试模式，记录SQL查询和发现信息
-  debug: true,
+  // 开发环境开启调试模式，记录SQL查询和发现信息
+  debug: isDev,
 
   // Schema Generator 配置
   schemaGenerator: {

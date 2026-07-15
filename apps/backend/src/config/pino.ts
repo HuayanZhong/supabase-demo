@@ -1,17 +1,22 @@
 import { Params } from "nestjs-pino";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 export const pinoConfig: Params = {
   pinoHttp: {
-    transport: {
-      target: "pino-pretty",
-      options: {
-        colorize: true,
-        levelFirst: true,
-        customColors: "trace:gray,debug:cyan,info:green,warn:yellow,error:red,fatal:magenta",
-        translateTime: "SYS:HH:MM:ss",
-        ignore: "pid,hostname",
-      },
-    },
+    level: isDev ? "debug" : "info",
+    transport: isDev
+      ? {
+          target: "pino-pretty",
+          options: {
+            colorize: true,
+            levelFirst: true,
+            customColors: "trace:gray,debug:cyan,info:green,warn:yellow,error:red,fatal:magenta",
+            translateTime: "HH:MM:ss",
+            ignore: "pid,hostname",
+          },
+        }
+      : undefined,
     // 精简请求日志，仅保留 method、url、statusCode、响应时间
     serializers: {
       req: (req) => ({
