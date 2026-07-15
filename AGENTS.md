@@ -8,12 +8,28 @@
 AGENTS.md               ← 总纲（始终生效）
   │
   └─ .trae/rules/       ← 规则体系（按领域/事件生效）
-       ├─ agent-routing.md        命中规则（路由决策）
-       ├─ agent-catalog.md        Agent 操作目录（按章节注入）
        ├─ language.md            语言约束
        ├─ naming.md              命名规范
        ├─ comments.md            注释风格
        ├─ git-commit-message.md  Commit 格式
+       ├─ agent/                 Agent 治理（按职责拆分）
+       │    ├─ routing.md        任务路由决策（UserPromptSubmit 注入）
+       │    ├─ roles.md          角色与资源（SessionStart 注入）
+       │    ├─ execution.md      执行规范（UserPromptSubmit 注入）
+       │    ├─ search.md         文档检索（搜索任务时加载）
+       │    ├─ safety.md         安全约束（PreToolUse 注入）
+       │    └─ quality.md        质量验证（Stop 注入）
+       ├─ tool/                  MCP 工具规则（每个工具独立文件，按意图匹配）
+       │    ├─ chrome-devtools.md         浏览器自动化（前端验证/UI 调试）
+       │    ├─ filesystem.md              文件系统操作（文件读写/编辑）
+       │    ├─ supabase.md                数据库操作（SQL 执行/表结构查询）
+       │    ├─ aminer-data-search.md      学术数据查询（论文/学者/机构）
+       │    ├─ tavily-search.md           网络搜索（最新资料/实时数据）
+       │    ├─ autoglm-browser-agent.md   浏览器自动化（网页交互/数据采集）
+       │    ├─ autoglm-deepresearch.md    深度研究（调研报告/综合分析）
+       │    ├─ autoglm-generate-image.md  图片生成（文生图/图像创作）
+       │    ├─ context7.md                代码上下文查询（依赖关系/模块分析）
+       │    └─ sequential-thinking.md     顺序思考（复杂推理/多步骤思考）
        ├─ backend/               NestJS + 数据库 + 注释 + 异常处理 + 日志
        │    ├─ nestjs.md         Controller/Service/Module
        │    ├─ comments.md       注释规范（JSDoc 模板）
@@ -47,8 +63,12 @@ AGENTS.md               ← 总纲（始终生效）
 
 | 文件                             | 生效方式 | 适用场景                           |
 | -------------------------------- | -------- | ---------------------------------- |
-| `agent-routing.md`               | 智能生效 | 意图分类、Agent 选型时自动触发     |
-| `agent-catalog.md`               | 智能生效 | 按章节分阶段注入各 hook 事件       |
+| `agent/routing.md`               | 智能生效 | 意图分类、Agent 选型时自动触发     |
+| `agent/roles.md`                 | 智能生效 | 角色定义与资源映射（SessionStart） |
+| `agent/execution.md`             | 智能生效 | 执行规范（UserPromptSubmit）       |
+| `agent/search.md`                | 智能生效 | 文档检索规范（搜索任务时加载）     |
+| `agent/safety.md`                | 智能生效 | 安全约束（PreToolUse）             |
+| `agent/quality.md`               | 智能生效 | 质量验证（Stop）                   |
 | `language.md`                    | 始终生效 | 回答、注释、commit 使用中文        |
 | `naming.md`                      | 始终生效 | 文件、变量、类型命名规范           |
 | `comments.md`                    | 始终生效 | 注释风格与 JSDoc 约定              |
@@ -90,8 +110,8 @@ PreToolUse(chrome-devtools) → inject-credentials.ps1（本地凭证注入）
 
 ## 技能与 MCP
 
-Skills 和 MCP 的调用规则见 `agent-catalog.md`（角色与资源章节）。
+Skills 和 MCP 的调用规则见 `agent/roles.md`。
 
 ## 任务收尾
 
-任务完成后按 `agent-catalog.md` 执行质量验证。
+任务完成后按 `agent/quality.md` 执行质量验证。

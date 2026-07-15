@@ -8,12 +8,29 @@
 rules/
 ├── README.md                  # 本文档
 │
-├── agent-routing.md           # 命中规则：路由决策 + 冲突解决
-├── agent-catalog.md           # Agent 操作目录（按章节分阶段注入）
 ├── language.md                # 语言约束：回答/注释/commit 用中文
 ├── naming.md                  # 命名规范：文件/变量/类型命名
 ├── comments.md                # 注释风格（全项目通用）
 ├── git-commit-message.md      # Commit message 格式
+│
+├── agent/                     # Agent 治理（按职责拆分）
+│   ├── roles.md               # 角色与资源（SessionStart 注入）
+│   ├── execution.md           # 执行规范（UserPromptSubmit 注入）
+│   ├── search.md              # 文档检索（搜索任务时加载）
+│   ├── safety.md              # 安全约束（PreToolUse 注入）
+│   └── quality.md             # 质量验证（Stop 注入）
+│
+├── tool/                      # MCP 工具规则（每个工具独立文件）
+│   ├── chrome-devtools.md     # 浏览器自动化（前端验证/UI 调试）
+│   ├── filesystem.md          # 文件系统操作（文件读写/编辑）
+│   ├── supabase.md            # 数据库操作（SQL 执行/表结构查询）
+│   ├── aminer-data-search.md  # 学术数据查询（论文/学者/机构）
+│   ├── tavily-search.md       # 网络搜索（最新资料/实时数据）
+│   ├── autoglm-browser-agent.md # 浏览器自动化（网页交互/数据采集）
+│   ├── autoglm-deepresearch.md # 深度研究（调研报告/综合分析）
+│   ├── autoglm-generate-image.md # 图片生成（文生图/图像创作）
+│   ├── context7.md            # 代码上下文查询（依赖关系/模块分析）
+│   └── sequential-thinking.md # 顺序思考（复杂推理/多步骤思考）
 │
 ├── backend/                   # 后端领域
 │   ├── nestjs.md              # Controller/Service/Module 规范
@@ -49,10 +66,10 @@ rules/
 
 ## 生效方式
 
-| 方式         | 说明                                                                                                       | 文件                                                                                                                |
-| ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| **始终生效** | Session 期间始终存在                                                                                       | `language.md`、`naming.md`、`comments.md`                                                                           |
-| **智能生效** | 任务涉及对应领域时自动触发；`enforce-code-standards.ps1` 在 PreToolUse 按文件路径智能指向后端/前端注释规则 | `agent-routing.md`、`agent-catalog.md`、`backend/*`、`frontend/*`、`shared/*`、`quality/*`、`git-commit-message.md` |
+| 方式         | 说明                                                                                                       | 文件                                                                                             |
+| ------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **始终生效** | Session 期间始终存在                                                                                       | `language.md`、`naming.md`、`comments.md`                                                        |
+| **智能生效** | 任务涉及对应领域时自动触发；`enforce-code-standards.ps1` 在 PreToolUse 按文件路径智能指向后端/前端注释规则 | `agent/*`、`tool/*`、`backend/*`、`frontend/*`、`shared/*`、`quality/*`、`git-commit-message.md` |
 
 ## Hooks 安全拦截
 
