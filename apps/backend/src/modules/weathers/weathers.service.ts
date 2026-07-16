@@ -130,7 +130,7 @@ export class WeathersService {
       icon: this.mapIcon(now.icon),
       humidity,
       wind: `${now.windDir} ${now.windSpeed}km/h`,
-      uvIndex: 0,
+      uvIndex: now.uvIndex ? Number.parseInt(now.uvIndex, 10) : 0,
     };
   }
 

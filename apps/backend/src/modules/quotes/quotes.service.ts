@@ -34,14 +34,9 @@ export class QuotesService {
    */
   async findAll(): Promise<Quote[]> {
     this.logger.debug("查询所有名言");
-    try {
-      const quotes = await this.quoteRepo.findAll({ orderBy: { createdAt: "DESC" } });
-      this.logger.debug({ count: quotes.length }, "查询成功");
-      return quotes;
-    } catch (error) {
-      this.logger.error({ error: String(error) }, "查询名言失败");
-      throw error;
-    }
+    const quotes = await this.quoteRepo.findAll({ orderBy: { createdAt: "DESC" } });
+    this.logger.debug({ count: quotes.length }, "查询成功");
+    return quotes;
   }
 
   /**

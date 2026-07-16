@@ -13,11 +13,12 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
+import { RequiredEntityData } from "@mikro-orm/core";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Location } from "./entities/location.entity";
 import { Logger } from "nestjs-pino";
-import type { GeoCityItem, GeoCityResponse } from "./types/locations.types";
+import type { GeoCityResponse } from "./types/locations.types";
 
 /**
  * 位置服务类
@@ -101,7 +102,7 @@ export class LocationsService {
       if (location) {
         this.em.assign(location, data);
       } else {
-        location = this.locationRepository.create(data as any);
+        location = this.locationRepository.create(data as RequiredEntityData<Location>);
       }
       this.em.persist(location);
       locations.push(location);
@@ -119,7 +120,9 @@ export class LocationsService {
    * @returns 创建的位置实体
    */
   async create(createLocationDto: CreateLocationDto): Promise<Location> {
-    const location = this.locationRepository.create(createLocationDto as any);
+    const location = this.locationRepository.create(
+      createLocationDto as RequiredEntityData<Location>,
+    );
     await this.em.persist(location).flush();
     this.logger.debug({ qweatherId: location.qweatherId }, "创建位置");
     return location;

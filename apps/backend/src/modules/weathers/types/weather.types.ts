@@ -32,6 +32,8 @@ export interface QWeatherNow {
   cloud: string;
   /** 露点温度 */
   dew: string;
+  /** 紫外线指数 */
+  uvIndex: string;
 }
 
 /** 和风天气实时天气 API 完整响应 */

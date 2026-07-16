@@ -4,6 +4,6 @@ import { LocationFactory } from "./LocationFactory";
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    new LocationFactory(em).make(10);
+    new LocationFactory(em).create(10);
   }
 }

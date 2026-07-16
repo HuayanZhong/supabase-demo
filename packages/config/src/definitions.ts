@@ -11,6 +11,9 @@ export const envSchema = z.object({
   // Supabase 项目地址
   SUPABASE_URL: z.url(),
 
+  // PostgreSQL 直连串（Session-mode pooler，用于迁移/DDL 操作，可选）
+  DIRECT_URL: z.string().optional(),
+
   // 天气 API Key（和风天气）
   WEATHER_API_KEY: z.string().min(1),
 
