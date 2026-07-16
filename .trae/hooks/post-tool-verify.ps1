@@ -1,4 +1,4 @@
-# PostToolUse 验证：工具执行后自动检查
+﻿# PostToolUse 验证：工具执行后自动检查
 # 针对 Write/Edit 工具执行后运行 lint 检查
 
 $inputJson = [Console]::In.ReadToEnd()

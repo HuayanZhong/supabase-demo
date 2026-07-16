@@ -1,4 +1,4 @@
-# UserPromptSubmit 注入：任务路由决策 + 执行规范
+﻿# UserPromptSubmit 注入：任务路由决策 + 执行规范
 # 用户提交 prompt 时注入路由规则和执行规范
 
 $result = @{

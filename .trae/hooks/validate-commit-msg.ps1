@@ -1,4 +1,4 @@
-# PreToolUse(commit) 验证：检查 commit message 格式
+﻿# PreToolUse(commit) 验证：检查 commit message 格式
 # 确保符合 git-commit-message.md 规范
 
 $inputJson = [Console]::In.ReadToEnd()

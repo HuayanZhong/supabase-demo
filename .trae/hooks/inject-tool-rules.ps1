@@ -1,4 +1,4 @@
-# PreToolUse 注入：按工具名匹配注入对应 tool/*.md 规则
+﻿# PreToolUse 注入：按工具名匹配注入对应 tool/*.md 规则
 # 工具调用前注入该工具的使用规范
 
 $inputJson = [Console]::In.ReadToEnd()

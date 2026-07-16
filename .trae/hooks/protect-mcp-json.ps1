@@ -1,4 +1,4 @@
-$inputJson = [Console]::In.ReadToEnd()
+﻿$inputJson = [Console]::In.ReadToEnd()
 $parsed = $inputJson | ConvertFrom-Json
 
 # 兼容 Windows (\) 和 Unix (/) 路径分隔符

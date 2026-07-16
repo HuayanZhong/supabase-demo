@@ -1,4 +1,4 @@
-# SessionStart 注入：角色与资源定义
+﻿# SessionStart 注入：角色与资源定义
 # 会话开始时注入 agent/roles.md 指针，建立角色认知
 
 $result = @{

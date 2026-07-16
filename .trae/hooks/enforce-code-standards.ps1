@@ -1,4 +1,4 @@
-# 安全拦截：按文件路径决定 allow/deny，规则注入由 Trae IDE 内置机制处理
+﻿# 安全拦截：按文件路径决定 allow/deny，规则注入由 Trae IDE 内置机制处理
 # 同时注入注释规范指针（根据文件路径判断后端/前端）
 $inputJson = [Console]::In.ReadToEnd()
 $parsed = $inputJson | ConvertFrom-Json
