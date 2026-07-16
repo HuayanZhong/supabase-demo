@@ -31,6 +31,7 @@
     "@nestjs/platform-express": "catalog:backend",
     "@nestjs/swagger": "catalog:backend",
     "@supabase/config": "workspace:*",
+    "class-transformer": "catalog:backend",
     "class-validator": "catalog:backend",
     "dotenv": "^17.4.2",
     "lru-cache": "catalog:backend",
