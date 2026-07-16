@@ -52,7 +52,14 @@ export class LocationsService {
 
     const url = `https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(keyword)}&key=${apiKey}&range=cn`;
 
-    const res = await fetch(url);
+    let res: Response;
+    try {
+      res = await fetch(url);
+    } catch (e) {
+      this.logger.error({ keyword, err: e }, "GeoAPI 请求网络错误");
+      throw new BadGatewayException("城市搜索请求网络错误");
+    }
+
     if (!res.ok) {
       this.logger.error({ keyword, status: res.status }, "GeoAPI 请求失败");
       throw new BadGatewayException(`城市搜索请求失败: ${res.status}`);

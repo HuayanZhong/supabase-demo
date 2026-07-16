@@ -88,7 +88,14 @@ export class WeathersService {
 
     const url = `https://devapi.qweather.com/v7/weather/now?location=${locationId}&key=${apiKey}`;
 
-    const res = await fetch(url);
+    let res: Response;
+    try {
+      res = await fetch(url);
+    } catch (e) {
+      this.logger.error({ locationId, err: e }, "和风天气 API 请求网络错误");
+      throw new BadGatewayException("天气服务请求网络错误");
+    }
+
     if (!res.ok) {
       this.logger.error({ locationId, status: res.status }, "和风天气 API 请求失败");
       throw new BadGatewayException(`天气服务请求失败: ${res.status}`);
