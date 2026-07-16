@@ -42,6 +42,7 @@ export default defineNuxtConfig({
       supabaseUrl: "",
       supabasePublishableKey: "",
       baseUrl: `http://localhost:${process.env.PORT ?? 3000}`,
+      apiBase: "", // 后端 API 地址，默认回退到 http://localhost:4000/api
     },
   },
 

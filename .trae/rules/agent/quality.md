@@ -20,6 +20,35 @@ description: 质量验证规范，Stop 时注入
 | 代码规范检查   | 运行 `pnpm -F {包名} lint`（如项目配置了 lint）   | 无 lint 错误；如未配置 lint 则标注"未配置"原因 |
 | 已有功能未破坏 | 检查是否有静默移除已有行为                        | 未被要求的代码段未删除                         |
 
+## 规则检查清单
+
+修改代码前，必须列出该文件涉及的所有领域规则文件，逐条检查关键条款：
+
+| 文件类型           | 必须检查的规则文件                                                                   |
+| ------------------ | ------------------------------------------------------------------------------------ |
+| Vue 组件/页面      | `frontend/nuxt.md` `frontend/styles.md` `frontend/comments.md`                       |
+| Server route       | `frontend/nuxt.md`（数据获取、server routes 规范）                                   |
+| Backend Service    | `backend/nestjs.md` `backend/database.md` `backend/comments.md` `backend/logging.md` |
+| Backend Controller | `backend/nestjs.md` `backend/error-handling.md`                                      |
+| 类型定义           | `shared/frontend-types.md`                                                           |
+
+检查完成后，在输出中声明："已检查 {N} 个规则文件，关键条款均已遵守"。
+
+## 注释最低要求
+
+新建或修改文件后，检查是否满足以下最低注释要求：
+
+| 文件类型     | 最低要求                                                       |
+| ------------ | -------------------------------------------------------------- |
+| Service      | 文件级 JSDoc（说明职责）+ 公开方法 JSDoc（说明参数和返回）     |
+| Controller   | 文件级 JSDoc（说明路由前缀）+ 每个端点 JSDoc（说明用途和参数） |
+| Server route | 文件级 JSDoc（说明接口用途、参数、返回）                       |
+| Entity       | 文件级 JSDoc + 非自明字段行内注释                              |
+| Vue 组件     | 文件级注释（组件用途说明）                                     |
+| 类型文件     | 文件级 JSDoc（类型用途说明）                                   |
+
+> 注释解释"为什么这么做"，而非"做了什么"（代码本身应能看出做了什么）。
+
 ## 学习与优化
 
 - 每次任务完成后记录：实际执行时间 vs 预估时间、遇到的阻塞点和解决方案、可复用的模式

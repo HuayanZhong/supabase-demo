@@ -1,29 +1,109 @@
 /**
  * 位置服务
  *
- * 提供位置信息的增删改查功能，对接和风天气 GeoAPI。
- * 位置数据用于天气查询的地理位置缓存。
+ * 提供位置信息的增删改查和城市搜索功能。
+ * search() 调用和风天气 GeoAPI 搜索城市并将结果缓存到数据库。
  */
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+  BadGatewayException,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Location } from "./entities/location.entity";
 import { Logger } from "nestjs-pino";
+import type { GeoCityItem, GeoCityResponse } from "./types/locations.types";
 
 /**
  * 位置服务类
- * 封装位置的 CRUD 操作，使用 MikroORM 进行数据持久化
+ * 封装位置的 CRUD 和城市搜索操作
  */
 @Injectable()
 export class LocationsService {
   constructor(
     private readonly em: EntityManager,
+    private readonly configService: ConfigService,
     @InjectRepository(Location)
     private readonly locationRepository: EntityRepository<Location>,
     private readonly logger: Logger,
   ) {}
+
+  /**
+   * 搜索城市
+   *
+   * 调用和风天气 GeoAPI 搜索城市，返回结果并将每条记录 upsert 到本地缓存。
+   *
+   * @param keyword - 城市名/关键词
+   * @returns 位置实体数组
+   * @throws InternalServerErrorException API Key 未配置
+   * @throws BadGatewayException GeoAPI 请求失败或返回错误
+   */
+  async search(keyword: string): Promise<Location[]> {
+    const apiKey = this.configService.get<string>("WEATHER_API_KEY");
+    if (!apiKey) {
+      this.logger.error("WEATHER_API_KEY 未配置");
+      throw new InternalServerErrorException("天气服务配置错误");
+    }
+
+    const url = `https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(keyword)}&key=${apiKey}&range=cn`;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      this.logger.error({ keyword, status: res.status }, "GeoAPI 请求失败");
+      throw new BadGatewayException(`城市搜索请求失败: ${res.status}`);
+    }
+
+    const body: GeoCityResponse = await res.json();
+    if (body.code !== "200" || !body.location?.length) {
+      this.logger.debug({ keyword, code: body.code }, "GeoAPI 无结果");
+      return [];
+    }
+
+    // 批量查询已有记录，避免逐条 await
+    const qweatherIds = body.location.map((item) => item.id);
+    const existingLocations = await this.locationRepository.find({
+      qweatherId: { $in: qweatherIds },
+    });
+    const existingMap = new Map(existingLocations.map((loc) => [loc.qweatherId, loc]));
+
+    const locations: Location[] = [];
+
+    for (const item of body.location) {
+      const data = {
+        qweatherId: item.id,
+        name: item.name,
+        lat: Number.parseFloat(item.lat),
+        lon: Number.parseFloat(item.lon),
+        adm2: item.adm2 || undefined,
+        adm1: item.adm1 || undefined,
+        country: item.country || undefined,
+        tz: item.tz || undefined,
+        utcOffset: item.utcOffset || undefined,
+        isDst: item.isDst === "1",
+        type: item.type || undefined,
+        rank: item.rank ? Number.parseInt(item.rank, 10) || undefined : undefined,
+        fxLink: item.fxLink || undefined,
+      };
+
+      let location = existingMap.get(item.id);
+      if (location) {
+        this.em.assign(location, data);
+      } else {
+        location = this.locationRepository.create(data as any);
+      }
+      this.em.persist(location);
+      locations.push(location);
+    }
+
+    await this.em.flush();
+    this.logger.debug({ keyword, count: locations.length }, "城市搜索完成");
+    return locations;
+  }
 
   /**
    * 创建位置
@@ -32,7 +112,7 @@ export class LocationsService {
    * @returns 创建的位置实体
    */
   async create(createLocationDto: CreateLocationDto): Promise<Location> {
-    const location = this.locationRepository.create(createLocationDto);
+    const location = this.locationRepository.create(createLocationDto as any);
     await this.em.persist(location).flush();
     this.logger.debug({ qweatherId: location.qweatherId }, "创建位置");
     return location;

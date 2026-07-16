@@ -29,3 +29,6 @@ export type {
   LearnActivity,
   CategoryMeta,
 } from "./learn/index.ts";
+
+// 天气
+export type { WeatherData } from "./weather/index.ts";

@@ -1,13 +1,26 @@
-import { Injectable, InternalServerErrorException, BadGatewayException } from "@nestjs/common";
+/**
+ * 天气服务
+ *
+ * 负责天气数据的缓存与实时获取，对接和风天气 API。
+ * 通过 locationId（和风天气 LocationID）查询天气，城市名从 locations 表获取。
+ */
+import {
+  Injectable,
+  InternalServerErrorException,
+  BadGatewayException,
+  NotFoundException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { LRUCache } from "lru-cache";
+import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
+import { InjectRepository } from "@mikro-orm/nestjs";
+import { Location } from "../locations/entities/location.entity";
 import { WeatherVo } from "./vo/weather.vo";
 import { QWeatherNow, QWeatherResponse, CacheEntry } from "./types/weather.types";
 import { Logger } from "nestjs-pino";
 
 /**
  * 天气服务
- * 负责天气数据的缓存与实时获取，对接和风天气 API
  */
 @Injectable()
 export class WeathersService {
@@ -19,82 +32,83 @@ export class WeathersService {
 
   constructor(
     private readonly configService: ConfigService,
+    private readonly em: EntityManager,
+    @InjectRepository(Location)
+    private readonly locationRepository: EntityRepository<Location>,
     private readonly logger: Logger,
   ) {
     this.cache = new LRUCache<string, CacheEntry>({
-      max: 100, // 最多缓存 100 个城市
-      ttl: this.CACHE_TTL_MS, // 30 分钟过期
+      max: 100,
+      ttl: this.CACHE_TTL_MS,
     });
   }
 
   /**
-   * 获取指定城市的实时天气
+   * 获取指定位置的实时天气
    *
-   * 优先返回缓存数据。缓存未命中或已过期时，调用和风天气 API 获取，
-   * 并将结果写入缓存后返回。LRUCache 自动处理过期和淘汰。
+   * 通过和风天气 LocationID 查询天气，城市名从 locations 表获取。
+   * 优先返回缓存数据，缓存未命中时调用和风天气 API 获取并写入缓存。
    *
-   * @param city - 城市名称（如 "武汉"）
+   * @param locationId - 和风天气 LocationID（如 "101010100"）
    * @returns 天气视图对象
    */
-  async getWeather(city: string): Promise<WeatherVo> {
-    const cached = this.cache.get(city);
+  async getWeather(locationId: string): Promise<WeatherVo> {
+    // 从 DB 获取城市名
+    const location = await this.locationRepository.findOne({ qweatherId: locationId });
+    if (!location) {
+      throw new NotFoundException(`位置 ${locationId} 不存在，请先搜索城市`);
+    }
+
+    const cacheKey = locationId;
+    const cached = this.cache.get(cacheKey);
     if (cached) {
-      this.logger.debug({ city }, "天气缓存命中");
+      this.logger.debug({ locationId }, "天气缓存命中");
       return cached.data;
     }
 
-    this.logger.debug({ city }, "天气缓存未命中，请求和风天气 API");
-    const data = await this.fetchWeather(city);
-    this.cache.set(city, { data });
+    this.logger.debug({ locationId }, "天气缓存未命中，请求和风天气 API");
+    const data = await this.fetchWeather(locationId, location.name);
+    this.cache.set(cacheKey, { data });
     return data;
   }
 
   /**
    * 调用和风天气实时天气 API
    *
-   * 使用 devapi 接口（免费订阅），GET 方式请求当前天气数据。
-   * API Key 从环境变量 WEATHER_API_KEY 读取。
-   *
-   * @param city - 城市名称
+   * @param locationId - 和风天气 LocationID
+   * @param cityName - 城市名（用于返回 VO）
    * @returns 转换后的天气视图对象
-   * @throws 当 API Key 未配置、HTTP 请求失败或 API 返回错误码时抛出
    */
-  private async fetchWeather(city: string): Promise<WeatherVo> {
+  private async fetchWeather(locationId: string, cityName: string): Promise<WeatherVo> {
     const apiKey = this.configService.get<string>("WEATHER_API_KEY");
     if (!apiKey) {
       this.logger.error("WEATHER_API_KEY 未配置");
       throw new InternalServerErrorException("天气服务配置错误");
     }
 
-    const url = `https://devapi.qweather.com/v7/weather/now?location=${encodeURIComponent(city)}&key=${apiKey}`;
+    const url = `https://devapi.qweather.com/v7/weather/now?location=${locationId}&key=${apiKey}`;
 
     const res = await fetch(url);
-
     if (!res.ok) {
-      this.logger.error({ city, status: res.status }, "和风天气 API 请求失败");
+      this.logger.error({ locationId, status: res.status }, "和风天气 API 请求失败");
       throw new BadGatewayException(`天气服务请求失败: ${res.status}`);
     }
 
     const body: QWeatherResponse = await res.json();
-
     if (body.code !== "200") {
-      this.logger.error({ city, code: body.code }, "和风天气 API 返回错误");
+      this.logger.error({ locationId, code: body.code }, "和风天气 API 返回错误");
       throw new BadGatewayException(`天气服务返回错误: ${body.code}`);
     }
 
-    this.logger.log({ city, temp: body.now.temp, condition: body.now.text }, "天气数据获取成功");
-    return this.toVo(city, body.now);
+    this.logger.log(
+      { locationId, city: cityName, temp: body.now.temp, condition: body.now.text },
+      "天气数据获取成功",
+    );
+    return this.toVo(cityName, body.now);
   }
 
   /**
    * 将和风天气 API 返回的原始数据转换为业务视图对象
-   *
-   * 当前为简化处理：tempLow/tempHigh 基于当前温度估算，uvIndex 暂为 0。
-   * 后续对接逐日预报 API 后可替换为真实数值。
-   *
-   * @param city - 城市名称
-   * @param now  - 和风天气实时数据
-   * @returns 天气视图对象
    */
   private toVo(city: string, now: QWeatherNow): WeatherVo {
     const temp = Number.parseInt(now.temp, 10);
@@ -103,7 +117,6 @@ export class WeathersService {
     return {
       city,
       temp,
-      // 当前无逐日预报接口，暂按固定偏移估算
       tempLow: temp - 5,
       tempHigh: temp + 3,
       condition: now.text,
@@ -116,21 +129,9 @@ export class WeathersService {
 
   /**
    * 将和风天气图标代码映射为 lucide 图标名
-   *
-   * 编码规则（参考 https://dev.qweather.com/docs/resource/icons/）：
-   *   - 100-199：晴/多云
-   *   - 300-399：雨
-   *   - 400-499：雪
-   *   - 500-515：雾/霾
-   * 未识别的 code 默认返回 `i-lucide-cloud`。
-   *
-   * @param code - 和风天气图标代码
-   * @returns lucide 图标名称（含 `i-lucide-` 前缀）
    */
   private mapIcon(code: string): string {
-    // 参考 https://dev.qweather.com/docs/resource/icons/
     const map: Record<string, string> = {
-      // --- 晴 / 多云 (100-153) ---
       "100": "i-lucide-sun",
       "101": "i-lucide-cloud-sun",
       "102": "i-lucide-cloud-sun",
@@ -140,8 +141,6 @@ export class WeathersService {
       "151": "i-lucide-cloud-sun",
       "152": "i-lucide-cloud-sun",
       "153": "i-lucide-cloud-sun",
-
-      // --- 雨 (300-399) ---
       "300": "i-lucide-cloud-rain",
       "301": "i-lucide-cloud-drizzle",
       "302": "i-lucide-cloud-rain",
@@ -162,8 +161,6 @@ export class WeathersService {
       "317": "i-lucide-cloud-rain",
       "318": "i-lucide-cloud-rain",
       "399": "i-lucide-cloud-rain",
-
-      // --- 雪 (400-499) ---
       "400": "i-lucide-cloud-snow",
       "401": "i-lucide-cloud-snow",
       "402": "i-lucide-cloud-snow",
@@ -176,8 +173,6 @@ export class WeathersService {
       "409": "i-lucide-cloud-snow",
       "410": "i-lucide-cloud-snow",
       "499": "i-lucide-cloud-snow",
-
-      // --- 雾 / 霾 (500-515) ---
       "500": "i-lucide-haze",
       "501": "i-lucide-haze",
       "502": "i-lucide-haze",
