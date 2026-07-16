@@ -1,4 +1,4 @@
-﻿# PreToolUse 注入：按工具名匹配注入对应 tool/*.md 规则
+# PreToolUse 注入：按工具名匹配注入对应 tool/*.md 规则
 # 工具调用前注入该工具的使用规范
 
 $inputJson = [Console]::In.ReadToEnd()
@@ -9,18 +9,16 @@ $toolName = if ($parsed.toolName) { $parsed.toolName } elseif ($parsed.tool_name
 
 # 工具名到规则文件的映射
 $toolRuleMap = @{
-  "mcp_chrome-devtools" = "tool/chrome-devtools.md"
-  "mcp_supabase"        = "tool/supabase.md"
-  "mcp_Filesystem"      = "tool/filesystem.md"
-  "mcp_Sequential_Thinking" = "tool/sequential-thinking.md"
-  "mcp_context7"        = "tool/context7.md"
-  "mcp_tavily_search"   = "tool/tavily-search.md"
-  "mcp_nuxt-ui"         = "tool/nuxt-ui.md"
-  "mcp_github"          = "tool/github.md"
-  "mcp_windows-cli"     = "tool/windows-cli.md"
-  "mcp_autoglm"         = "tool/autoglm.md"
-  "mcp_aminer"          = "tool/aminer-data-search.md"
-  "integrated_code_mode" = "tool/integrated-code-mode.md"
+  "mcp_chrome-devtools"          = "tool/chrome-devtools.md"
+  "mcp_supabase"                 = "tool/supabase.md"
+  "mcp_Filesystem"               = "tool/filesystem.md"
+  "mcp_Sequential_Thinking"      = "tool/sequential-thinking.md"
+  "mcp_context7"                 = "tool/context7.md"
+  "mcp_tavily_search"            = "tool/tavily-search.md"
+  "mcp_aminer"                   = "tool/aminer-data-search.md"
+  "mcp_autoglm-browser-agent"    = "tool/autoglm-browser-agent.md"
+  "mcp_autoglm-deepresearch"     = "tool/autoglm-deepresearch.md"
+  "mcp_autoglm-generate-image"   = "tool/autoglm-generate-image.md"
 }
 
 # 匹配工具名前缀（使用 [regex]::Escape 转义防止正则注入）
