@@ -24,7 +24,7 @@ async function bootstrap() {
   });
   // 配置日志记录器
   app.useLogger(app.get(Logger));
-  // 设置全局路由缀
+  // 设置全局路由前缀
   app.setGlobalPrefix("api");
   // 配置 CORS，允许前端跨域请求
   app.enableCors({
