@@ -4,9 +4,7 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "noEmit": true,
-    "allowImportingTsExtensions": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "allowImportingTsExtensions": true
   },
   "include": ["src"]
 }
