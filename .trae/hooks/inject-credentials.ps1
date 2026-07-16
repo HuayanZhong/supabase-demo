@@ -1,3 +1,7 @@
+# PreToolUse(chrome-devtools) 注入：本地凭证注入
+# 浏览器操作前注入本地凭证到 AI 上下文
+# 安全改进：不注入明文密码，仅注入"已配置凭证"状态标记
+
 $credPath = Join-Path $PSScriptRoot "..\local-credentials.json"
 
 if (-not (Test-Path $credPath)) {
@@ -14,14 +18,22 @@ if (-not (Test-Path $credPath)) {
 
 try {
   $cred = Get-Content $credPath -Raw | ConvertFrom-Json
-  $context = @"
-你需要用以下账号登录 Google 服务时使用：
-- 用户名/邮箱：`$($cred.google.username)
-- 密码：`$($cred.google.password)
+  
+  # 安全检查：仅注入状态标记，不暴露明文凭证
+  $hasGoogleCreds = ($null -ne $cred.google.username) -and ($null -ne $cred.google.password)
+  
+  if ($hasGoogleCreds) {
+    $context = @"
+本地已配置 Google 服务凭证（用户名：$($cred.google.username)）。
+如需使用凭证，请从安全存储中读取，不要在对话中明文展示密码。
 "@
+  } else {
+    $context = "本地凭证文件存在但 Google 凭证未配置完整。"
+  }
+  
   $result = @{
     hookSpecificOutput = @{
-      hookEventName      = 'PreToolUse'
+      hookEventName     = 'PreToolUse'
       permissionDecision = 'allow'
       additionalContext  = $context
     }

@@ -53,9 +53,26 @@
             "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/inject-tool-rules.ps1"
           }
         ]
+      },
+      {
+        "matcher": "RunCommand",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/validate-commit-msg.ps1"
+          }
+        ]
       }
     ],
-    "PostToolUse": [],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/post-tool-verify.ps1"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

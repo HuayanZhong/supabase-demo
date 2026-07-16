@@ -103,7 +103,9 @@ AGENTS.md               ← 总纲（始终生效）
 PreToolUse(DeleteFile|Edit|Write) → protect-mcp-json.ps1（安全拦截）
                                  → enforce-code-standards.ps1（安全拦截）
 PreToolUse(execute_sql)     → protect-sql.ps1（安全拦截）
-PreToolUse(chrome-devtools) → inject-credentials.ps1（本地凭证注入）
+PreToolUse(chrome-devtools) → inject-credentials.ps1（凭证状态注入）
+PreToolUse(RunCommand)      → validate-commit-msg.ps1（commit message 验证）
+PostToolUse(Write|Edit)     → post-tool-verify.ps1（自动 lint 检查）
 ```
 
 > 规则注入由 Trae IDE 内置机制处理，通过 `alwaysApply` 字段控制始终生效或按意图匹配。
