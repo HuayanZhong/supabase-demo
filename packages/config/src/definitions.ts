@@ -11,6 +11,9 @@ export const envSchema = z.object({
   // Supabase 项目地址
   SUPABASE_URL: z.url(),
 
+  // 前端地址（CORS 白名单）
+  FRONTEND_URL: z.string().default("http://localhost:3000"),
+
   // PostgreSQL 直连串（Session-mode pooler，用于迁移/DDL 操作，可选）
   DIRECT_URL: z.string().optional(),
 

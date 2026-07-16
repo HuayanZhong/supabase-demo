@@ -34,7 +34,7 @@ async function bootstrap() {
   // 全局响应拦截器
   app.useGlobalInterceptors(new TransformInterceptor());
   // 全局异常过滤器
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter(app.get(Logger)));
   // 全局验证管道
   app.useGlobalPipes(
     new ValidationPipe({
