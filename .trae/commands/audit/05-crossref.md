@@ -39,7 +39,15 @@
 - 检查描述是否覆盖所有步骤（语义匹配），未覆盖则自动更新
 - 命令表与 `.trae/commands/` 实际文件列表对比，缺漏则追加
 
-## 5f. `.trae/rules/` 内规则间的交叉引用
+## 5f. agents/README.md 一致性
+
+- 提取 `agents/README.md` 中 Subagent 清单表的 `name`、`description`、`tools`，与实际 `.trae/agents/*.md` 文件对比
+- README 中列出的 Subagent 必须全部存在于 `.trae/agents/` 目录
+- 实际目录中的 Subagent 文件必须全部在 README 清单表中收录
+- 检查 `description` 与子文件的 frontmatter 是否语义匹配，不匹配报告差异
+- `logs/agent-invoke.log` 文件存在性检查，不存在则报告"日志缺失"
+
+## 5g. `.trae/rules/` 内规则间的交叉引用
 
 - 扫描每个 `.md` 文件中匹配 `\.trae/rules/[a-zA-Z0-9_\-/]+\.md` 的引用路径
 - 构建有向引用图 `{源文件 → [被引用文件列表]}`
@@ -48,5 +56,5 @@
 ## 输出摘要
 
 ```
-[{步骤5 交叉引用}] AGENTS↔hooks {N} | hooks↔hooks.json {N} | 脚本描述 {N} | rules/README {N} | commands/README {N} | 规则间 {N}
+[{步骤5 交叉引用}] AGENTS↔hooks {N} | hooks↔hooks.json {N} | 脚本描述 {N} | rules/README {N} | commands/README {N} | agents/README {N} | 规则间 {N}
 ```

@@ -25,6 +25,10 @@
   - 命令描述与实际命令文件一致性
   - 命令表与实际命令文件一致性
 
+- **agents/README.md**（新增）：
+  - Subagent 清单表与实际 `.trae/agents/*.md` 文件一致性
+  - 文件结构图与实际目录一致性
+
 ### 2. 配置文件
 
 - **hooks.json**：
@@ -52,6 +56,19 @@
   - description 是否存在
   - 是否有 language 字段（中文优先）
 
+### 5. Subagent 文件
+
+- **frontmatter 元数据**：
+  - `name` 是否存在且合法（字母开头，含字母/数字/连字符，≤50 字符）
+  - `description` 是否存在且包含明确触发关键词
+  - `tools` 是否只包含有效工具名（Read/Glob/Grep/Write/Bash/LSP/Skill/WebSearch/WebFetch）
+  - 被允许的工具在项目中确实存在（如 `Bash` 需终端可用、`Skill` 需有对应 skill 实现）
+
+- **文件结构**：
+  - 文件名 = `{name}.md`（kebab-case 一致性检查）
+  - 文件路径 = `.trae/agents/{name}.md`
+  - `logs/` 目录存在，`agent-invoke.log` 非空
+
 ## 执行
 
 ### 4.1 Markdown 语义检查
@@ -63,7 +80,8 @@ $markdownFiles = @(
   ".trae/AGENTS.md",
   ".trae/rules/README.md",
   ".trae/hooks/README.md",
-  ".trae/commands/README.md"
+  ".trae/commands/README.md",
+  ".trae/agents/README.md"
 )
 
 foreach ($file in $markdownFiles) {
@@ -162,8 +180,61 @@ foreach ($ruleFile in $ruleFiles) {
 }
 ```
 
+### 4.5 Subagent 文件检查
+
+```powershell
+$agentErrors = @()
+$agentDir = ".trae/agents"
+$agentFiles = Get-ChildItem "$agentDir" -Filter "*.md" | Where-Object { $_.Name -ne "README.md" }
+
+foreach ($agentFile in $agentFiles) {
+  $content = Get-Content $agentFile -Raw
+
+  # 检查 frontmatter
+  if ($content -match '^---\s*\n(.*?)\n---') {
+    $frontmatter = $matches[1]
+
+    # 检查 name 合法性
+    if ($frontmatter -match 'name:\s*"([^"]+)"') {
+      $name = $matches[1]
+      if ($name -notmatch '^[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9]$') {
+        $agentErrors += "Subagent {$($agentFile.Name)} 的 name 不合法: {$name}"
+      }
+    } else {
+      $agentErrors += "Subagent {$($agentFile.Name)} 缺少 name 字段"
+    }
+
+    # 检查 description
+    if (-not ($frontmatter -match 'description:\s*"')) {
+      $agentErrors += "Subagent {$($agentFile.Name)} 缺少 description 字段"
+    }
+
+    # 检查 tools
+    if ($frontmatter -match 'tools:\s*(.+)') {
+      $tools = $matches[1]
+      $validTools = @('Read', 'Glob', 'Grep', 'Write', 'Bash', 'LSP', 'Skill', 'WebSearch', 'WebFetch')
+      foreach ($tool in ($tools -split ',' | ForEach-Object { $_.Trim() })) {
+        if ($tool -and $tool -notin $validTools) {
+          $agentErrors += "Subagent {$($agentFile.Name)} 包含无效工具: {$tool}"
+        }
+      }
+    } else {
+      $agentErrors += "Subagent {$($agentFile.Name)} 缺少 tools 字段"
+    }
+  } else {
+    $agentErrors += "Subagent {$($agentFile.Name)} 缺少 YAML frontmatter"
+  }
+}
+
+# 检查日志目录
+$logFile = "$agentDir/logs/agent-invoke.log"
+if (-not (Test-Path $logFile)) {
+  $agentErrors += "Subagent 日志文件缺失: {$logFile}"
+}
+```
+
 ## 输出摘要
 
 ```
-[{步骤8 语义检查}] Markdown一致性 {N} \| 脚本路径 {N} \| matcher {N} \| Skills {N} \| 规则 {N}
+[{步骤8 语义检查}] Markdown一致性 {N} \| 脚本路径 {N} \| matcher {N} \| Skills {N} \| 规则 {N} \| Subagent {N}
 ```
