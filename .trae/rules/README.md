@@ -14,6 +14,7 @@ rules/
 ├── git-commit-message.md      # Commit message 格式
 │
 ├── agent/                     # Agent 治理（按职责拆分）
+│   ├── routing.md             # 任务路由决策（UserPromptSubmit 注入）
 │   ├── roles.md               # 角色与资源（SessionStart 注入）
 │   ├── execution.md           # 执行规范（UserPromptSubmit 注入）
 │   ├── search.md              # 文档检索（搜索任务时加载）
@@ -81,6 +82,8 @@ rules/
 | PreToolUse(execute_sql)             | protect-sql.ps1 →                                             | SQL 注入拦截        |
 | PreToolUse(chrome-devtools)         | inject-credentials.ps1 →                                      | 本地凭证注入        |
 | PreToolUse(MCP 工具)                | inject-tool-rules.ps1 →                                       | 工具规则注入        |
+| PreToolUse(RunCommand)              | validate-commit-msg.ps1 →                                     | Commit message 验证 |
+| PostToolUse(Write\|Edit)            | post-tool-verify.ps1 →                                        | 自动 lint 检查      |
 | Stop                                | inject-quality-rules.ps1 →                                    | 质量验证注入        |
 
 > 规则注入通过 Hooks 指针注入，AI 自行读取规则文件。`alwaysApply: true` 的规则由 IDE 内置机制始终生效。
