@@ -14,7 +14,8 @@ tools: Read, Glob, Grep, Bash, Skill
 
 ## 执行流程
 
-0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] i18n-validator | 用户请求：{从用户消息中提取的关键描述}"`
+0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] i18n-validator | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
+
 1. **读项目规范**：读取 `.trae/rules/frontend/i18n.md`
 2. **读实际 locale JSON 文件**：Read 读取 `packages/i18n/locales/{zh-CN,en,ja,ko}.json`，**确认真实的 key 层级结构、嵌套深度、已有的命名约定**（不是凭假设）
 3. **读用户修改的目标文件**：Read 读取用户新增/修改的 .vue 或 .ts 文件，**关注实际的 `t()` 调用写法、已用 key 的实际路径**
