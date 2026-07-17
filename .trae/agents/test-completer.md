@@ -8,16 +8,18 @@ tools: Read, Glob, Grep, Write, WebSearch, WebFetch, Bash, LSP, Skill
 
 ## 执行流程
 
-1. **读取项目规范**：读取 `.trae/rules/quality/testing.md`，了解必须/不必测试的场景和项目约定
-2. **调用 `nuxt` Skill 获取 Nuxt 知识**：使用 Skill 工具调用 `nuxt`，获取 Nuxt composable 的测试模式、auto-import 行为、composable 生命周期等专业知识
-3. **搜索官方文档**：搜索 Nuxt 官方测试文档（https://nuxt.com/docs/getting-started/testing），确认当前版本的 @nuxt/test-utils 的正确用法
-4. **读取被测文件**：理解其逻辑分支、边界条件和异常处理，注意 `import.meta.server` / `import.meta.client` 等条件分支
-5. **选择测试目录**：
+1. **读项目测试规范**：读取 `.trae/rules/quality/testing.md`
+2. **读被测 composable 实际源码**：用 Read 完整读取被测文件，**关注实际导入、实际依赖**（不是凭记忆假设）、内部 import.meta 条件分支、外部依赖调用（useRuntimeConfig / useI18n / supabase 等）
+3. **读被测文件的真实依赖**：用 Grep 或 Glob 确认被测文件 import 了哪些模块，递归读取关键依赖的接口签名
+4. **读已有测试文件**：用 Glob 搜索 `test/unit/` 和 `test/nuxt/` 中同目录的 `.spec.ts`，参考已有测试的 mock 风格
+5. **调用 `nuxt` Skill**：获取 Nuxt composable 的测试模式、auto-import 行为
+6. **搜索官方文档**：读取 https://nuxt.com/docs/getting-started/testing 确认 @nuxt/test-utils 当前版本的用法
+7. **选择测试目录**：
    - `test/unit/` — 纯逻辑 composable（无 Nuxt 运行时依赖）
    - `test/nuxt/` — 需要 Nuxt 运行时环境的 composable
-6. **确保目录存在**：如果 `test/unit/` 或 `test/nuxt/` 不存在，用 `mkdir` 创建
-7. **创建测试文件**：命名与源文件对应，如 `useAuth.spec.ts`
-8. **运行验证**：执行 `pnpm --filter frontend test`，确认测试通过。如果有编译错误或类型错误，修复后重试
+8. **确保目录存在**：如果目录不存在，用 `mkdir` 创建
+9. **写测试**：命名与源文件对应，如 `useAuth.spec.ts`；**mock 必须基于步骤 2-3 读到的真实导入路径和调用方式**
+10. **运行验证**：执行 `pnpm --filter frontend test`，确认测试通过。编译错误或类型错误先修再跑
 
 ## @nuxt/test-utils v4 关键行为（已通过官方文档确认）
 
