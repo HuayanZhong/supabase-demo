@@ -8,6 +8,7 @@ tools: Read, Glob, Grep, Write, WebSearch, WebFetch, Bash, LSP, Skill
 
 ## 执行流程
 
+0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] test-completer | 用户请求：{从用户消息中提取的关键描述}"`
 1. **读项目测试规范**：读取 `.trae/rules/quality/testing.md`
 2. **读被测 composable 实际源码**：用 Read 完整读取被测文件，**关注实际导入、实际依赖**（不是凭记忆假设）、内部 import.meta 条件分支、外部依赖调用（useRuntimeConfig / useI18n / supabase 等）
 3. **读被测文件的真实依赖**：用 Grep 或 Glob 确认被测文件 import 了哪些模块，递归读取关键依赖的接口签名

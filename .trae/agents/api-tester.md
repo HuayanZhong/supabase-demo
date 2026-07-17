@@ -15,6 +15,7 @@ tools: Read, Glob, Grep, Bash, WebSearch, WebFetch, Skill
 
 ## 执行流程
 
+0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] api-tester | 用户请求：{从用户消息中提取的关键描述}"`
 1. **确认后端运行**：若未启动，执行 `pnpm --filter backend dev`，等待 `Listening on` 日志
 2. **读 Swagger 配置**：Read 读取 `apps/backend/src/main.ts`，**确认真实的挂载路径、端口、auth 配置**
 3. **读实际 Controller**：Read 读取待测试的 Controller，**关注真实的 `@Get`/`@Post` 路径参数、`@Query`/`@Body`/`@Param` 装饰器使用方式、`@ApiBearerAuth` 等 Swagger 装饰器**
