@@ -5,9 +5,11 @@
  * 全局注册，导出 SUPABASE_CLIENT 供其他模块使用。
  */
 import { Global, Module } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { EnvVars } from "@supabase/config";
 import { SupabaseGuard } from "../../common/guards/supabase.guard";
 import { AuthController } from "./auth.controller";
 
@@ -19,12 +21,10 @@ export const SUPABASE_CLIENT = "SUPABASE_CLIENT";
   providers: [
     {
       provide: SUPABASE_CLIENT,
-      useFactory: (): SupabaseClient => {
-        const url = process.env.SUPABASE_URL;
-        const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-        if (!url || !key) {
-          throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set");
-        }
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<EnvVars, true>): SupabaseClient => {
+        const url = config.get("SUPABASE_URL");
+        const key = config.get("SUPABASE_SERVICE_ROLE_KEY");
         return createClient(url, key);
       },
     },
