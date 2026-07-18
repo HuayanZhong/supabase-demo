@@ -47,16 +47,17 @@ export class LocationsService {
    */
   async search(keyword: string): Promise<Location[]> {
     const apiKey = this.configService.get<string>("WEATHER_API_KEY");
-    if (!apiKey) {
-      this.logger.error("WEATHER_API_KEY 未配置");
+    const apiHost = this.configService.get<string>("WEATHER_API_HOST");
+    if (!apiKey || !apiHost) {
+      this.logger.error(!apiKey ? "WEATHER_API_KEY 未配置" : "WEATHER_API_HOST 未配置");
       throw new InternalServerErrorException("天气服务配置错误");
     }
 
-    const url = `https://geoapi.qweather.com/v2/city/lookup?location=${encodeURIComponent(keyword)}&key=${apiKey}&range=cn`;
+    const url = `https://${apiHost}/v2/city/lookup?location=${encodeURIComponent(keyword)}&range=cn`;
 
     let res: Response;
     try {
-      res = await fetch(url);
+      res = await fetch(url, { headers: { "X-QW-Api-Key": apiKey } });
     } catch (e) {
       this.logger.error({ keyword, err: e }, "GeoAPI 请求网络错误");
       throw new BadGatewayException("城市搜索请求网络错误");
@@ -129,17 +130,19 @@ export class LocationsService {
     const { lat, lon } = input;
 
     const apiKey = this.configService.get<string>("WEATHER_API_KEY");
-    if (!apiKey) {
-      this.logger.error("WEATHER_API_KEY 未配置");
+    const apiHost = this.configService.get<string>("WEATHER_API_HOST");
+    if (!apiKey || !apiHost) {
+      this.logger.error(!apiKey ? "WEATHER_API_KEY 未配置" : "WEATHER_API_HOST 未配置");
       throw new InternalServerErrorException("天气服务配置错误");
     }
 
     // 逆地理编码：用 "lon,lat" 查询和风天气 GeoAPI
-    const url = `https://geoapi.qweather.com/v2/city/lookup?location=${lon},${lat}&key=${apiKey}&range=cn`;
+    const url = `https://${apiHost}/v2/city/lookup?location=${encodeURIComponent(`${lon},${lat}`)}&range=cn`;
+    this.logger.debug({ lat, lon, range: "cn" }, "逆地理编码请求");
 
     let res: Response;
     try {
-      res = await fetch(url);
+      res = await fetch(url, { headers: { "X-QW-Api-Key": apiKey } });
     } catch (e) {
       this.logger.error({ lat, lon, err: e }, "GeoAPI 逆地理编码网络错误");
       throw new BadGatewayException("逆地理编码请求网络错误");

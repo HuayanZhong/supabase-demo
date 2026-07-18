@@ -81,16 +81,17 @@ export class WeathersService {
    */
   private async fetchWeather(locationId: string, cityName: string): Promise<WeatherVo> {
     const apiKey = this.configService.get<string>("WEATHER_API_KEY");
-    if (!apiKey) {
-      this.logger.error("WEATHER_API_KEY 未配置");
+    const apiHost = this.configService.get<string>("WEATHER_API_HOST");
+    if (!apiKey || !apiHost) {
+      this.logger.error(!apiKey ? "WEATHER_API_KEY 未配置" : "WEATHER_API_HOST 未配置");
       throw new InternalServerErrorException("天气服务配置错误");
     }
 
-    const url = `https://devapi.qweather.com/v7/weather/now?location=${locationId}&key=${apiKey}`;
+    const url = `https://${apiHost}/v7/weather/now?location=${locationId}`;
 
     let res: Response;
     try {
-      res = await fetch(url);
+      res = await fetch(url, { headers: { "X-QW-Api-Key": apiKey } });
     } catch (e) {
       this.logger.error({ locationId, err: e }, "和风天气 API 请求网络错误");
       throw new BadGatewayException("天气服务请求网络错误");
