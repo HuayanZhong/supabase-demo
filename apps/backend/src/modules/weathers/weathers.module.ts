@@ -9,6 +9,7 @@ import { LocationsModule } from "../locations/locations.module";
   imports: [
     QWeatherModule,
     LocationsModule,
+    // TTL 30 分钟，Service 中 set() 不再重复传入
     CacheModule.register({ ttl: 30 * 60 * 1000, max: 100 }),
   ],
   controllers: [WeathersController],

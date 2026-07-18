@@ -29,14 +29,14 @@ export class QuotesController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: "创建名言" })
   @ApiDataResponse(Quote, { status: HttpStatus.CREATED, description: "创建成功" })
-  create(@Body() createQuoteDto: CreateQuoteDto) {
+  create(@Body() createQuoteDto: CreateQuoteDto): Promise<Quote> {
     return this.quotesService.create(createQuoteDto);
   }
 
   @Get()
   @ApiOperation({ summary: "获取所有名言" })
   @ApiDataResponse(Quote, { description: "获取成功", isArray: true })
-  findAll() {
+  findAll(): Promise<Quote[]> {
     return this.quotesService.findAll();
   }
 
@@ -44,7 +44,7 @@ export class QuotesController {
   @ApiOperation({ summary: "获取单条名言" })
   @ApiDataResponse(Quote, { description: "获取成功" })
   @ApiErrorResponse(HttpStatus.NOT_FOUND, "名言不存在")
-  findOne(@Param("id", ParseIntPipe) id: number) {
+  findOne(@Param("id", ParseIntPipe) id: number): Promise<Quote> {
     return this.quotesService.findOne(id);
   }
 
@@ -52,7 +52,10 @@ export class QuotesController {
   @ApiOperation({ summary: "更新名言" })
   @ApiDataResponse(Quote, { description: "更新成功" })
   @ApiErrorResponse(HttpStatus.NOT_FOUND, "名言不存在")
-  update(@Param("id", ParseIntPipe) id: number, @Body() updateQuoteDto: UpdateQuoteDto) {
+  update(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateQuoteDto: UpdateQuoteDto,
+  ): Promise<Quote> {
     return this.quotesService.update(id, updateQuoteDto);
   }
 
@@ -60,7 +63,7 @@ export class QuotesController {
   @ApiOperation({ summary: "删除名言" })
   @ApiResponse({ status: HttpStatus.OK, description: "删除成功" })
   @ApiErrorResponse(HttpStatus.NOT_FOUND, "名言不存在")
-  remove(@Param("id", ParseIntPipe) id: number) {
+  remove(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return this.quotesService.remove(id);
   }
 }

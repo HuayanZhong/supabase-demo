@@ -6,12 +6,10 @@
  */
 import { Global, Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { APP_GUARD } from "@nestjs/core";
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EnvVars } from "@supabase/config";
-import { SUPABASE_CLIENT } from "../../common/constants";
-import { SupabaseGuard } from "../../common/guards/supabase.guard";
+import { SUPABASE_CLIENT } from "./constants";
 import { AuthController } from "./auth.controller";
 
 @Global()
@@ -29,10 +27,6 @@ import { AuthController } from "./auth.controller";
         }
         return createClient(url, key);
       },
-    },
-    {
-      provide: APP_GUARD,
-      useClass: SupabaseGuard,
     },
   ],
   exports: [SUPABASE_CLIENT],

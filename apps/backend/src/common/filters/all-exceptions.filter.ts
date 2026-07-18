@@ -16,12 +16,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message =
       exception instanceof HttpException ? exception.message : "Internal server error";
 
-    // 未预期的服务器错误记录日志
+    // 服务器内部错误记录 error 日志
     if (status >= 500) {
       this.logger.error(
         { status, exception: exception instanceof Error ? exception.stack : exception },
         `未捕获异常: ${message}`,
       );
+    }
+
+    // 429 (Too Many Requests) 记录 warn 日志
+    if (status === HttpStatus.TOO_MANY_REQUESTS) {
+      this.logger.warn({ status }, "请求频率超限");
     }
 
     response.status(status).json({

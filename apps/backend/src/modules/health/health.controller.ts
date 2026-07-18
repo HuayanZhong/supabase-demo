@@ -1,9 +1,9 @@
 import { Controller, Get, HttpStatus, VERSION_NEUTRAL } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { ApiErrorResponse } from "../common/decorators/api-data-response.decorator";
-import { Public } from "../common/decorators/public.decorator";
+import { ApiErrorResponse } from "../../common/decorators/api-data-response.decorator";
+import { Public } from "../../common/decorators/public.decorator";
 import { SkipThrottle } from "@nestjs/throttler";
-import { HealthService } from "./health.service";
+import { HealthService } from "./health.service.ts";
 
 /**
  * 健康检查控制器

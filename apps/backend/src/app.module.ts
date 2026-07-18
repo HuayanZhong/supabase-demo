@@ -6,12 +6,13 @@ import { pinoConfig } from "./config/pino";
 import { LocationsModule } from "./modules/locations/locations.module";
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 import config from "../mikro-orm.config";
-import { HealthModule } from "./health/health.module";
+import { HealthModule } from "./modules/health/health.module";
 import { ConfigModule } from "@nestjs/config";
 import { QWeatherModule } from "./modules/qweather/qweather.module";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
 import { SupabaseModule } from "./modules/supabase/supabase.module";
+import { SupabaseGuard } from "./modules/supabase/supabase.guard";
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { SupabaseModule } from "./modules/supabase/supabase.module";
     // 注册全局 Guard，按数组顺序执行：
     // 1. ThrottlerGuard（限流，先于认证执行，避免无效 token 消耗资源）
     { provide: APP_GUARD, useClass: ThrottlerGuard },
-    // 2. SupabaseGuard（JWT 认证，在 SupabaseModule 中通过 APP_GUARD 注册）
+    // 2. SupabaseGuard（JWT 认证）
+    { provide: APP_GUARD, useClass: SupabaseGuard },
   ],
 })
 export class AppModule {}

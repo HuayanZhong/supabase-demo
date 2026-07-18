@@ -4,6 +4,8 @@
  * 从 Authorization header 提取 access_token，调用 supabase.auth.getUser()
  * 验证 token 有效性。验证通过后将用户信息挂载到 request.user。
  * 使用 @Public() 装饰器可跳过认证（如 health check）。
+ *
+ * 认证失败时会记录 warn 级别日志，便于安全审计。
  */
 import {
   Injectable,
@@ -13,8 +15,9 @@ import {
   Inject,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { SUPABASE_CLIENT } from "../constants";
-import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
+import { Logger } from "nestjs-pino";
+import { SUPABASE_CLIENT } from "./constants";
+import { IS_PUBLIC_KEY } from "../../common/decorators/public.decorator";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 @Injectable()
@@ -22,6 +25,7 @@ export class SupabaseGuard implements CanActivate {
   constructor(
     @Inject(SUPABASE_CLIENT) private readonly supabase: SupabaseClient,
     private readonly reflector: Reflector,
+    private readonly logger: Logger,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -36,13 +40,20 @@ export class SupabaseGuard implements CanActivate {
     const authHeader = request.headers.authorization;
 
     if (!authHeader) {
+      this.logger.warn({ ip: request.ip, path: request.url }, "缺少 Authorization 头");
       throw new UnauthorizedException("缺少 Authorization 头");
     }
 
-    const token = authHeader.replace("Bearer ", "");
+    // 兼容 "Bearer xxx" 和 "bearer xxx" 写法
+    const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
+
     const { data, error } = await this.supabase.auth.getUser(token);
 
     if (error || !data.user) {
+      this.logger.warn(
+        { ip: request.ip, path: request.url, error: error?.message },
+        "Token 验证失败",
+      );
       throw new UnauthorizedException("Token 无效或已过期");
     }
 

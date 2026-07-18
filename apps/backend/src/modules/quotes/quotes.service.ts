@@ -69,5 +69,6 @@ export class QuotesService {
   async remove(id: number): Promise<void> {
     const quote = await this.findOne(id);
     await this.em.remove(quote).flush();
+    this.logger.debug({ id }, "删除名言");
   }
 }

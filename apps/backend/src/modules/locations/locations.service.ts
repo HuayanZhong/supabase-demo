@@ -179,10 +179,9 @@ export class LocationsService {
   /**
    * 删除位置
    */
-  async remove(id: number): Promise<{ deleted: true }> {
+  async remove(id: number): Promise<void> {
     const location = await this.findOne(id);
     await this.em.remove(location).flush();
     this.logger.debug({ id }, "删除位置");
-    return { deleted: true };
   }
 }

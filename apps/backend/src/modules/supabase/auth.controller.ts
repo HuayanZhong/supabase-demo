@@ -1,4 +1,4 @@
-import { Controller, Get, VERSION_NEUTRAL } from "@nestjs/common";
+import { Controller, Get } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { CurrentUser } from "../../common/decorators/current-user.decorator";
 import type { User } from "@supabase/supabase-js";
@@ -7,10 +7,9 @@ import type { User } from "@supabase/supabase-js";
  * 认证信息控制器
  *
  * 提供当前登录用户信息查询接口，用于验证 token 是否有效。
- * 使用 VERSION_NEUTRAL 确保不依赖版本前缀。
  */
 @ApiTags("认证")
-@Controller({ path: "auth", version: VERSION_NEUTRAL })
+@Controller({ path: "auth", version: "1" })
 export class AuthController {
   @Get("me")
   @ApiOperation({ summary: "获取当前登录用户信息" })

@@ -15,9 +15,6 @@ import { LocationsService } from "../locations/locations.service";
 
 @Injectable()
 export class WeathersService {
-  /** 缓存有效期：30 分钟（毫秒） */
-  private readonly CACHE_TTL_MS = 30 * 60 * 1000;
-
   /** 缓存键前缀，避免与其他模块的缓存冲突 */
   private readonly CACHE_KEY_PREFIX = "weather:";
 
@@ -30,12 +27,10 @@ export class WeathersService {
 
   /**
    * 启动时打印缓存配置，便于排查缓存相关问题
+   * TTL 由 WeathersModule 中 CacheModule.register() 统一管理
    */
   onModuleInit() {
-    this.logger.log(
-      { ttl: `${this.CACHE_TTL_MS / 1000}s`, keyPrefix: this.CACHE_KEY_PREFIX },
-      "天气缓存已就绪",
-    );
+    this.logger.log({ keyPrefix: this.CACHE_KEY_PREFIX }, "天气缓存已就绪");
   }
 
   /**
@@ -57,7 +52,8 @@ export class WeathersService {
 
     this.logger.debug({ locationId }, "天气缓存未命中，请求和风天气 API");
     const data = await this.fetchWeather(locationId, location.name);
-    await this.cacheManager.set(cacheKey, data, this.CACHE_TTL_MS);
+    // TTL 由 CacheModule.register() 默认值控制，无需重复传入
+    await this.cacheManager.set(cacheKey, data);
     return data;
   }
 
