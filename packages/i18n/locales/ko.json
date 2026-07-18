@@ -332,11 +332,8 @@
   "Learn RecordLastWeek": "지난주",
 
   "AI Space": "AI 어시스턴트",
-  "AI SpaceDesc": "스마트 채팅 어시스턴트로 업무와 학습을 도와드립니다",
   "AI NewConversation": "새 대화",
-  "AI Send": "보내기",
   "AI InputPlaceholder": "질문을 입력하세요...",
-  "AI EmptyTitle": "새 대화 시작하기",
   "AI EmptyDesc": "업무나 학습에 관한 질문을 자유롭게 물어보세요",
   "AI ConversationHistory": "대화 기록",
   "AI NoConversations": "대화 기록이 없습니다",
@@ -344,8 +341,6 @@
   "AI Suggestion2": "프로젝트 진행 분석",
   "AI Suggestion3": "오늘 작업 요약",
   "AI Suggestion4": "학습 자료 추천",
-  "AI AssistantName": "AI 어시스턴트",
-  "AI UserName": "나",
 
   "Settings Title": "개인 설정",
   "Settings Description": "프로필, 계정 보안 및 알림 환경설정 관리",

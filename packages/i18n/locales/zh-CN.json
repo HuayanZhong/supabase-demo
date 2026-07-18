@@ -332,11 +332,8 @@
   "Learn RecordLastWeek": "上周",
 
   "AI Space": "AI 助手",
-  "AI SpaceDesc": "智能对话助手，帮你解决工作学习中的问题",
   "AI NewConversation": "新建对话",
-  "AI Send": "发送",
   "AI InputPlaceholder": "输入你的问题...",
-  "AI EmptyTitle": "开始一段新对话",
   "AI EmptyDesc": "你可以向我提问任何工作或学习相关的问题",
   "AI ConversationHistory": "对话历史",
   "AI NoConversations": "暂无对话记录",
@@ -344,8 +341,6 @@
   "AI Suggestion2": "分析项目进展",
   "AI Suggestion3": "总结今日工作",
   "AI Suggestion4": "推荐学习资源",
-  "AI AssistantName": "AI 助手",
-  "AI UserName": "你",
 
   "Settings Title": "个人设置",
   "Settings Description": "管理你的个人资料、账号安全和通知偏好",
