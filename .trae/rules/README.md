@@ -19,7 +19,8 @@ rules/
 │   ├── execution.md           # 执行规范（UserPromptSubmit 注入）
 │   ├── search.md              # 文档检索（搜索任务时加载）
 │   ├── safety.md              # 安全约束（PreToolUse 注入）
-│   └── quality.md             # 质量验证（Stop 注入）
+│   ├── quality.md             # 质量验证（Stop 注入）
+│   └── logging.md             # 任务日志追踪（UserPromptSubmit + Stop 注入）
 │
 ├── tool/                      # MCP 工具规则（每个工具独立文件）
 │   ├── chrome-devtools.md     # 浏览器自动化（前端验证/UI 调试）

@@ -7,6 +7,7 @@ $result = @{
     additionalContext = @"
 请阅读 .trae/rules/agent/routing.md（任务路由决策）
 请阅读 .trae/rules/agent/execution.md（执行规范）
+请阅读 .trae/rules/agent/logging.md（任务日志追踪规范）
 "@
   }
 }
