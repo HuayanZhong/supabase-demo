@@ -9,9 +9,13 @@ import {
   ParseIntPipe,
   Query,
   HttpCode,
+  HttpStatus,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from "@nestjs/swagger";
-import { ApiDataResponse } from "../../common/decorators/api-data-response.decorator";
+import {
+  ApiDataResponse,
+  ApiErrorResponse,
+} from "../../common/decorators/api-data-response.decorator";
 import { LocationsService } from "./locations.service";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { CreateLocationInputDto } from "./dto/create-location-input.dto";
@@ -40,11 +44,11 @@ export class LocationsController {
   }
 
   @Post()
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: "创建位置（经纬度 + 逆地理编码）" })
-  @ApiDataResponse(Location, { status: 201, description: "创建成功" })
-  @ApiResponse({ status: 404, description: "经纬度未找到对应城市" })
-  @ApiResponse({ status: 502, description: "逆地理编码服务错误" })
+  @ApiDataResponse(Location, { status: HttpStatus.CREATED, description: "创建成功" })
+  @ApiErrorResponse(HttpStatus.NOT_FOUND, "经纬度未找到对应城市")
+  @ApiErrorResponse(HttpStatus.BAD_GATEWAY, "逆地理编码服务错误")
   create(@Body() input: CreateLocationInputDto) {
     return this.locationsService.createFromLatLon(input);
   }
@@ -59,7 +63,7 @@ export class LocationsController {
   @Get(":id")
   @ApiOperation({ summary: "获取单个位置" })
   @ApiDataResponse(Location, { description: "获取成功" })
-  @ApiResponse({ status: 404, description: "位置不存在" })
+  @ApiErrorResponse(HttpStatus.NOT_FOUND, "位置不存在")
   findOne(@Param("id", ParseIntPipe) id: number) {
     return this.locationsService.findOne(id);
   }
@@ -67,15 +71,15 @@ export class LocationsController {
   @Patch(":id")
   @ApiOperation({ summary: "更新位置" })
   @ApiDataResponse(Location, { description: "更新成功" })
-  @ApiResponse({ status: 404, description: "位置不存在" })
+  @ApiErrorResponse(HttpStatus.NOT_FOUND, "位置不存在")
   update(@Param("id", ParseIntPipe) id: number, @Body() updateLocationDto: UpdateLocationDto) {
     return this.locationsService.update(id, updateLocationDto);
   }
 
   @Delete(":id")
   @ApiOperation({ summary: "删除位置" })
-  @ApiResponse({ status: 200, description: "删除成功" })
-  @ApiResponse({ status: 404, description: "位置不存在" })
+  @ApiResponse({ status: HttpStatus.OK, description: "删除成功" })
+  @ApiErrorResponse(HttpStatus.NOT_FOUND, "位置不存在")
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.locationsService.remove(id);
   }
