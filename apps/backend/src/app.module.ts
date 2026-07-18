@@ -8,17 +8,22 @@ import { MikroOrmModule } from "@mikro-orm/nestjs";
 import config from "../mikro-orm.config";
 import { HealthModule } from "./health/health.module";
 import { ConfigModule } from "@nestjs/config";
+import { QWeatherModule } from "./modules/qweather/qweather.module";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    // 全局模块
+    ConfigModule.forRoot({ isGlobal: true }),
+    LoggerModule.forRoot(pinoConfig),
+    // 数据层
+    MikroOrmModule.forRoot(config),
+    // 基础设施模块
+    QWeatherModule,
+    // 业务模块
+    LocationsModule,
     WeathersModule,
     QuotesModule,
-    LoggerModule.forRoot(pinoConfig),
-    LocationsModule,
-    MikroOrmModule.forRoot(config),
+    // 运维
     HealthModule,
   ],
   controllers: [],

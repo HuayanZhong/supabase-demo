@@ -4,24 +4,16 @@
  * 负责天气数据的缓存与实时获取，对接和风天气 API。
  * 通过 locationId（和风天气 LocationID）查询天气，城市名从 locations 表获取。
  */
-import {
-  Injectable,
-  InternalServerErrorException,
-  BadGatewayException,
-  NotFoundException,
-} from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { LRUCache } from "lru-cache";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Location } from "../locations/entities/location.entity";
 import { WeatherVo } from "./vo/weather.vo";
-import { QWeatherNow, QWeatherResponse, CacheEntry } from "./types/weather.types";
+import { QWeatherResponse, CacheEntry } from "./types/weather.types";
 import { Logger } from "nestjs-pino";
+import { QWeatherApiService } from "../qweather/qweather-api.service";
 
-/**
- * 天气服务
- */
 @Injectable()
 export class WeathersService {
   /** LRU 缓存，最多存储 100 个城市，自动淘汰最久未使用的缓存 */
@@ -31,11 +23,11 @@ export class WeathersService {
   private readonly CACHE_TTL_MS = 30 * 60 * 1000;
 
   constructor(
-    private readonly configService: ConfigService,
     private readonly em: EntityManager,
     @InjectRepository(Location)
     private readonly locationRepository: EntityRepository<Location>,
     private readonly logger: Logger,
+    private readonly qweatherApi: QWeatherApiService,
   ) {
     this.cache = new LRUCache<string, CacheEntry>({
       max: 100,
@@ -48,9 +40,6 @@ export class WeathersService {
    *
    * 通过和风天气 LocationID 查询天气，城市名从 locations 表获取。
    * 优先返回缓存数据，缓存未命中时调用和风天气 API 获取并写入缓存。
-   *
-   * @param locationId - 和风天气 LocationID（如 "101010100"）
-   * @returns 天气视图对象
    */
   async getWeather(locationId: string): Promise<WeatherVo> {
     // 从 DB 获取城市名
@@ -74,39 +63,11 @@ export class WeathersService {
 
   /**
    * 调用和风天气实时天气 API
-   *
-   * @param locationId - 和风天气 LocationID
-   * @param cityName - 城市名（用于返回 VO）
-   * @returns 转换后的天气视图对象
    */
   private async fetchWeather(locationId: string, cityName: string): Promise<WeatherVo> {
-    const apiKey = this.configService.get<string>("WEATHER_API_KEY");
-    const apiHost = this.configService.get<string>("WEATHER_API_HOST");
-    if (!apiKey || !apiHost) {
-      this.logger.error(!apiKey ? "WEATHER_API_KEY 未配置" : "WEATHER_API_HOST 未配置");
-      throw new InternalServerErrorException("天气服务配置错误");
-    }
-
-    const url = `https://${apiHost}/v7/weather/now?location=${locationId}`;
-
-    let res: Response;
-    try {
-      res = await fetch(url, { headers: { "X-QW-Api-Key": apiKey } });
-    } catch (e) {
-      this.logger.error({ locationId, err: e }, "和风天气 API 请求网络错误");
-      throw new BadGatewayException("天气服务请求网络错误");
-    }
-
-    if (!res.ok) {
-      this.logger.error({ locationId, status: res.status }, "和风天气 API 请求失败");
-      throw new BadGatewayException(`天气服务请求失败: ${res.status}`);
-    }
-
-    const body: QWeatherResponse = await res.json();
-    if (body.code !== "200") {
-      this.logger.error({ locationId, code: body.code }, "和风天气 API 返回错误");
-      throw new BadGatewayException(`天气服务返回错误: ${body.code}`);
-    }
+    const body = await this.qweatherApi.get<QWeatherResponse>("/v7/weather/now", {
+      location: locationId,
+    });
 
     this.logger.log(
       { locationId, city: cityName, temp: body.now.temp, condition: body.now.text },
@@ -118,13 +79,14 @@ export class WeathersService {
   /**
    * 将和风天气 API 返回的原始数据转换为业务视图对象
    */
-  private toVo(city: string, now: QWeatherNow): WeatherVo {
+  private toVo(city: string, now: QWeatherResponse["now"]): WeatherVo {
     const temp = Number.parseInt(now.temp, 10);
     const humidity = Number.parseInt(now.humidity, 10);
 
     return {
       city,
       temp,
+      // TODO: 当前使用 v7/weather/now（仅实时温度），待接入 v7/weather/3d 后改为真实预报高低温
       tempLow: temp - 5,
       tempHigh: temp + 3,
       condition: now.text,

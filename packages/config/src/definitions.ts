@@ -17,11 +17,17 @@ export const envSchema = z.object({
   // PostgreSQL 直连串（Session-mode pooler，用于迁移/DDL 操作，可选）
   DIRECT_URL: z.string().optional(),
 
-  // 天气 API Key（和风天气，控制台 https://console.qweather.com）
-  WEATHER_API_KEY: z.string().min(1),
-
   // 和风天气 API Host（控制台 → 设置 → API Host）
   WEATHER_API_HOST: z.string().min(1),
+
+  // 和风天气 JWT 私钥（Ed25519 PEM，控制台生成）
+  WEATHER_JWT_PRIVATE_KEY: z.string().min(1),
+
+  // 和风天气 JWT 凭据 ID
+  WEATHER_JWT_KID: z.string().min(1),
+
+  // 和风天气 JWT 项目 ID
+  WEATHER_JWT_SUB: z.string().min(1),
 
   // 运行环境（development / production / test）
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
