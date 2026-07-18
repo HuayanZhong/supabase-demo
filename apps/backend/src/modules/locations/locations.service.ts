@@ -12,6 +12,7 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { CreateLocationDto } from "./dto/create-location.dto";
+import { CreateLocationInputDto } from "./dto/create-location-input.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { RequiredEntityData } from "@mikro-orm/core";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
@@ -111,6 +112,76 @@ export class LocationsService {
     await this.em.flush();
     this.logger.debug({ keyword, count: locations.length }, "城市搜索完成");
     return locations;
+  }
+
+  /**
+   * 通过经纬度创建位置
+   *
+   * 调用和风天气 GeoAPI 进行逆地理编码，自动补全城市信息后保存。
+   *
+   * @param input - 包含经纬度和可选自定义名称的输入
+   * @returns 创建的位置实体（含完整城市信息）
+   * @throws InternalServerErrorException API Key 未配置
+   * @throws BadGatewayException GeoAPI 请求失败或返回错误
+   * @throws NotFoundException 逆地理编码无匹配结果
+   */
+  async createFromLatLon(input: CreateLocationInputDto): Promise<Location> {
+    const { lat, lon } = input;
+
+    const apiKey = this.configService.get<string>("WEATHER_API_KEY");
+    if (!apiKey) {
+      this.logger.error("WEATHER_API_KEY 未配置");
+      throw new InternalServerErrorException("天气服务配置错误");
+    }
+
+    // 逆地理编码：用 "lon,lat" 查询和风天气 GeoAPI
+    const url = `https://geoapi.qweather.com/v2/city/lookup?location=${lon},${lat}&key=${apiKey}&range=cn`;
+
+    let res: Response;
+    try {
+      res = await fetch(url);
+    } catch (e) {
+      this.logger.error({ lat, lon, err: e }, "GeoAPI 逆地理编码网络错误");
+      throw new BadGatewayException("逆地理编码请求网络错误");
+    }
+
+    if (!res.ok) {
+      this.logger.error({ lat, lon, status: res.status }, "GeoAPI 逆地理编码请求失败");
+      throw new BadGatewayException(`逆地理编码请求失败: ${res.status}`);
+    }
+
+    const body: GeoCityResponse = await res.json();
+    if (body.code !== "200" || !body.location?.length) {
+      this.logger.warn({ lat, lon, code: body.code }, "逆地理编码无匹配结果");
+      throw new NotFoundException(`经纬度 (${lat}, ${lon}) 未找到对应城市`);
+    }
+
+    // 取第一个匹配结果（最精确的城市）
+    const item = body.location[0];
+
+    const locationData = {
+      qweatherId: item.id,
+      name: item.name,
+      lat,
+      lon,
+      adm2: item.adm2 || undefined,
+      adm1: item.adm1 || undefined,
+      country: item.country || undefined,
+      tz: item.tz || undefined,
+      utcOffset: item.utcOffset || undefined,
+      isDst: item.isDst === "1",
+      type: item.type || undefined,
+      rank: item.rank ? Number.parseInt(item.rank, 10) || undefined : undefined,
+      fxLink: item.fxLink || undefined,
+    };
+
+    const location = this.locationRepository.create(locationData as RequiredEntityData<Location>);
+    await this.em.persist(location).flush();
+    this.logger.debug(
+      { qweatherId: location.qweatherId, name: location.name },
+      "通过经纬度创建位置",
+    );
+    return location;
   }
 
   /**

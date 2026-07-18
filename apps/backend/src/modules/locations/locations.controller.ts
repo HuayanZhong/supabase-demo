@@ -8,11 +8,12 @@ import {
   Delete,
   ParseIntPipe,
   Query,
+  HttpCode,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from "@nestjs/swagger";
 import { LocationsService } from "./locations.service";
-import { CreateLocationDto } from "./dto/create-location.dto";
 import { UpdateLocationDto } from "./dto/update-location.dto";
+import { CreateLocationInputDto } from "./dto/create-location-input.dto";
 import { Location } from "./entities/location.entity";
 
 /**
@@ -38,10 +39,13 @@ export class LocationsController {
   }
 
   @Post()
-  @ApiOperation({ summary: "创建位置" })
+  @HttpCode(201)
+  @ApiOperation({ summary: "创建位置（经纬度 + 逆地理编码）" })
   @ApiResponse({ status: 201, description: "创建成功", type: Location })
-  create(@Body() createLocationDto: CreateLocationDto) {
-    return this.locationsService.create(createLocationDto);
+  @ApiResponse({ status: 404, description: "经纬度未找到对应城市" })
+  @ApiResponse({ status: 502, description: "逆地理编码服务错误" })
+  create(@Body() input: CreateLocationInputDto) {
+    return this.locationsService.createFromLatLon(input);
   }
 
   @Get()
