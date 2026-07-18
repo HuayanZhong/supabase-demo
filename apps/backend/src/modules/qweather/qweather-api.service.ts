@@ -37,12 +37,24 @@ export class QWeatherApiService {
 
     this.logger.debug({ path, params }, "和风天气 API 请求");
 
+    // 10 秒超时，避免外部 API 挂死导致请求堆积
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10_000);
+
     let res: Response;
     try {
-      res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal,
+      });
     } catch (e) {
       this.logger.error({ path, err: e }, "和风天气 API 请求网络错误");
-      throw new BadGatewayException(`天气服务请求网络错误`);
+      if (e instanceof DOMException && e.name === "AbortError") {
+        throw new BadGatewayException("天气服务请求超时");
+      }
+      throw new BadGatewayException("天气服务请求网络错误");
+    } finally {
+      clearTimeout(timeoutId);
     }
 
     if (!res.ok) {

@@ -33,6 +33,16 @@ export class WeathersService {
   ) {}
 
   /**
+   * 启动时打印缓存配置，便于排查缓存相关问题
+   */
+  onModuleInit() {
+    this.logger.log(
+      { ttl: `${this.CACHE_TTL_MS / 1000}s`, keyPrefix: this.CACHE_KEY_PREFIX },
+      "天气缓存已就绪",
+    );
+  }
+
+  /**
    * 获取指定位置的实时天气
    *
    * 通过和风天气 LocationID 查询天气，城市名从 locations 表获取。

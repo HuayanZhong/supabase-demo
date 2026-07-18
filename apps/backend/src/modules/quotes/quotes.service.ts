@@ -41,39 +41,25 @@ export class QuotesService {
 
   /**
    * 根据 ID 查询单条名言
+   *
+   * 全局异常过滤器（AllExceptionsFilter）已兜底处理 500+ 异常，
+   * 此处无需额外 try-catch。
    */
   async findOne(id: number): Promise<Quote> {
-    this.logger.debug({ id }, "查询名言");
-    try {
-      const quote = await this.quoteRepo.findOne(id);
-      if (!quote) {
-        this.logger.warn({ id }, "名言不存在");
-        throw new NotFoundException(`名言 #${id} 不存在`);
-      }
-      return quote;
-    } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      this.logger.error({ id, error: String(error) }, "查询名言失败");
-      throw error;
+    const quote = await this.quoteRepo.findOne(id);
+    if (!quote) {
+      throw new NotFoundException(`名言 #${id} 不存在`);
     }
+    return quote;
   }
 
   /**
    * 更新名言
    */
   async update(id: number, updateQuoteDto: UpdateQuoteDto): Promise<Quote> {
-    this.logger.debug({ id }, "更新名言");
     const quote = await this.findOne(id);
     this.em.assign(quote, updateQuoteDto);
-    try {
-      await this.em.flush();
-      this.logger.debug({ id }, "名言更新成功");
-    } catch (error) {
-      this.logger.error({ id, error: String(error) }, "更新名言失败");
-      throw error;
-    }
+    await this.em.flush();
     return quote;
   }
 
@@ -81,14 +67,7 @@ export class QuotesService {
    * 删除名言
    */
   async remove(id: number): Promise<void> {
-    this.logger.debug({ id }, "删除名言");
     const quote = await this.findOne(id);
-    try {
-      await this.em.remove(quote).flush();
-      this.logger.debug({ id }, "名言删除成功");
-    } catch (error) {
-      this.logger.error({ id, error: String(error) }, "删除名言失败");
-      throw error;
-    }
+    await this.em.remove(quote).flush();
   }
 }
