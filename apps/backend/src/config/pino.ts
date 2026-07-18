@@ -1,8 +1,11 @@
 import { Params } from "nestjs-pino";
+import { RequestMethod } from "@nestjs/common";
 
 const isDev = process.env.NODE_ENV !== "production";
 
 export const pinoConfig: Params = {
+  // 使用 Express v5 兼容的通配符语法，避免 LegacyRouteConverter 警告
+  forRoutes: [{ path: "/{*path}", method: RequestMethod.ALL }],
   pinoHttp: {
     level: isDev ? "debug" : "info",
     transport: isDev
