@@ -13,7 +13,7 @@ import {
   Inject,
 } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
-import { SUPABASE_CLIENT } from "../../modules/supabase/supabase.module";
+import { SUPABASE_CLIENT } from "../constants";
 import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
 import type { SupabaseClient } from "@supabase/supabase-js";
 

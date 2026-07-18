@@ -10,10 +10,9 @@ import { APP_GUARD } from "@nestjs/core";
 import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EnvVars } from "@supabase/config";
+import { SUPABASE_CLIENT } from "../../common/constants";
 import { SupabaseGuard } from "../../common/guards/supabase.guard";
 import { AuthController } from "./auth.controller";
-
-export const SUPABASE_CLIENT = "SUPABASE_CLIENT";
 
 @Global()
 @Module({
