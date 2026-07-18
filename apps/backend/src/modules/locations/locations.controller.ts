@@ -11,6 +11,7 @@ import {
   HttpCode,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from "@nestjs/swagger";
+import { ApiDataResponse } from "../../common/decorators/api-data-response.decorator";
 import { LocationsService } from "./locations.service";
 import { UpdateLocationDto } from "./dto/update-location.dto";
 import { CreateLocationInputDto } from "./dto/create-location-input.dto";
@@ -30,7 +31,7 @@ export class LocationsController {
   @Get("search")
   @ApiOperation({ summary: "搜索城市" })
   @ApiQuery({ name: "keyword", description: "城市名/关键词", example: "北京", required: true })
-  @ApiResponse({ status: 200, description: "搜索成功", type: [Location] })
+  @ApiDataResponse(Location, { description: "搜索成功", isArray: true })
   search(@Query("keyword") keyword?: string) {
     if (!keyword) {
       return [];
@@ -41,7 +42,7 @@ export class LocationsController {
   @Post()
   @HttpCode(201)
   @ApiOperation({ summary: "创建位置（经纬度 + 逆地理编码）" })
-  @ApiResponse({ status: 201, description: "创建成功", type: Location })
+  @ApiDataResponse(Location, { status: 201, description: "创建成功" })
   @ApiResponse({ status: 404, description: "经纬度未找到对应城市" })
   @ApiResponse({ status: 502, description: "逆地理编码服务错误" })
   create(@Body() input: CreateLocationInputDto) {
@@ -50,14 +51,14 @@ export class LocationsController {
 
   @Get()
   @ApiOperation({ summary: "获取所有位置" })
-  @ApiResponse({ status: 200, description: "获取成功", type: [Location] })
+  @ApiDataResponse(Location, { description: "获取成功", isArray: true })
   findAll() {
     return this.locationsService.findAll();
   }
 
   @Get(":id")
   @ApiOperation({ summary: "获取单个位置" })
-  @ApiResponse({ status: 200, description: "获取成功", type: Location })
+  @ApiDataResponse(Location, { description: "获取成功" })
   @ApiResponse({ status: 404, description: "位置不存在" })
   findOne(@Param("id", ParseIntPipe) id: number) {
     return this.locationsService.findOne(id);
@@ -65,7 +66,7 @@ export class LocationsController {
 
   @Patch(":id")
   @ApiOperation({ summary: "更新位置" })
-  @ApiResponse({ status: 200, description: "更新成功", type: Location })
+  @ApiDataResponse(Location, { description: "更新成功" })
   @ApiResponse({ status: 404, description: "位置不存在" })
   update(@Param("id", ParseIntPipe) id: number, @Body() updateLocationDto: UpdateLocationDto) {
     return this.locationsService.update(id, updateLocationDto);

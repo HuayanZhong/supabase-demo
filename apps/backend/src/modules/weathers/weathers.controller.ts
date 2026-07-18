@@ -6,6 +6,7 @@
  */
 import { Controller, Get, Query, BadRequestException } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from "@nestjs/swagger";
+import { ApiDataResponse } from "../../common/decorators/api-data-response.decorator";
 import { WeathersService } from "./weathers.service";
 import { WeatherVo } from "./vo/weather.vo";
 
@@ -22,7 +23,7 @@ export class WeathersController {
     example: "101010100",
     required: true,
   })
-  @ApiResponse({ status: 200, description: "获取成功", type: WeatherVo })
+  @ApiDataResponse(WeatherVo, { description: "获取成功" })
   @ApiResponse({ status: 400, description: "locationId 参数缺失" })
   @ApiResponse({ status: 404, description: "位置不存在" })
   @ApiResponse({ status: 502, description: "天气服务错误" })
