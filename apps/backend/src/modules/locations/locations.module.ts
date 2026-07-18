@@ -9,5 +9,6 @@ import { QWeatherModule } from "../qweather/qweather.module";
   imports: [MikroOrmModule.forFeature([Location]), QWeatherModule],
   controllers: [LocationsController],
   providers: [LocationsService],
+  exports: [LocationsService],
 })
 export class LocationsModule {}

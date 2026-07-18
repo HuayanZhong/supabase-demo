@@ -36,8 +36,10 @@ import { SupabaseModule } from "./modules/supabase/supabase.module";
   ],
   controllers: [],
   providers: [
-    // 全局注册限流 Guard，对所有路由生效
+    // 注册全局 Guard，按数组顺序执行：
+    // 1. ThrottlerGuard（限流，先于认证执行，避免无效 token 消耗资源）
     { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // 2. SupabaseGuard（JWT 认证，在 SupabaseModule 中通过 APP_GUARD 注册）
   ],
 })
 export class AppModule {}

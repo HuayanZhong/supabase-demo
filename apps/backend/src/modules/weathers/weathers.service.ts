@@ -5,15 +5,13 @@
  * 通过 locationId（和风天气 LocationID）查询天气，城市名从 locations 表获取。
  * 使用 @nestjs/cache-manager 管理缓存，支持多存储后端切换。
  */
-import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { CACHE_MANAGER, Cache } from "@nestjs/cache-manager";
-import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
-import { InjectRepository } from "@mikro-orm/nestjs";
-import { Location } from "../locations/entities/location.entity";
 import { WeatherVo } from "./vo/weather.vo";
 import { QWeatherResponse } from "./types/weather.types";
 import { Logger } from "nestjs-pino";
 import { QWeatherApiService } from "../qweather/qweather-api.service";
+import { LocationsService } from "../locations/locations.service";
 
 @Injectable()
 export class WeathersService {
@@ -24,9 +22,7 @@ export class WeathersService {
   private readonly CACHE_KEY_PREFIX = "weather:";
 
   constructor(
-    private readonly em: EntityManager,
-    @InjectRepository(Location)
-    private readonly locationRepository: EntityRepository<Location>,
+    private readonly locationsService: LocationsService,
     private readonly logger: Logger,
     private readonly qweatherApi: QWeatherApiService,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
@@ -50,10 +46,7 @@ export class WeathersService {
    */
   async getWeather(locationId: string): Promise<WeatherVo> {
     // 从 DB 获取城市名
-    const location = await this.locationRepository.findOne({ qweatherId: locationId });
-    if (!location) {
-      throw new NotFoundException(`位置 ${locationId} 不存在，请先搜索城市`);
-    }
+    const location = await this.locationsService.findOneByQweatherId(locationId);
 
     const cacheKey = `${this.CACHE_KEY_PREFIX}${locationId}`;
     const cached = await this.cacheManager.get<WeatherVo>(cacheKey);

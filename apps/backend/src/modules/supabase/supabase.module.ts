@@ -24,6 +24,9 @@ import { AuthController } from "./auth.controller";
       useFactory: (config: ConfigService<EnvVars, true>): SupabaseClient => {
         const url = config.get("SUPABASE_URL");
         const key = config.get("SUPABASE_SERVICE_ROLE_KEY");
+        if (!url || !key) {
+          throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set");
+        }
         return createClient(url, key);
       },
     },

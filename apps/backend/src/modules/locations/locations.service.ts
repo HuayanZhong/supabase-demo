@@ -125,6 +125,17 @@ export class LocationsService {
   }
 
   /**
+   * 根据和风天气 LocationID 查询位置
+   */
+  async findOneByQweatherId(qweatherId: string): Promise<Location> {
+    const location = await this.locationRepository.findOne({ qweatherId });
+    if (!location) {
+      throw new NotFoundException(`位置 ${qweatherId} 不存在`);
+    }
+    return location;
+  }
+
+  /**
    * 创建位置
    */
   async create(createLocationDto: CreateLocationDto): Promise<Location> {
