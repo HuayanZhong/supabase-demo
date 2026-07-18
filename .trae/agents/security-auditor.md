@@ -15,7 +15,7 @@ tools: Read, Glob, Grep, RunCommand, Skill
 
 ## 执行流程
 
-0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] security-auditor | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
+0. **记录调用日志**：执行 `$null = New-Item -Path ".trae/agents/logs" -ItemType Directory -Force; Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] security-auditor | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
 
 1. **读项目规范**：读取 `.trae/rules/quality/security.md`
 2. **查 OWASP Top 10**：读取 https://owasp.org/Top10/ 确认风险分类

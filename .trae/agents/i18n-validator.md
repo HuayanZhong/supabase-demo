@@ -14,7 +14,7 @@ tools: Read, Glob, Grep, RunCommand, Skill
 
 ## 执行流程
 
-0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] i18n-validator | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
+0. **记录调用日志**：执行 `$null = New-Item -Path ".trae/agents/logs" -ItemType Directory -Force; Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] i18n-validator | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
 
 1. **读项目规范**：读取 `.trae/rules/frontend/i18n.md`
 2. **读实际 locale JSON 文件**：Read 读取 `packages/i18n/locales/{zh-CN,en,ja,ko}.json`，**确认真实的 key 层级结构、嵌套深度、已有的命名约定**（不是凭假设）

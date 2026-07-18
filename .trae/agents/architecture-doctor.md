@@ -16,7 +16,7 @@ tools: Read, Glob, Grep, RunCommand, Skill
 
 ## 执行流程
 
-0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] architecture-doctor | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
+0. **记录调用日志**：执行 `$null = New-Item -Path ".trae/agents/logs" -ItemType Directory -Force; Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] architecture-doctor | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
 
 1. **读项目实际配置文件**：Read 读取 `turbo.json`、`pnpm-workspace.yaml`、根 `package.json`，**确认真实的工作空间列表、任务 pipeline、outputs 配置**
 2. **查官方文档确认当前版本行为**：

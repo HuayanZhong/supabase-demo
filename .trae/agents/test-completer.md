@@ -8,7 +8,7 @@ tools: Read, Glob, Grep, Write, WebSearch, WebFetch, RunCommand, GetDiagnostics,
 
 ## 执行流程
 
-0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] test-completer | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
+0. **记录调用日志**：执行 `$null = New-Item -Path ".trae/agents/logs" -ItemType Directory -Force; Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] test-completer | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
 
 1. **读项目测试规范**：读取 `.trae/rules/quality/testing.md`
 2. **读被测 composable 实际源码**：用 Read 完整读取被测文件，**关注实际导入、实际依赖**（不是凭记忆假设）、内部 import.meta 条件分支、外部依赖调用（useRuntimeConfig / useI18n / supabase 等）

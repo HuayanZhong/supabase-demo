@@ -20,7 +20,10 @@ rules/
 │   ├── search.md              # 文档检索（搜索任务时加载）
 │   ├── safety.md              # 安全约束（PreToolUse 注入）
 │   ├── quality.md             # 质量验证（Stop 注入）
-│   └── logging.md             # 任务日志追踪（UserPromptSubmit + Stop 注入）
+│   ├── logging.md             # 任务日志追踪（UserPromptSubmit + Stop 注入）
+│   ├── ambiguity.md           # 模糊需求处理与冲突解决规范
+│   ├── learning.md            # 学习优化规范，任务完成后自动记录经验与模式提取
+│   └── text-response.md       # 纯文本回答规范，无工具调用时自动遵循
 │
 ├── tool/                      # MCP 工具规则（每个工具独立文件）
 │   ├── chrome-devtools.md     # 浏览器自动化（前端验证/UI 调试）

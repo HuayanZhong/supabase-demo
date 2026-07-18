@@ -12,6 +12,7 @@ AGENTS.md               ← 总纲（始终生效）
        ├─ naming.md              命名规范
        ├─ comments.md            注释风格
        ├─ git-commit-message.md  Commit 格式
+       ├─ README.md              规则体系目录索引与总览
        ├─ agent/                 Agent 治理（按职责拆分）
        │    ├─ ambiguity.md      模糊需求处理（需求不明确/规则冲突时触发）
        │    ├─ execution.md      执行规范（UserPromptSubmit 注入）
@@ -52,7 +53,7 @@ AGENTS.md               ← 总纲（始终生效）
        │    ├─ delivery-checklist.md 交付前自检
        │    ├─ echarts.md        ECharts 图表规范
        │    ├─ layout-bfc.md     Flex + BFC 滚动约束
-       │    ├─ no-decoration.md  禁止有效装饰
+       │    ├─ no-decoration.md  禁止无效装饰
        │    └─ task-stability.md 长任务稳定性
        ├─ shared/                Monorepo 治理 + 类型边界
        │    ├─ monorepo.md       子包创建、构建配置

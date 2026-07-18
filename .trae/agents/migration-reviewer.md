@@ -15,7 +15,7 @@ tools: Read, Glob, Grep, GetDiagnostics, RunCommand, Skill
 
 ## 执行流程
 
-0. **记录调用日志**：执行 `Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] migration-reviewer | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
+0. **记录调用日志**：执行 `$null = New-Item -Path ".trae/agents/logs" -ItemType Directory -Force; Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] migration-reviewer | 用户请求：{从用户消息中提取的关键描述}" -Encoding UTF8`
 
 1. **读项目规范**：读取 `.trae/rules/backend/database.md`
 2. **读 ORM 配置**：Read 读取 `apps/backend/mikro-orm.config.ts`，**确认实体的真实路径、迁移路径、使用的扩展列表**
