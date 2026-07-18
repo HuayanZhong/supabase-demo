@@ -1,4 +1,5 @@
----
+﻿---
+name: shared-dependencies
 alwaysApply: false
 description: 依赖管理规范，涉及添加/升级依赖时生效
 ---

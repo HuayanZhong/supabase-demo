@@ -1,4 +1,5 @@
----
+﻿---
+name: shared-frontend-types
 alwaysApply: false
 description: 类型定义规范，涉及 @supabase/types 或数据模型定义时生效
 ---

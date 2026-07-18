@@ -1,4 +1,5 @@
----
+﻿---
+name: tool-filesystem
 alwaysApply: false
 description: 文件系统操作工具，用于文件读取、写入、编辑、目录操作，涉及文件操作时自动触发
 ---

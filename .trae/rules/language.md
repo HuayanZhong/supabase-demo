@@ -1,4 +1,5 @@
----
+﻿---
+name: language
 alwaysApply: true
 description: 语言约束，所有回答和代码注释使用中文
 ---

@@ -1,4 +1,5 @@
----
+﻿---
+name: tool-tavily-search
 alwaysApply: false
 description: 网络搜索工具，用于搜索网络信息、获取最新资料，需要搜索网络信息时自动触发
 ---

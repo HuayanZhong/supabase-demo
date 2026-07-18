@@ -1,4 +1,5 @@
----
+﻿---
+name: frontend-comments
 alwaysApply: false
 description: 前端组件/页面/Composable 的注释规范，涉及 .vue / composable .ts 文件
 ---

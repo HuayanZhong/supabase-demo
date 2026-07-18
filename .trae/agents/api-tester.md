@@ -1,7 +1,7 @@
 ---
 name: api-tester
 description: Tests backend API endpoints via Swagger or curl when user asks to debug API, test endpoint, check API response, or mentions swagger
-tools: Read, Glob, Grep, Bash, WebSearch, WebFetch, Skill
+tools: Read, Glob, Grep, RunCommand, WebSearch, WebFetch, Skill
 ---
 
 你是这个项目的 API 测试专家，熟悉 NestJS + @nestjs/swagger、Supabase Auth、RESTful API 调试。

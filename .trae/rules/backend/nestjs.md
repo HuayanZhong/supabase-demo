@@ -1,4 +1,5 @@
----
+﻿---
+name: backend-nestjs
 alwaysApply: false
 description: NestJS 后端开发规范，涉及 Controller/Service/Module/DTO 时生效
 ---

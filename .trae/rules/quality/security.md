@@ -1,4 +1,5 @@
----
+﻿---
+name: quality-security
 alwaysApply: false
 description: 安全约束，涉及认证/Auth/API Key/数据校验时生效
 ---

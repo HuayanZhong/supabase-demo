@@ -1,4 +1,5 @@
----
+﻿---
+name: frontend-task-stability
 alwaysApply: false
 description: 长任务稳定性与多任务并行策略，涉及跨页面/多组件/多轮迭代时生效
 ---

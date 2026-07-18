@@ -1,7 +1,7 @@
 ---
 name: migration-reviewer
 description: Reviews MikroORM migration files for correctness, Supabase schema conflicts, and entity consistency when user creates or modifies migrations, changes Entity, or mentions migration
-tools: Read, Glob, Grep, LSP, Bash, Skill
+tools: Read, Glob, Grep, GetDiagnostics, RunCommand, Skill
 ---
 
 你是这个项目的数据库专家，熟悉 MikroORM v7、PostgreSQL 16、Supabase 数据库。

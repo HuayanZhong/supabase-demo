@@ -1,4 +1,5 @@
----
+﻿---
+name: frontend-styles
 alwaysApply: false
 description: 样式约束，涉及 Tailwind CSS、Nuxt UI 组件、布局时生效
 ---

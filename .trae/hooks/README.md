@@ -38,7 +38,8 @@
 │   ├── execution.md           # 执行规范
 │   ├── search.md              # 文档检索
 │   ├── safety.md              # 安全约束
-│   └── quality.md             # 质量验证
+│   ├── quality.md             # 质量验证
+│   └── logging.md             # 任务日志追踪
 ├── tool/                      # MCP 工具规则（10 个文件）
 ├── backend/                   # 后端领域规则
 ├── frontend/                  # 前端领域规则
@@ -98,12 +99,12 @@ Stop → inject-quality-rules.ps1（注入质量验证规范）
 
 ### 生命周期注入
 
-| 事件             | 注入规则                            | 说明                         |
-| ---------------- | ----------------------------------- | ---------------------------- |
-| SessionStart     | `agent/roles.md`                    | 会话开始时注入角色定义       |
-| UserPromptSubmit | `agent/routing.md` + `execution.md` | 用户提交时注入路由和执行规范 |
-| PreToolUse       | `tool/*.md`（按工具名匹配）         | 工具调用前注入工具规则       |
-| Stop             | `agent/quality.md`                  | 会话结束时注入质量验证规范   |
+| 事件             | 注入规则                                | 说明                                  |
+| ---------------- | --------------------------------------- | ------------------------------------- |
+| SessionStart     | `agent/roles.md`                        | 会话开始时注入角色定义                |
+| UserPromptSubmit | `agent/routing.md` + `execution.md`     | 用户提交时注入路由和执行规范          |
+| PreToolUse       | `tool/*.md`（按工具名匹配）             | 工具调用前注入工具规则                |
+| Stop             | `agent/quality.md` + `agent/logging.md` | 会话结束时注入质量验证 + 日志追踪规范 |
 
 ### 始终生效规则
 

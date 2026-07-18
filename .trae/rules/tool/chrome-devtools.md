@@ -1,4 +1,5 @@
----
+﻿---
+name: tool-chrome-devtools
 alwaysApply: false
 description: 浏览器自动化工具，用于前端页面验证、UI 调试、表单测试、浏览器交互，涉及前端页面检查时自动触发
 ---

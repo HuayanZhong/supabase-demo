@@ -1,4 +1,5 @@
----
+﻿---
+name: frontend-delivery-checklist
 alwaysApply: false
 description: 前端交付前自检，每次修改代码后生效
 ---

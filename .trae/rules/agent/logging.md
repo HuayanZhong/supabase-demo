@@ -1,4 +1,5 @@
----
+﻿---
+name: agent-logging
 alwaysApply: false
 description: 任务日志追踪规范，UserPromptSubmit 和 Stop 时注入
 ---

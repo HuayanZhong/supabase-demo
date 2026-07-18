@@ -1,4 +1,5 @@
----
+﻿---
+name: tool-sequential-thinking
 alwaysApply: false
 description: 顺序思考工具，用于复杂推理、多步骤思考，需要复杂推理时自动触发
 ---

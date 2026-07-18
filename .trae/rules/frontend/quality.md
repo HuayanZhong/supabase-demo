@@ -1,4 +1,5 @@
----
+﻿---
+name: frontend-quality
 alwaysApply: false
 description: 前端质量规范，涉及可访问性/加载状态/性能优化时生效
 ---

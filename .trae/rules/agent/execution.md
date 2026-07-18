@@ -1,4 +1,5 @@
----
+﻿---
+name: agent-execution
 alwaysApply: false
 description: 执行规范，UserPromptSubmit 时注入
 ---

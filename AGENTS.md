@@ -111,20 +111,7 @@ AGENTS.md               ← 总纲（始终生效）
 
 ## Hooks 生命周期
 
-```
-SessionStart                → inject-agent-roles.ps1（角色与资源注入）
-UserPromptSubmit            → inject-agent-routing.ps1（路由决策 + 执行规范注入）
-PreToolUse(DeleteFile|Edit|Write) → protect-mcp-json.ps1（安全拦截）
-                                 → enforce-code-standards.ps1（安全拦截）
-PreToolUse(execute_sql)     → protect-sql.ps1（安全拦截）
-PreToolUse(chrome-devtools) → inject-credentials.ps1（凭证状态注入）
-PreToolUse(MCP 工具)        → inject-tool-rules.ps1（按工具名注入规则）
-PreToolUse(RunCommand)      → validate-commit-msg.ps1（commit message 验证）
-PostToolUse(Write|Edit)     → post-tool-verify.ps1（自动 lint 检查）
-Stop                        → inject-quality-rules.ps1（质量验证注入）
-```
-
-> 规则注入由 Trae IDE 内置机制处理，通过 `alwaysApply` 字段控制始终生效或按意图匹配。
+详见 `.trae/hooks/README.md`（事件明细与脚本映射）和 `.trae/rules/README.md`（规则注入关系）。
 
 ## 技能与 MCP
 

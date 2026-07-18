@@ -1,4 +1,5 @@
----
+﻿---
+name: backend-logging
 alwaysApply: false
 description: 后端日志规范，涉及日志记录/日志级别/结构化日志时生效
 ---
