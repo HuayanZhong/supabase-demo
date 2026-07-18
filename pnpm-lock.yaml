@@ -234,6 +234,9 @@ importers:
       '@supabase/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@supabase/supabase-js':
+        specifier: catalog:dev
+        version: 2.110.2
       cache-manager:
         specifier: catalog:backend
         version: 7.2.9

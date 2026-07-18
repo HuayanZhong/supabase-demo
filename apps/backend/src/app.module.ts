@@ -9,6 +9,7 @@ import config from "../mikro-orm.config";
 import { HealthModule } from "./health/health.module";
 import { ConfigModule } from "@nestjs/config";
 import { QWeatherModule } from "./modules/qweather/qweather.module";
+import { SupabaseModule } from "./modules/supabase/supabase.module";
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { QWeatherModule } from "./modules/qweather/qweather.module";
     QuotesModule,
     // 运维
     HealthModule,
+    SupabaseModule,
   ],
   controllers: [],
   providers: [],

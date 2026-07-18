@@ -32,7 +32,8 @@ export const envSchema = z.object({
   // 运行环境（development / production / test）
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 
-  // SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),   // 等功能需要时启用
+  // Supabase 服务角色密钥（用于后端验证 JWT、管理操作）
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   // JWT_SECRET: z.string().min(32),                  // 等功能需要时启用
 });
 

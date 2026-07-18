@@ -32,6 +32,7 @@
     "@nestjs/platform-express": "catalog:backend",
     "@nestjs/swagger": "catalog:backend",
     "@supabase/config": "workspace:*",
+    "@supabase/supabase-js": "catalog:dev",
     "cache-manager": "catalog:backend",
     "class-transformer": "catalog:backend",
     "class-validator": "catalog:backend",
