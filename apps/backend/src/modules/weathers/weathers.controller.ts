@@ -14,7 +14,7 @@ import { WeathersService } from "./weathers.service";
 import { WeatherVo } from "./vo/weather.vo";
 
 @ApiTags("天气")
-@Controller("weathers")
+@Controller({ path: "weathers", version: "1" })
 export class WeathersController {
   constructor(private readonly weathersService: WeathersService) {}
 

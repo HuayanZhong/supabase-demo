@@ -21,7 +21,7 @@ import { UpdateQuoteDto } from "./dto/update-quote.dto";
 import { Quote } from "./entities/quote.entity";
 
 @ApiTags("名言")
-@Controller("quotes")
+@Controller({ path: "quotes", version: "1" })
 export class QuotesController {
   constructor(private readonly quotesService: QuotesService) {}
 

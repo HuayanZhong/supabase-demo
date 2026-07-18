@@ -17,12 +17,12 @@ const {
   "weather",
   async () => {
     // 先确保城市已缓存到 DB（search 接口会 upsert）
-    await $fetch("/api/locations/search", {
+    await $fetch("/api/v1/locations/search", {
       params: { keyword: defaultCityName },
     });
 
     // 获取实时天气
-    return $fetch("/api/weathers/now", {
+    return $fetch("/api/v1/weathers/now", {
       params: { locationId: defaultLocationId },
     });
   },

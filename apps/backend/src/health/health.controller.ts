@@ -1,14 +1,16 @@
-import { Controller, Get, HttpStatus } from "@nestjs/common";
+import { Controller, Get, HttpStatus, VERSION_NEUTRAL } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { ApiErrorResponse } from "../common/decorators/api-data-response.decorator";
 import { HealthService } from "./health.service";
 
 /**
  * 健康检查控制器
- * 提供 /health 端点，用于负载均衡器和 Kubernetes 探针
+ *
+ * 使用 VERSION_NEUTRAL，无论请求走 v1/v2/无版本均可访问 /api/health。
+ * 负载均衡器和 K8s 探针不需要关心版本。
  */
 @ApiTags("健康检查")
-@Controller("health")
+@Controller({ path: "health", version: VERSION_NEUTRAL })
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 

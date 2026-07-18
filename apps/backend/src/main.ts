@@ -5,7 +5,7 @@ import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
 import { parseEnv, envSchema } from "@supabase/config";
 import { config } from "dotenv";
 import { Logger } from "nestjs-pino";
-import { ValidationPipe } from "@nestjs/common";
+import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 // 根据 NODE_ENV 加载对应的 .env 文件（必须放在 parseEnv 之前）
@@ -26,6 +26,11 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   // 设置全局路由前缀
   app.setGlobalPrefix("api");
+  // 开启 URI 版本控制，所有接口必须显式标注版本号
+  // 访问方式统一为 api/v1/xxx，不标版本返回 404
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
   // 配置 CORS，允许前端跨域请求
   app.enableCors({
     origin: process.env.FRONTEND_URL || "http://localhost:3000",
@@ -54,6 +59,26 @@ async function bootstrap() {
     .setVersion("1.0")
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
+
+  // Swagger 不感知 NestJS URI 版本控制中间件，生成的路径缺少版本前缀（如 `/v1`）。
+  // 以下映射表为每个 Controller 的路径手动指定版本前缀：
+  //   - key:   Controller 的 @Controller() 路径（即 Swagger 原始路径）
+  //   - value: 版本前缀
+  // 新增 v2 Controller 时，在此添加对应的映射即可。
+  const PATH_VERSION_MAP: Record<string, string> = {
+    "/locations": "v1",
+    "/weathers": "v1",
+    "/quotes": "v1",
+  };
+  const originalPaths = { ...document.paths };
+  for (const [path, methods] of Object.entries(originalPaths)) {
+    const version = PATH_VERSION_MAP[path];
+    if (version) {
+      document.paths[`/${version}${path}`] = methods;
+      delete document.paths[path];
+    }
+  }
+
   SwaggerModule.setup("api/docs", app, document);
 
   // 启动应用

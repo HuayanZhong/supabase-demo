@@ -28,7 +28,7 @@ import { Location } from "./entities/location.entity";
  * 搜索接口转发到和风天气 GeoAPI，其余操作基于本地数据库缓存。
  */
 @ApiTags("位置")
-@Controller("locations")
+@Controller({ path: "locations", version: "1" })
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
