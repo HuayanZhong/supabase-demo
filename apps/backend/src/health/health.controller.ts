@@ -2,6 +2,7 @@ import { Controller, Get, HttpStatus, VERSION_NEUTRAL } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { ApiErrorResponse } from "../common/decorators/api-data-response.decorator";
 import { Public } from "../common/decorators/public.decorator";
+import { SkipThrottle } from "@nestjs/throttler";
 import { HealthService } from "./health.service";
 
 /**
@@ -9,8 +10,9 @@ import { HealthService } from "./health.service";
  *
  * 使用 VERSION_NEUTRAL，无论请求走 v1/v2/无版本均可访问 /api/health。
  * 负载均衡器和 K8s 探针不需要关心版本。
- * 标记 @Public() 无需认证即可访问。
+ * 标记 @Public() 无需认证即可访问，@SkipThrottle() 跳过限流。
  */
+@SkipThrottle()
 @ApiTags("健康检查")
 @Controller({ path: "health", version: VERSION_NEUTRAL })
 export class HealthController {

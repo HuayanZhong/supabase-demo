@@ -51,6 +51,9 @@ catalogs:
     '@nestjs/swagger':
       specifier: ^11.4.5
       version: 11.4.5
+    '@nestjs/throttler':
+      specifier: ^6.5.0
+      version: 6.5.0
     cache-manager:
       specifier: ^7.2.9
       version: 7.2.9
@@ -60,6 +63,9 @@ catalogs:
     class-validator:
       specifier: ^0.15.1
       version: 0.15.1
+    helmet:
+      specifier: ^8.3.0
+      version: 8.3.0
     nestjs-pino:
       specifier: ^4.6.1
       version: 4.6.1
@@ -231,6 +237,9 @@ importers:
       '@nestjs/swagger':
         specifier: catalog:backend
         version: 11.4.5(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)
+      '@nestjs/throttler':
+        specifier: catalog:backend
+        version: 6.5.0(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(reflect-metadata@0.2.2)
       '@supabase/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -249,6 +258,9 @@ importers:
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
+      helmet:
+        specifier: catalog:backend
+        version: 8.3.0
       nestjs-pino:
         specifier: catalog:backend
         version: 4.6.1(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(pino-http@11.0.0)(pino@10.3.1)(rxjs@7.8.2)
@@ -1921,6 +1933,13 @@ packages:
         optional: true
       class-validator:
         optional: true
+
+  '@nestjs/throttler@6.5.0':
+    resolution: {integrity: sha512-9j0ZRfH0QE1qyrj9JjIRDz5gQLPqq9yVC2nHsrosDVAfI5HHw08/aUAWx9DZLSdQf4HDkmhTTEGLrRFHENvchQ==}
+    peerDependencies:
+      '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
+      '@nestjs/core': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0
+      reflect-metadata: ^0.1.13 || ^0.2.0
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -5427,6 +5446,10 @@ packages:
   hasown@2.0.4:
     resolution: {integrity: sha512-T2UbfbBEF32wiepXIsMlTW9+dDYC6wMh/t/vYA4tuOMKqWz/n3vr1NFSxQiyP+zk2mXsoMA/i/7qV6LKut1t1A==}
     engines: {node: '>= 0.4'}
+
+  helmet@8.3.0:
+    resolution: {integrity: sha512-Qgpiaws3Sm30Av8Eah6sjMCZZwjlBu+E68rhpCWBshY1lb09HtLwj5GviX0OyQIn+ulUS0iX0AxN5n3tLZzz1w==}
+    engines: {node: '>=18.0.0'}
 
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
@@ -9268,6 +9291,12 @@ snapshots:
       class-transformer: 0.5.1
       class-validator: 0.15.1
 
+  '@nestjs/throttler@6.5.0(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(reflect-metadata@0.2.2)':
+    dependencies:
+      '@nestjs/common': 11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 11.1.28(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.28)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      reflect-metadata: 0.2.2
+
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -12853,6 +12882,8 @@ snapshots:
   hasown@2.0.4:
     dependencies:
       function-bind: 1.1.2
+
+  helmet@8.3.0: {}
 
   help-me@5.0.0: {}
 

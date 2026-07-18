@@ -7,6 +7,7 @@ import { config } from "dotenv";
 import { Logger } from "nestjs-pino";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import helmet from "helmet";
 
 // 根据 NODE_ENV 加载对应的 .env 文件（必须放在 parseEnv 之前）
 const nodeEnv = process.env.NODE_ENV || "development";
@@ -24,6 +25,10 @@ async function bootstrap() {
   });
   // 配置日志记录器
   app.useLogger(app.get(Logger));
+
+  // Helmet：设置安全相关 HTTP 头
+  app.use(helmet());
+
   // 设置全局路由前缀
   app.setGlobalPrefix("api");
   // 开启 URI 版本控制，所有接口必须显式标注版本号

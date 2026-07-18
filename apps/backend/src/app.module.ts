@@ -9,6 +9,8 @@ import config from "../mikro-orm.config";
 import { HealthModule } from "./health/health.module";
 import { ConfigModule } from "@nestjs/config";
 import { QWeatherModule } from "./modules/qweather/qweather.module";
+import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
+import { APP_GUARD } from "@nestjs/core";
 import { SupabaseModule } from "./modules/supabase/supabase.module";
 
 @Module({
@@ -16,6 +18,10 @@ import { SupabaseModule } from "./modules/supabase/supabase.module";
     // 全局模块
     ConfigModule.forRoot({ isGlobal: true }),
     LoggerModule.forRoot(pinoConfig),
+    // 安全：全局限流（默认每 60 秒最多 60 次请求）
+    ThrottlerModule.forRoot({
+      throttlers: [{ ttl: 60000, limit: 60 }],
+    }),
     // 数据层
     MikroOrmModule.forRoot(config),
     // 基础设施模块
@@ -29,6 +35,9 @@ import { SupabaseModule } from "./modules/supabase/supabase.module";
     SupabaseModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    // 全局注册限流 Guard，对所有路由生效
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
+  ],
 })
 export class AppModule {}
