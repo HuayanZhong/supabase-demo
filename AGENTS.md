@@ -13,13 +13,16 @@ AGENTS.md               ← 总纲（始终生效）
        ├─ comments.md            注释风格
        ├─ git-commit-message.md  Commit 格式
        ├─ agent/                 Agent 治理（按职责拆分）
-       │    ├─ routing.md        任务路由决策（UserPromptSubmit 注入）
-       │    ├─ roles.md          角色与资源（SessionStart 注入）
+       │    ├─ ambiguity.md      模糊需求处理（需求不明确/规则冲突时触发）
        │    ├─ execution.md      执行规范（UserPromptSubmit 注入）
-       │    ├─ search.md         文档检索（搜索任务时加载）
-       │    ├─ safety.md         安全约束（PreToolUse 注入）
+       │    ├─ learning.md       学习优化（任务完成后自动记录经验）
+       │    ├─ logging.md        任务日志追踪（UserPromptSubmit + Stop 注入）
        │    ├─ quality.md        质量验证（Stop 注入）
-       │    └─ logging.md        任务日志追踪（UserPromptSubmit + Stop 注入）
+       │    ├─ roles.md          角色与资源（SessionStart 注入）
+       │    ├─ routing.md        任务路由决策（UserPromptSubmit 注入）
+       │    ├─ safety.md         安全约束（PreToolUse 注入）
+       │    ├─ search.md         文档检索（搜索任务时加载）
+       │    └─ text-response.md  纯文本回答规范（无工具调用时自动遵循）
        ├─ tool/                  MCP 工具规则（每个工具独立文件，按意图匹配）
        │    ├─ chrome-devtools.md         浏览器自动化（前端验证/UI 调试）
        │    ├─ filesystem.md              文件系统操作（文件读写/编辑）
@@ -72,6 +75,9 @@ AGENTS.md               ← 总纲（始终生效）
 | `agent/safety.md`                | 智能生效 | 安全约束（PreToolUse）                              |
 | `agent/quality.md`               | 智能生效 | 质量验证（Stop）                                    |
 | `agent/logging.md`               | 智能生效 | 任务日志追踪（UserPromptSubmit + Stop）             |
+| `agent/ambiguity.md`             | 智能生效 | 模糊需求处理与冲突解决规范                          |
+| `agent/learning.md`              | 智能生效 | 学习优化规范，任务完成后自动执行经验记录与模式提取  |
+| `agent/text-response.md`         | 智能生效 | 纯文本回答规范，无工具调用时自动遵循                |
 | `tool/chrome-devtools.md`        | 智能生效 | 浏览器自动化（前端验证/UI 调试）                    |
 | `tool/filesystem.md`             | 智能生效 | 文件系统操作（文件读写/编辑）                       |
 | `tool/supabase.md`               | 智能生效 | 数据库操作（SQL 执行/表结构查询）                   |
