@@ -36,6 +36,7 @@ rules/
 │
 ├── backend/                   # 后端领域
 │   ├── nestjs.md              # Controller/Service/Module 规范
+│   ├── nestjs-fundamentals/ # DI/生命周期/作用域等 NestJS 基础原理（含 11 个专题）
 │   ├── comments.md            # 后端注释规范（JSDoc 模板 / Entity DTO 注释）
 │   ├── database.md            # MikroORM Entity/Repository/迁移
 │   ├── error-handling.md      # 异常处理与错误码

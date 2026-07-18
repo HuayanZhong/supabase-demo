@@ -33,6 +33,7 @@ AGENTS.md               ← 总纲（始终生效）
        │    └─ sequential-thinking.md     顺序思考（复杂推理/多步骤思考）
        ├─ backend/               NestJS + 数据库 + 注释 + 异常处理 + 日志
        │    ├─ nestjs.md         Controller/Service/Module
+       │    ├─ nestjs-fundamentals/  DI/生命周期/作用域等基本原理
        │    ├─ comments.md       注释规范（JSDoc 模板）
        │    ├─ database.md       MikroORM Entity/Repository
        │    ├─ error-handling.md 异常处理与错误码
@@ -62,52 +63,53 @@ AGENTS.md               ← 总纲（始终生效）
 
 ## 规则体系
 
-| 文件                             | 生效方式 | 适用场景                                |
-| -------------------------------- | -------- | --------------------------------------- |
-| `agent/routing.md`               | 智能生效 | 意图分类、Agent 选型时自动触发          |
-| `agent/roles.md`                 | 智能生效 | 角色定义与资源映射（SessionStart）      |
-| `agent/execution.md`             | 智能生效 | 执行规范（UserPromptSubmit）            |
-| `agent/search.md`                | 智能生效 | 文档检索规范（搜索任务时加载）          |
-| `agent/safety.md`                | 智能生效 | 安全约束（PreToolUse）                  |
-| `agent/quality.md`               | 智能生效 | 质量验证（Stop）                        |
-| `agent/logging.md`               | 智能生效 | 任务日志追踪（UserPromptSubmit + Stop） |
-| `tool/chrome-devtools.md`        | 智能生效 | 浏览器自动化（前端验证/UI 调试）        |
-| `tool/filesystem.md`             | 智能生效 | 文件系统操作（文件读写/编辑）           |
-| `tool/supabase.md`               | 智能生效 | 数据库操作（SQL 执行/表结构查询）       |
-| `tool/aminer-data-search.md`     | 智能生效 | 学术数据查询（论文/学者/机构）          |
-| `tool/tavily-search.md`          | 智能生效 | 网络搜索（最新资料/实时数据）           |
-| `tool/autoglm-browser-agent.md`  | 智能生效 | 浏览器自动化（网页交互/数据采集）       |
-| `tool/autoglm-deepresearch.md`   | 智能生效 | 深度研究（调研报告/综合分析）           |
-| `tool/autoglm-generate-image.md` | 智能生效 | 图片生成（文生图/图像创作）             |
-| `tool/context7.md`               | 智能生效 | 代码上下文查询（依赖关系/模块分析）     |
-| `tool/sequential-thinking.md`    | 智能生效 | 顺序思考（复杂推理/多步骤思考）         |
-| `language.md`                    | 始终生效 | 回答、注释、commit 使用中文             |
-| `naming.md`                      | 始终生效 | 文件、变量、类型命名规范                |
-| `comments.md`                    | 始终生效 | 注释风格与 JSDoc 约定                   |
-| `backend/nestjs.md`              | 智能生效 | NestJS Controller/Service/Module        |
-| `backend/comments.md`            | 智能生效 | 后端注释规范（JSDoc 模板）              |
-| `backend/database.md`            | 智能生效 | MikroORM Entity/Repository/迁移         |
-| `backend/error-handling.md`      | 智能生效 | 异常处理、错误码、Exception Filter      |
-| `backend/logging.md`             | 智能生效 | 日志级别、结构化日志、请求追踪          |
-| `frontend/nuxt.md`               | 智能生效 | Nuxt 组件/页面/数据获取                 |
-| `frontend/styles.md`             | 智能生效 | Tailwind / Nuxt UI 样式                 |
-| `frontend/i18n.md`               | 智能生效 | 国际化翻译                              |
-| `frontend/quality.md`            | 智能生效 | a11y、加载状态、性能约定                |
-| `frontend/comments.md`           | 智能生效 | Vue / composable 注释规范               |
-| `frontend/components.md`         | 智能生效 | 组件提取、拆分、复用                    |
-| `frontend/dashboard-layout.md`   | 智能生效 | Dashboard 布局约束                      |
-| `frontend/delivery-checklist.md` | 智能生效 | 前端交付前自检                          |
-| `frontend/echarts.md`            | 智能生效 | ECharts 图表规范                        |
-| `frontend/layout-bfc.md`         | 智能生效 | Flex + BFC 滚动约束                     |
-| `frontend/no-decoration.md`      | 智能生效 | 禁止无效装饰                            |
-| `frontend/task-stability.md`     | 智能生效 | 长任务稳定性与多任务并行                |
-| `shared/monorepo.md`             | 智能生效 | 子包创建/依赖管理                       |
-| `shared/dependencies.md`         | 智能生效 | 依赖添加与版本管理规范                  |
-| `shared/env-vars.md`             | 智能生效 | 环境变量注册与使用规范                  |
-| `shared/frontend-types.md`       | 智能生效 | ViewModel 与 Entity 职责边界            |
-| `quality/testing.md`             | 智能生效 | 测试编写与运行                          |
-| `quality/security.md`            | 智能生效 | 安全与认证                              |
-| `git-commit-message.md`          | 智能生效 | Commit message 格式                     |
+| 文件                             | 生效方式 | 适用场景                                            |
+| -------------------------------- | -------- | --------------------------------------------------- |
+| `agent/routing.md`               | 智能生效 | 意图分类、Agent 选型时自动触发                      |
+| `agent/roles.md`                 | 智能生效 | 角色定义与资源映射（SessionStart）                  |
+| `agent/execution.md`             | 智能生效 | 执行规范（UserPromptSubmit）                        |
+| `agent/search.md`                | 智能生效 | 文档检索规范（搜索任务时加载）                      |
+| `agent/safety.md`                | 智能生效 | 安全约束（PreToolUse）                              |
+| `agent/quality.md`               | 智能生效 | 质量验证（Stop）                                    |
+| `agent/logging.md`               | 智能生效 | 任务日志追踪（UserPromptSubmit + Stop）             |
+| `tool/chrome-devtools.md`        | 智能生效 | 浏览器自动化（前端验证/UI 调试）                    |
+| `tool/filesystem.md`             | 智能生效 | 文件系统操作（文件读写/编辑）                       |
+| `tool/supabase.md`               | 智能生效 | 数据库操作（SQL 执行/表结构查询）                   |
+| `tool/aminer-data-search.md`     | 智能生效 | 学术数据查询（论文/学者/机构）                      |
+| `tool/tavily-search.md`          | 智能生效 | 网络搜索（最新资料/实时数据）                       |
+| `tool/autoglm-browser-agent.md`  | 智能生效 | 浏览器自动化（网页交互/数据采集）                   |
+| `tool/autoglm-deepresearch.md`   | 智能生效 | 深度研究（调研报告/综合分析）                       |
+| `tool/autoglm-generate-image.md` | 智能生效 | 图片生成（文生图/图像创作）                         |
+| `tool/context7.md`               | 智能生效 | 代码上下文查询（依赖关系/模块分析）                 |
+| `tool/sequential-thinking.md`    | 智能生效 | 顺序思考（复杂推理/多步骤思考）                     |
+| `language.md`                    | 始终生效 | 回答、注释、commit 使用中文                         |
+| `naming.md`                      | 始终生效 | 文件、变量、类型命名规范                            |
+| `comments.md`                    | 始终生效 | 注释风格与 JSDoc 约定                               |
+| `backend/nestjs.md`              | 智能生效 | NestJS Controller/Service/Module                    |
+| `backend/nestjs-fundamentals/`   | 智能生效 | NestJS 基础原理（DI、生命周期、作用域等 11 个主题） |
+| `backend/comments.md`            | 智能生效 | 后端注释规范（JSDoc 模板）                          |
+| `backend/database.md`            | 智能生效 | MikroORM Entity/Repository/迁移                     |
+| `backend/error-handling.md`      | 智能生效 | 异常处理、错误码、Exception Filter                  |
+| `backend/logging.md`             | 智能生效 | 日志级别、结构化日志、请求追踪                      |
+| `frontend/nuxt.md`               | 智能生效 | Nuxt 组件/页面/数据获取                             |
+| `frontend/styles.md`             | 智能生效 | Tailwind / Nuxt UI 样式                             |
+| `frontend/i18n.md`               | 智能生效 | 国际化翻译                                          |
+| `frontend/quality.md`            | 智能生效 | a11y、加载状态、性能约定                            |
+| `frontend/comments.md`           | 智能生效 | Vue / composable 注释规范                           |
+| `frontend/components.md`         | 智能生效 | 组件提取、拆分、复用                                |
+| `frontend/dashboard-layout.md`   | 智能生效 | Dashboard 布局约束                                  |
+| `frontend/delivery-checklist.md` | 智能生效 | 前端交付前自检                                      |
+| `frontend/echarts.md`            | 智能生效 | ECharts 图表规范                                    |
+| `frontend/layout-bfc.md`         | 智能生效 | Flex + BFC 滚动约束                                 |
+| `frontend/no-decoration.md`      | 智能生效 | 禁止无效装饰                                        |
+| `frontend/task-stability.md`     | 智能生效 | 长任务稳定性与多任务并行                            |
+| `shared/monorepo.md`             | 智能生效 | 子包创建/依赖管理                                   |
+| `shared/dependencies.md`         | 智能生效 | 依赖添加与版本管理规范                              |
+| `shared/env-vars.md`             | 智能生效 | 环境变量注册与使用规范                              |
+| `shared/frontend-types.md`       | 智能生效 | ViewModel 与 Entity 职责边界                        |
+| `quality/testing.md`             | 智能生效 | 测试编写与运行                                      |
+| `quality/security.md`            | 智能生效 | 安全与认证                                          |
+| `git-commit-message.md`          | 智能生效 | Commit message 格式                                 |
 
 ## Hooks 生命周期
 
