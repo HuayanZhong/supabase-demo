@@ -3,24 +3,25 @@
  *
  * 负责天气数据的缓存与实时获取，对接和风天气 API。
  * 通过 locationId（和风天气 LocationID）查询天气，城市名从 locations 表获取。
+ * 使用 @nestjs/cache-manager 管理缓存，支持多存储后端切换。
  */
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { LRUCache } from "lru-cache";
+import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import { CACHE_MANAGER, Cache } from "@nestjs/cache-manager";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Location } from "../locations/entities/location.entity";
 import { WeatherVo } from "./vo/weather.vo";
-import { QWeatherResponse, CacheEntry } from "./types/weather.types";
+import { QWeatherResponse } from "./types/weather.types";
 import { Logger } from "nestjs-pino";
 import { QWeatherApiService } from "../qweather/qweather-api.service";
 
 @Injectable()
 export class WeathersService {
-  /** LRU 缓存，最多存储 100 个城市，自动淘汰最久未使用的缓存 */
-  private readonly cache: LRUCache<string, CacheEntry>;
-
   /** 缓存有效期：30 分钟（毫秒） */
   private readonly CACHE_TTL_MS = 30 * 60 * 1000;
+
+  /** 缓存键前缀，避免与其他模块的缓存冲突 */
+  private readonly CACHE_KEY_PREFIX = "weather:";
 
   constructor(
     private readonly em: EntityManager,
@@ -28,12 +29,8 @@ export class WeathersService {
     private readonly locationRepository: EntityRepository<Location>,
     private readonly logger: Logger,
     private readonly qweatherApi: QWeatherApiService,
-  ) {
-    this.cache = new LRUCache<string, CacheEntry>({
-      max: 100,
-      ttl: this.CACHE_TTL_MS,
-    });
-  }
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {}
 
   /**
    * 获取指定位置的实时天气
@@ -48,16 +45,16 @@ export class WeathersService {
       throw new NotFoundException(`位置 ${locationId} 不存在，请先搜索城市`);
     }
 
-    const cacheKey = locationId;
-    const cached = this.cache.get(cacheKey);
+    const cacheKey = `${this.CACHE_KEY_PREFIX}${locationId}`;
+    const cached = await this.cacheManager.get<WeatherVo>(cacheKey);
     if (cached) {
       this.logger.debug({ locationId }, "天气缓存命中");
-      return cached.data;
+      return cached;
     }
 
     this.logger.debug({ locationId }, "天气缓存未命中，请求和风天气 API");
     const data = await this.fetchWeather(locationId, location.name);
-    this.cache.set(cacheKey, { data });
+    await this.cacheManager.set(cacheKey, data, this.CACHE_TTL_MS);
     return data;
   }
 

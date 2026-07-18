@@ -1,5 +1,3 @@
-import { WeatherVo } from "../vo/weather.vo";
-
 /** 和风天气实时天气 API 响应中的 now 字段 */
 export interface QWeatherNow {
   /** 观测时间 */
@@ -44,10 +42,4 @@ export interface QWeatherResponse {
   updateTime: string;
   /** 当前天气实况 */
   now: QWeatherNow;
-}
-
-/** 缓存条目（LRUCache 自动管理过期） */
-export interface CacheEntry {
-  /** 缓存的天气数据 */
-  data: WeatherVo;
 }
