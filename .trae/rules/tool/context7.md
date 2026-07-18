@@ -1,5 +1,4 @@
 ﻿---
-name: tool-context7
 alwaysApply: false
 description: 代码上下文查询工具，用于查询代码库上下文、依赖关系，需要查询代码库上下文时自动触发
 ---

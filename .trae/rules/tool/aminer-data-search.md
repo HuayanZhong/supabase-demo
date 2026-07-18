@@ -1,5 +1,4 @@
 ﻿---
-name: tool-aminer-data-search
 alwaysApply: false
 description: 学术数据查询工具，用于论文、学者、机构、期刊等学术数据查询，涉及学术数据查询时自动触发
 ---

@@ -1,5 +1,4 @@
 ﻿---
-name: tool-supabase
 alwaysApply: false
 description: Supabase 数据库工具，用于数据库操作、SQL 执行、表结构查询，涉及数据库查询/迁移时自动触发
 ---

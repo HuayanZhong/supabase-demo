@@ -1,5 +1,4 @@
 ﻿---
-name: backend-comments
 alwaysApply: false
 description: 后端注释规范，涉及 apps/backend/ 下 Service/Controller/Util 类文件时生效
 ---

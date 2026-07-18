@@ -1,5 +1,4 @@
 ﻿---
-name: frontend-no-decoration
 alwaysApply: false
 description: 禁止无效装饰，涉及视觉效果时生效
 ---

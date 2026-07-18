@@ -1,5 +1,4 @@
----
-name: agent-learning
+﻿---
 alwaysApply: false
 description: 学习优化规范，任务完成后自动执行经验记录与模式提取
 ---

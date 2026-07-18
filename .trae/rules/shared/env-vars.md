@@ -1,5 +1,4 @@
 ﻿---
-name: shared-env-vars
 alwaysApply: false
 description: 环境变量规范，涉及环境变量读取、配置时生效
 ---

@@ -1,5 +1,4 @@
 ﻿---
-name: backend-database
 alwaysApply: false
 description: 数据库与 MikroORM 规范，涉及 Entity/Repository/迁移/查询时生效
 ---

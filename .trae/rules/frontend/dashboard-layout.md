@@ -1,5 +1,4 @@
 ﻿---
-name: frontend-dashboard-layout
 alwaysApply: false
 description: Dashboard 布局约束，涉及 UDashboardGroup/Sidebar/Panel 时生效
 ---

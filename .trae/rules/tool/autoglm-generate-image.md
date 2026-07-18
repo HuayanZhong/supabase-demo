@@ -1,5 +1,4 @@
 ﻿---
-name: tool-autoglm-generate-image
 alwaysApply: false
 description: 图片生成工具，用于生成图片、文生图，需要生成图片时自动触发
 ---

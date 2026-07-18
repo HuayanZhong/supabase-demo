@@ -1,5 +1,4 @@
 ﻿---
-name: agent-search
 alwaysApply: false
 description: 文档检索规范，AI 执行搜索任务时自行加载
 ---

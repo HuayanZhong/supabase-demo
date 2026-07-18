@@ -1,5 +1,4 @@
 ﻿---
-name: frontend-layout-bfc
 alwaysApply: false
 description: Flex 布局 + BFC 滚动约束，涉及聊天/列表等需要独立滚动区域时生效
 ---

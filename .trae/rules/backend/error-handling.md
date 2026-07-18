@@ -1,5 +1,4 @@
 ﻿---
-name: backend-error-handling
 alwaysApply: false
 description: 后端异常处理与错误响应规范，涉及 Exception Filter/业务错误码/API 错误响应时生效
 ---

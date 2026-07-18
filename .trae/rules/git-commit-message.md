@@ -1,5 +1,4 @@
 ﻿---
-name: git-commit-message
 alwaysApply: false
 description: 生成 git commit message 时遵循 Conventional Commits 格式
 scene: git_message

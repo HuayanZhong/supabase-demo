@@ -1,5 +1,4 @@
----
-name: agent-text-response
+﻿---
 alwaysApply: false
 description: 纯文本回答规范，当当前轮次无工具调用时自动遵循
 ---

@@ -1,5 +1,4 @@
 ﻿---
-name: frontend-echarts
 alwaysApply: false
 description: ECharts 图表规范，涉及 vue-echarts 图表组件时生效
 ---

@@ -1,5 +1,4 @@
 ﻿---
-name: agent-roles
 alwaysApply: false
 description: Agent 角色定义与资源映射，SessionStart 时注入
 ---

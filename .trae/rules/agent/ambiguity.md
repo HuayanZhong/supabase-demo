@@ -1,5 +1,4 @@
----
-name: agent-ambiguity
+﻿---
 alwaysApply: false
 description: 模糊需求处理与冲突解决规范，当用户需求不明确或有规则冲突时自动触发
 ---

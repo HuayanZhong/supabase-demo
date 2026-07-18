@@ -1,5 +1,4 @@
 ﻿---
-name: quality-testing
 alwaysApply: false
 description: 测试规范，涉及编写/运行/审查测试时生效
 ---

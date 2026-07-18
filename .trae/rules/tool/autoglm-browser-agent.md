@@ -1,5 +1,4 @@
 ﻿---
-name: tool-autoglm-browser-agent
 alwaysApply: false
 description: 浏览器自动化工具，用于自动化浏览器操作、网页交互，需要自动化浏览器操作时自动触发
 ---

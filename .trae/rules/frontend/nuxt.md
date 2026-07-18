@@ -1,5 +1,4 @@
 ﻿---
-name: frontend-nuxt
 alwaysApply: false
 description: Nuxt 前端开发规范，涉及组件/页面/路由/数据获取时生效
 ---

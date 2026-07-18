@@ -16,7 +16,7 @@
 .trae/hooks/
 ├── README.md                  # 本文档
 ├── inject-agent-roles.ps1     # SessionStart — 注入角色定义
-├── inject-agent-routing.ps1   # UserPromptSubmit — 注入路由决策 + 执行规范
+├── inject-agent-routing.ps1   # UserPromptSubmit — 按会话模式注入路由决策（dev模式加执行规范）
 ├── inject-tool-rules.ps1      # PreToolUse — 按工具名注入工具规则
 ├── inject-quality-rules.ps1   # Stop — 注入质量验证规范
 ├── enforce-code-standards.ps1 # PreToolUse(Write) — 安全拦截（允许写入）+ 注释规范
@@ -34,12 +34,15 @@
 ├── git-commit-message.md      # Commit 格式
 ├── agent/                     # Agent 治理
 │   ├── routing.md             # 任务路由决策
-│   ├── roles.md               # 角色与资源
 │   ├── execution.md           # 执行规范
-│   ├── search.md              # 文档检索
-│   ├── safety.md              # 安全约束
+│   ├── ambiguity.md           # 模糊需求处理与冲突解决
+│   ├── roles.md               # 角色与资源
 │   ├── quality.md             # 质量验证
-│   └── logging.md             # 任务日志追踪
+│   ├── learning.md            # 学习优化
+│   ├── text-response.md       # 纯文本回答规范
+│   ├── logging.md             # 任务日志追踪
+│   ├── search.md              # 文档检索
+│   └── safety.md              # 安全约束
 ├── tool/                      # MCP 工具规则（10 个文件）
 ├── backend/                   # 后端领域规则
 ├── frontend/                  # 前端领域规则
@@ -56,7 +59,7 @@ Session 创建
 SessionStart → inject-agent-roles.ps1（注入角色定义）
   │
   ▼
-UserPromptSubmit → inject-agent-routing.ps1（注入路由决策 + 执行规范）
+UserPromptSubmit → inject-agent-routing.ps1（注入路由决策，dev 模式追加执行规范）
   │
   ▼
 PreToolUse(DeleteFile|Edit|Write) ─────→ protect-mcp-json.ps1（安全拦截）
@@ -85,7 +88,7 @@ Stop → inject-quality-rules.ps1（注入质量验证规范）
 | 事件                                | Hook 脚本                  | 类型     | 作用                                                    | 说明         |
 | ----------------------------------- | -------------------------- | -------- | ------------------------------------------------------- | ------------ |
 | SessionStart                        | inject-agent-roles.ps1     | 规则注入 | 注入角色定义指针                                        | 会话开始时   |
-| UserPromptSubmit                    | inject-agent-routing.ps1   | 规则注入 | 注入路由决策 + 执行规范指针                             | 用户提交时   |
+| UserPromptSubmit                    | inject-agent-routing.ps1   | 规则注入 | 按会话模式注入路由决策（dev模式加执行规范）             | 用户提交时   |
 | PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1       | 安全拦截 | 拦截 `.trae/mcp.json` 写入，含明文 Token                | 写文件前     |
 | PreToolUse(DeleteFile\|Edit\|Write) | enforce-code-standards.ps1 | 安全拦截 | 允许写入 + 注入注释规范指针                             | 写代码前     |
 | PreToolUse(execute_sql)             | protect-sql.ps1            | 安全拦截 | 拦截 DROP/TRUNCATE/DELETE 等破坏性 SQL                  | 执行 SQL 前  |
@@ -99,12 +102,12 @@ Stop → inject-quality-rules.ps1（注入质量验证规范）
 
 ### 生命周期注入
 
-| 事件             | 注入规则                                | 说明                                  |
-| ---------------- | --------------------------------------- | ------------------------------------- |
-| SessionStart     | `agent/roles.md`                        | 会话开始时注入角色定义                |
-| UserPromptSubmit | `agent/routing.md` + `execution.md`     | 用户提交时注入路由和执行规范          |
-| PreToolUse       | `tool/*.md`（按工具名匹配）             | 工具调用前注入工具规则                |
-| Stop             | `agent/quality.md` + `agent/logging.md` | 会话结束时注入质量验证 + 日志追踪规范 |
+| 事件             | 注入规则                                          | 说明                                           |
+| ---------------- | ------------------------------------------------- | ---------------------------------------------- |
+| SessionStart     | `agent/roles.md`                                  | 会话开始时注入角色定义                         |
+| UserPromptSubmit | `agent/routing.md`（+`execution.md` 仅 dev 模式） | 用户提交时注入路由决策，开发任务时追加执行规范 |
+| PreToolUse       | `tool/*.md`（按工具名匹配）                       | 工具调用前注入工具规则                         |
+| Stop             | `agent/quality.md` + `agent/logging.md`           | 会话结束时注入质量验证 + 日志追踪规范          |
 
 ### 始终生效规则
 

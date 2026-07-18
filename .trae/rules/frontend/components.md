@@ -1,5 +1,4 @@
 ﻿---
-name: frontend-components
 alwaysApply: false
 description: 组件架构，涉及组件提取、拆分、复用时生效
 ---

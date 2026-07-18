@@ -1,5 +1,4 @@
 ﻿---
-name: shared-monorepo
 alwaysApply: false
 description: Monorepo 治理规范，涉及子包创建/依赖管理/构建配置时生效
 ---

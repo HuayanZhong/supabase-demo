@@ -1,5 +1,4 @@
 ﻿---
-name: tool-autoglm-deepresearch
 alwaysApply: false
 description: 深度研究工具，用于深度调研、生成研究报告，需要深度调研时自动触发
 ---

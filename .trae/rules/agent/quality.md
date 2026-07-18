@@ -1,5 +1,4 @@
 ﻿---
-name: agent-quality
 alwaysApply: false
 description: 质量验证规范，Stop 时注入
 ---

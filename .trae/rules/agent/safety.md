@@ -1,5 +1,4 @@
 ﻿---
-name: agent-safety
 alwaysApply: false
 description: 安全约束，PreToolUse 时注入
 ---

@@ -1,5 +1,4 @@
 ﻿---
-name: agent-routing
 alwaysApply: false
 description: 任务路由决策规则，定义意图分类、Agent 选型和任务摘要，由 classify-intent.ps1 在 UserPromptSubmit 时注入
 ---
