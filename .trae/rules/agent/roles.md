@@ -35,9 +35,10 @@ description: Agent 角色定义与资源映射，SessionStart 时注入
 
 ## Skills 与 MCP 映射
 
-| 领域 | Skills                                                   | MCP                 |
-| ---- | -------------------------------------------------------- | ------------------- |
-| 后端 | supabase, nestjs-best-practices, postgresql-table-design | supabase MCP        |
-| 前端 | nuxt, nuxt-ui, i18n-expert                               | nuxt-ui MCP         |
-| 质量 | webapp-testing, code-review, security-review             | chrome-devtools MCP |
-| 跨包 | turborepo                                                | —                   |
+| 领域 | Skills                                                                                               | MCP                              | 宽匹配触发说明                              |
+| ---- | ---------------------------------------------------------------------------------------------------- | -------------------------------- | ------------------------------------------- |
+| 后端 | `supabase`, `nestjs-best-practices`, `postgresql-table-design`, `mikro-orm-docs`, `mikro-orm-seeder` | supabase MCP                     | 任何 NestJS / DB / Supabase / MikroORM 操作 |
+| 前端 | `nuxt`, `nuxt-ui`, `i18n-expert`, `frontend-design`, `shadcn`                                        | nuxt-ui MCP, chrome-devtools MCP | 任何 Vue / Nuxt 页面/组件/样式操作          |
+| 质量 | `webapp-testing`, `code-review`, `security-review`, `test-driven-development`                        | chrome-devtools MCP              | 任何测试/审查/安全检查场景                  |
+| 跨包 | `turborepo`, `git-essentials`                                                                        | —                                | Monorepo 配置 / Git 操作                    |
+| 架构 | `architecture-designer`, `nestjs-best-practices`                                                     | —                                | 模块设计/重构/架构决策                      |

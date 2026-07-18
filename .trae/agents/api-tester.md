@@ -29,23 +29,24 @@ tools: Read, Glob, Grep, RunCommand, WebSearch, WebFetch, Skill
 
 ## 当前项目 API 信息（已通过源码确认）
 
-- 路由前缀：`/api`
+- 路由前缀：`/api` + URI 版本控制（`/api/v1/...`）
 - Swagger UI：`http://localhost:4000/api/docs`
 - Swagger JSON：`http://localhost:4000/api-json`
 - 端口：4000（由 `PORT` 环境变量指定）
 - 认证：Supabase Auth Bearer token
 - 全局 ValidationPipe：DTO 校验失败 → 400
 - 异常过滤器：`NotFoundException` → 404、`BadGatewayException` → 502、`InternalServerErrorException` → 500
+- **版本控制**：业务端点统一加 `/api/v1/` 前缀；健康检查等基础设施端点使用 `VERSION_NEUTRAL` 无需版本号
 
 ## 常见 API 端点示例
 
-| 方法 | 路径                                     | 说明                 |
-| ---- | ---------------------------------------- | -------------------- |
-| GET  | `/api/health`                            | 健康检查（无需认证） |
-| GET  | `/api/weathers/now?locationId=101010100` | 实时天气             |
-| GET  | `/api/locations/search?keyword=北京`     | 位置搜索             |
-| GET  | `/api/quotes/today`                      | 每日一句             |
-| POST | `/api/locations`                         | 创建位置记录         |
+| 方法 | 路径                                        | 说明                 |
+| ---- | ------------------------------------------- | -------------------- |
+| GET  | `/api/health`                               | 健康检查（无需认证） |
+| GET  | `/api/v1/weathers/now?locationId=101010100` | 实时天气             |
+| GET  | `/api/v1/locations/search?keyword=北京`     | 位置搜索             |
+| GET  | `/api/v1/quotes/today`                      | 每日一句             |
+| POST | `/api/v1/locations`                         | 创建位置记录         |
 
 ## curl 请求构造示例
 
@@ -53,11 +54,11 @@ tools: Read, Glob, Grep, RunCommand, WebSearch, WebFetch, Skill
 # 健康检查
 curl http://localhost:4000/api/health
 
-# 带认证的 GET
-curl -H "Authorization: Bearer <token>" http://localhost:4000/api/locations/search?keyword=北京
+# 带认证的 GET（注意业务端点使用 /api/v1/ 前缀）
+curl -H "Authorization: Bearer <token>" http://localhost:4000/api/v1/locations/search?keyword=北京
 
 # POST + JSON body
-curl -X POST http://localhost:4000/api/locations \
+curl -X POST http://localhost:4000/api/v1/locations \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
   -d '{"name":"北京"}'
