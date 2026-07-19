@@ -59,7 +59,7 @@ export default defineConfig({
   // 数据库种子配置
   seeder: {
     path: "dist/seeders", // 编译后的 JS 文件目录
-    pathTs: "src/seeders", // TypeScript 源文件目录
+    pathTs: "src/infra/database/seeders", // TypeScript 源文件目录
     defaultSeeder: "DatabaseSeeder", // 默认 seeder 类名
   },
 });

@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from "@nestjs/common";
 import { Observable, map } from "rxjs";
-import { Response } from "../../types/response";
+import { Response } from "../../shared/types/response";
 
 /**
  * 统一响应拦截器

@@ -1,6 +1,6 @@
 import { Factory } from "@mikro-orm/seeder";
 import { faker } from "@faker-js/faker";
-import { Location } from "../modules/locations/entities/location.entity";
+import { Location } from "../../../modules/locations/entities/location.entity";
 
 /**
  * 位置数据工厂

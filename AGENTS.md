@@ -7,6 +7,21 @@
 ```
 AGENTS.md               ← 总纲（始终生效）
   │
+  ├─ apps/               ← 应用层
+  │    └─ backend/       NestJS 后端
+  │         └─ src/
+  │              ├─ common/        公共基础设施
+  │              │    ├─ decorators/
+  │              │    ├─ filters/
+  │              │    └─ interceptors/
+  │              ├─ infra/         基础设施层
+  │              │    ├─ api-clients/  第三方 API 客户端
+  │              │    ├─ config/       配置管理
+  │              │    └─ database/     数据库 + 数据填充
+  │              ├─ modules/       业务模块
+  │              ├─ shared/        共享类型
+  │              └─ app.module.ts / main.ts
+  │
   └─ .trae/rules/       ← 规则体系（按领域/事件生效）
        ├─ language.md            语言约束
        ├─ naming.md              命名规范
