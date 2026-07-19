@@ -14,7 +14,7 @@ import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Location } from "./entities/location.entity";
 import { Logger } from "nestjs-pino";
-import { QWeatherApiService } from "../qweather/qweather-api.service";
+import { QWeatherApiService } from "../../infra/api-clients/qweather/qweather-api.service";
 import type { GeoCityResponse } from "./types/locations.types";
 
 @Injectable()

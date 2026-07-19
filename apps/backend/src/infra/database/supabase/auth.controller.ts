@@ -1,6 +1,6 @@
 import { Controller, Get } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { CurrentUser } from "../../common/decorators/current-user.decorator";
+import { CurrentUser } from "../../../common/decorators/current-user.decorator";
 import type { User } from "@supabase/supabase-js";
 
 /**

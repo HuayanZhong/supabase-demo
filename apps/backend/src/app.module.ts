@@ -2,17 +2,17 @@ import { Module } from "@nestjs/common";
 import { WeathersModule } from "./modules/weathers/weathers.module";
 import { QuotesModule } from "./modules/quotes/quotes.module";
 import { LoggerModule } from "nestjs-pino";
-import { pinoConfig } from "./config/pino";
+import { pinoConfig } from "./infra/config/pino";
 import { LocationsModule } from "./modules/locations/locations.module";
 import { MikroOrmModule } from "@mikro-orm/nestjs";
 import config from "../mikro-orm.config";
 import { HealthModule } from "./modules/health/health.module";
 import { ConfigModule } from "@nestjs/config";
-import { QWeatherModule } from "./modules/qweather/qweather.module";
+import { QWeatherModule } from "./infra/api-clients/qweather/qweather.module";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
-import { SupabaseModule } from "./modules/supabase/supabase.module";
-import { SupabaseGuard } from "./modules/supabase/supabase.guard";
+import { SupabaseModule } from "./infra/database/supabase/supabase.module";
+import { SupabaseGuard } from "./infra/database/supabase/supabase.guard";
 
 @Module({
   imports: [

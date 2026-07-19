@@ -10,7 +10,7 @@ import { CACHE_MANAGER, Cache } from "@nestjs/cache-manager";
 import { WeatherVo } from "./vo/weather.vo";
 import { QWeatherResponse } from "./types/weather.types";
 import { Logger } from "nestjs-pino";
-import { QWeatherApiService } from "../qweather/qweather-api.service";
+import { QWeatherApiService } from "../../infra/api-clients/qweather/qweather-api.service";
 import { LocationsService } from "../locations/locations.service";
 
 @Injectable()

@@ -7,7 +7,7 @@
 import { Injectable, InternalServerErrorException, BadGatewayException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Logger } from "nestjs-pino";
-import { QWeatherJwtService } from "./qweather-jwt.service";
+import { QWeatherJwtService } from "./qweather-jwt.service.ts";
 
 @Injectable()
 export class QWeatherApiService {

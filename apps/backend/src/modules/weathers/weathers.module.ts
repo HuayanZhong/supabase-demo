@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { CacheModule } from "@nestjs/cache-manager";
 import { WeathersService } from "./weathers.service";
 import { WeathersController } from "./weathers.controller";
-import { QWeatherModule } from "../qweather/qweather.module";
+import { QWeatherModule } from "../../infra/api-clients/qweather/qweather.module";
 import { LocationsModule } from "../locations/locations.module";
 
 @Module({

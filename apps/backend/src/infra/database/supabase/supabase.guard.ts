@@ -17,7 +17,7 @@ import {
 import { Reflector } from "@nestjs/core";
 import { Logger } from "nestjs-pino";
 import { SUPABASE_CLIENT } from "./constants";
-import { IS_PUBLIC_KEY } from "../../common/decorators/public.decorator";
+import { IS_PUBLIC_KEY } from "../../../common/decorators/public.decorator";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 @Injectable()
