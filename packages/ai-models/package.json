@@ -1,0 +1,23 @@
+{
+  "name": "@supabase/ai-models",
+  "version": "1.0.0",
+  "description": "AI 模型定义与配置（LLM 模型枚举、参数类型、模型能力描述）",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
+  }
+}

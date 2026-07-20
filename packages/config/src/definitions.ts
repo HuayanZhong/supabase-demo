@@ -35,6 +35,10 @@ export const envSchema = z.object({
   // Supabase 服务角色密钥（用于后端验证 JWT、管理操作）
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   // JWT_SECRET: z.string().min(32),                  // 等功能需要时启用
+
+  // --- AI ---
+  // DeepSeek API 密钥
+  DEEPSEEK_API_KEY: z.string().min(1),
 });
 
 export type EnvVars = z.infer<typeof envSchema>;

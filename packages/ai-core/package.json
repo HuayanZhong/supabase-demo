@@ -1,0 +1,23 @@
+{
+  "name": "@supabase/ai-core",
+  "version": "1.0.0",
+  "description": "AI 核心库（LLM 客户端抽象、多 provider 统一接口、prompt 管理）",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "oxlint",
+    "format": "oxfmt --check .",
+    "format:fix": "oxfmt .",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "oxfmt": "catalog:dev",
+    "oxlint": "catalog:dev",
+    "typescript": "catalog:dev"
+  }
+}
