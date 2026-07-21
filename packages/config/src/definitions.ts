@@ -39,6 +39,8 @@ export const envSchema = z.object({
   // --- AI ---
   // DeepSeek API 密钥
   DEEPSEEK_API_KEY: z.string().min(1),
+  // 智谱 AI API 密钥（OpenAI 兼容方式）
+  ZHIPUAI_API_KEY: z.string().min(1),
 });
 
 export type EnvVars = z.infer<typeof envSchema>;
