@@ -53,6 +53,31 @@ description: 执行规范，UserPromptSubmit 时注入
 
 **上下文容量评估**：子任务数量 × 平均文件数。容量不足时分批执行，每批结束后输出状态摘要。
 
+### 双Agent审查循环
+
+当任务触发 `routing.md` 的审查验证规则时，在标准长任务流程中嵌入双Agent审查循环：
+
+```
+  ┌─ 标准流程 ─────────────────────────────────────┐
+  │ 用户请求 → 主智能体解析 → 分派子智能体 → 整合    │
+  └────────────────────────────────────────────────┘
+                              ↓ 扩展为
+  ┌─ 双Agent审查循环 ───────────────────────────────┐
+  │ Phase 1: 主Agent 生成 SVO 结构计划 (Plan Manifest)│
+  │ Phase 2: Task(review-verifier) 计划审查           │  ← 独立窗口
+  │ Phase 3: 主Agent 按计划执行                        │
+  │ Phase 4: Task(review-verifier) 结果审查           │  ← 独立窗口
+  │ Phase 5: 主Agent 收敛检测 → 完成/人工介入          │
+  └──────────────────────────────────────────────────┘
+```
+
+**执行要点**：
+
+- Phase 2/4 通过 `Task(subagent_type=general_purpose_task)` 调用 review-verifier，不额外占用主Agent上下文
+- 审查Agent仅接收结构化的 Plan Manifest 或改动清单，不接触主Agent推理过程
+- 连续 3 轮审查 FAIL → 通过 `AskUserQuestion` 升级到人工介入
+- 详细生命周期和收敛控制见 `dual-agent-loop.md`
+
 ## 全面检查
 
 **触发条件**：用户意图涉及"检查所有"、"审查全部"、"看一下所有文件"等类似表述时，必须执行以下流程：

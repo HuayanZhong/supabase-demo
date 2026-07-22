@@ -1,4 +1,4 @@
-﻿# UserPromptSubmit 注入：任务路由决策
+# UserPromptSubmit 注入：任务路由决策
 # 根据会话模式判断是否需要注入执行规范
 #
 # 执行规范仅在 dev 模式下注入（涉及编码、重构等开发任务时）
@@ -21,6 +21,7 @@ $context = @"
 
 if ($injectExecution) {
   $context += "`n请阅读 .trae/rules/agent/execution.md（执行规范）"
+  $context += "`n请阅读 .trae/rules/agent/dual-agent-loop.md（双Agent协作循环）"
 }
 
 $result = @{

@@ -12,11 +12,10 @@
 ## 文件结构
 
 ```
-.trae/hooks.json              # Hook 配置文件（IDE 读取入口）
 .trae/hooks/
 ├── README.md                  # 本文档
 ├── inject-agent-roles.ps1     # SessionStart — 注入角色定义
-├── inject-agent-routing.ps1   # UserPromptSubmit — 按会话模式注入路由决策（dev模式加执行规范）
+├── inject-agent-routing.ps1   # UserPromptSubmit — 按会话模式注入路由决策（dev模式加执行规范和双Agent循环）
 ├── inject-tool-rules.ps1      # PreToolUse — 按工具名注入工具规则
 ├── inject-quality-rules.ps1   # Stop — 注入质量验证规范
 ├── enforce-code-standards.ps1 # PreToolUse(Write) — 安全拦截（允许写入）+ 注释规范
@@ -24,7 +23,8 @@
 ├── protect-sql.ps1            # PreToolUse(execute_sql) — 拦截破坏性 SQL
 ├── inject-credentials.ps1     # PreToolUse(chrome-devtools) — 注入本地凭证状态（不暴露明文密码）
 ├── validate-commit-msg.ps1    # PreToolUse(RunCommand) — 验证 commit message 格式
-└── post-tool-verify.ps1       # PostToolUse(Write|Edit) — 代码写入后自动 lint 检查
+├── post-tool-verify.ps1       # PostToolUse(Write|Edit) — 代码写入后自动 lint 检查
+└── inject-dual-agent-loop.ps1 # PostToolUse(Write|Edit) — 提醒双Agent审查循环（仅源码文件）
 
 .trae/rules/                   # 规则文件（由 Hooks 注入指针，AI 自行读取）
 ├── README.md                  # 规则体系总览
@@ -78,6 +78,7 @@ PreToolUse(RunCommand) → validate-commit-msg.ps1（验证 commit message）
   │
   ▼
 PostToolUse(Write|Edit) → post-tool-verify.ps1（自动 lint 检查）
+                       └─ inject-dual-agent-loop.ps1（双Agent循环提醒）
   │
   ▼
 Stop → inject-quality-rules.ps1（注入质量验证规范）
@@ -96,6 +97,7 @@ Stop → inject-quality-rules.ps1（注入质量验证规范）
 | PreToolUse(MCP 工具)                | inject-tool-rules.ps1      | 规则注入 | 按工具名匹配注入 tool/\*.md 规则指针                    | 工具调用前   |
 | PreToolUse(RunCommand)              | validate-commit-msg.ps1    | 规范验证 | 验证 commit message 格式（Conventional Commits + 中文） | 执行命令前   |
 | PostToolUse(Write\|Edit)            | post-tool-verify.ps1       | 质量验证 | 代码写入后自动运行 lint 检查                            | 写代码后     |
+| PostToolUse(Write\|Edit)            | inject-dual-agent-loop.ps1 | 规则提醒 | 检查是否已触发审查Agent，未触发则提醒执行双Agent循环    | 写代码后     |
 | Stop                                | inject-quality-rules.ps1   | 规则注入 | 注入质量验证规范指针                                    | 会话结束时   |
 
 ## 规则注入机制

@@ -23,7 +23,8 @@ rules/
 │   ├── logging.md             # 任务日志追踪（UserPromptSubmit + Stop 注入）
 │   ├── ambiguity.md           # 模糊需求处理与冲突解决规范
 │   ├── learning.md            # 学习优化规范，任务完成后自动记录经验与模式提取
-│   └── text-response.md       # 纯文本回答规范，无工具调用时自动遵循
+│   ├── text-response.md       # 纯文本回答规范，无工具调用时自动遵循
+│   └── dual-agent-loop.md     # 双Agent协作循环（主Agent+审查Agent，UserPromptSubmit注入）
 │
 ├── tool/                      # MCP 工具规则（每个工具独立文件）
 │   ├── chrome-devtools.md     # 浏览器自动化（前端验证/UI 调试）
@@ -79,17 +80,18 @@ rules/
 
 ## Hooks 生命周期
 
-| 生命周期                            | 脚本                                                          | 作用                |
-| ----------------------------------- | ------------------------------------------------------------- | ------------------- |
-| SessionStart                        | inject-agent-roles.ps1 →                                      | 角色定义注入        |
-| UserPromptSubmit                    | inject-agent-routing.ps1 →                                    | 路由 + 执行规范注入 |
-| PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 | 保护敏感文件        |
-| PreToolUse(execute_sql)             | protect-sql.ps1 →                                             | SQL 注入拦截        |
-| PreToolUse(chrome-devtools)         | inject-credentials.ps1 →                                      | 本地凭证注入        |
-| PreToolUse(MCP 工具)                | inject-tool-rules.ps1 →                                       | 工具规则注入        |
-| PreToolUse(RunCommand)              | validate-commit-msg.ps1 →                                     | Commit message 验证 |
-| PostToolUse(Write\|Edit)            | post-tool-verify.ps1 →                                        | 自动 lint 检查      |
-| Stop                                | inject-quality-rules.ps1 →                                    | 质量验证注入        |
+| 生命周期                            | 脚本                                                          | 作用                              |
+| ----------------------------------- | ------------------------------------------------------------- | --------------------------------- |
+| SessionStart                        | inject-agent-roles.ps1 →                                      | 角色定义注入                      |
+| UserPromptSubmit                    | inject-agent-routing.ps1 →                                    | 路由 + 执行规范 + 双Agent循环注入 |
+| PreToolUse(DeleteFile\|Edit\|Write) | protect-mcp-json.ps1（安全拦截） + enforce-code-standards.ps1 | 保护敏感文件                      |
+| PreToolUse(execute_sql)             | protect-sql.ps1 →                                             | SQL 注入拦截                      |
+| PreToolUse(chrome-devtools)         | inject-credentials.ps1 →                                      | 本地凭证注入                      |
+| PreToolUse(MCP 工具)                | inject-tool-rules.ps1 →                                       | 工具规则注入                      |
+| PreToolUse(RunCommand)              | validate-commit-msg.ps1 →                                     | Commit message 验证               |
+| PostToolUse(Write\|Edit)            | post-tool-verify.ps1 →                                        | 自动 lint 检查                    |
+| PostToolUse(Write\|Edit)            | inject-dual-agent-loop.ps1 →                                  | 双Agent循环提醒（仅源码文件）     |
+| Stop                                | inject-quality-rules.ps1 →                                    | 质量验证注入                      |
 
 > 规则注入通过 Hooks 指针注入，AI 自行读取规则文件。`alwaysApply: true` 的规则由 IDE 内置机制始终生效。
 
