@@ -147,6 +147,16 @@ Dual-Agent Loop:            │        │      │
    - 根因不明或 Debugger 也无法定位 → `AskUserQuestion` 人工介入
 5. Debugger 清理：根因明确且修复后，由 Debugger 自动清理插桩代码和调试产物
 
+**经验记录：** Debugger 定位的根因必须记录到 `learning.md`。记录格式：
+
+```
+## [日期] 根因记录：{问题简述}
+- 模块: {模块名}
+- 根因: {Debugger 分析结果}
+- 修复: {修复方案摘要}
+- 预防: {如何避免再犯}
+```
+
 > 连续 2 次触发 Debugger 仍无法定位根因 → 强制人工介入。
 
 ## 审查Agent防幻觉约束
@@ -162,12 +172,13 @@ Dual-Agent Loop:            │        │      │
 
 ## 与现有规则的联动
 
-| 规则                       | 作用                                                          |
-| -------------------------- | ------------------------------------------------------------- |
-| `routing.md`               | Agent选型表决定哪些任务需经过审查                             |
-| `skill-triggers.md`        | Skill 触发规则表（TRAE-code-review / TRAE-debugger 触发条件） |
-| `agent-forced-triggers.md` | 审查验证/Debugger 强制触发条件                                |
-| `execution.md`             | 长任务处理流程中整合双Agent循环 + Debugger兜底                |
-| `quality.md`               | Phase 4 结果审查包含 quality.md 检查项                        |
-| `safety.md`                | Phase 2 安全审查引用 safety.md 约束                           |
-| `logging.md`               | 审查Agent/Debugger调用记入 agent-invoke.log                   |
+| 规则                       | 作用                                                                                |
+| -------------------------- | ----------------------------------------------------------------------------------- |
+| `routing.md`               | Agent选型表决定哪些任务需经过审查                                                   |
+| `skill-triggers.md`        | Skill 触发规则表（TRAE-code-review / TRAE-debugger 触发条件）                       |
+| `agent-forced-triggers.md` | 审查验证/Debugger 强制触发条件                                                      |
+| `execution.md`             | 长任务处理流程中整合双Agent循环 + Debugger兜底                                      |
+| `quality.md`               | Phase 4 结果审查包含 quality.md 检查项；Phase 5 收敛通过后结果记入 task log         |
+| `safety.md`                | Phase 2 安全审查引用 safety.md 约束                                                 |
+| `logging.md`               | 审查Agent/Debugger 调用记入 agent-invoke.log；Phase 5 quality 检查结果记入 task log |
+| `learning.md`              | Debugger 根因分析结果记录到 learning.md                                             |

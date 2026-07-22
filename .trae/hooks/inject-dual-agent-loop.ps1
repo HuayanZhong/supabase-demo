@@ -55,39 +55,20 @@ if ($shouldExclude) {
   exit 0
 }
 
-# 检查是否已经触发过审查Agent（通过 review-verifier 标记文件）
-$reviewFlagPath = ".trae/.review-triggered"
-$reviewTriggered = Test-Path $reviewFlagPath
-
-if (-not $reviewTriggered) {
-  # 未触发审查 → 注入提醒
-  $context = @"
-## ⚠️ 本轮改动尚未经过审查Agent验证
-本次写入了源码文件 `$(Split-Path $filePath -Leaf)`，但尚未调用 review-verifier 进行审查。
-
-### 建议操作
-根据 routing.md 的审查验证规则，P0/P1 级任务必须经过 review-verifier 审查。
-请在任务完成前，调用 review-verifier 审查计划或已有改动。
+# 审查Agent在独立上下文（Task subagent）中执行，hook 无法追溯其执行状态
+# 因此始终提醒审查Agent的存在，由主Agent按任务优先级决定是否触发
+$context = @"
+## ⚠️ 本轮改动建议通过审查Agent验证
+本次写入了源码文件 `$(Split-Path $filePath -Leaf)`。P0/P1 级任务应调用 review-verifier 审查。
 
 请阅读 .trae/rules/agent/dual-agent-loop.md（双Agent协作循环）
 "@
 
-  $result = @{
-    hookSpecificOutput = @{
-      hookEventName      = $null
-      permissionDecision = 'allow'
-      additionalContext  = $context
-    }
-  }
-  Write-Output ($result | ConvertTo-Json -Compress)
-  exit 0
-}
-
-# 已触发过审查，通过
 $result = @{
   hookSpecificOutput = @{
     hookEventName      = $null
     permissionDecision = 'allow'
+    additionalContext  = $context
   }
 }
 Write-Output ($result | ConvertTo-Json -Compress)

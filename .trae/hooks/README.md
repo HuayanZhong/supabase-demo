@@ -35,6 +35,9 @@
 ├── agent/                     # Agent 治理
 │   ├── routing.md             # 任务路由决策
 │   ├── execution.md           # 执行规范
+│   ├── dual-agent-loop.md     # 双Agent协作循环
+│   ├── skill-triggers.md      # Skill 触发规则表
+│   ├── agent-forced-triggers.md # Agent 强制触发/并行策略/降级条件
 │   ├── ambiguity.md           # 模糊需求处理与冲突解决
 │   ├── roles.md               # 角色与资源
 │   ├── quality.md             # 质量验证
@@ -104,12 +107,12 @@ Stop → inject-quality-rules.ps1（注入质量验证规范）
 
 ### 生命周期注入
 
-| 事件             | 注入规则                                          | 说明                                           |
-| ---------------- | ------------------------------------------------- | ---------------------------------------------- |
-| SessionStart     | `agent/roles.md`                                  | 会话开始时注入角色定义                         |
-| UserPromptSubmit | `agent/routing.md`（+`execution.md` 仅 dev 模式） | 用户提交时注入路由决策，开发任务时追加执行规范 |
-| PreToolUse       | `tool/*.md`（按工具名匹配）                       | 工具调用前注入工具规则                         |
-| Stop             | `agent/quality.md` + `agent/logging.md`           | 会话结束时注入质量验证 + 日志追踪规范          |
+| 事件             | 注入规则                                                                 | 说明                                           |
+| ---------------- | ------------------------------------------------------------------------ | ---------------------------------------------- |
+| SessionStart     | `agent/roles.md`                                                         | 会话开始时注入角色定义                         |
+| UserPromptSubmit | `agent/routing.md`（+`execution.md` + `dual-agent-loop.md` 仅 dev 模式） | 用户提交时注入路由决策，开发任务时追加执行规范 |
+| PreToolUse       | `tool/*.md`（按工具名匹配）                                              | 工具调用前注入工具规则                         |
+| Stop             | `agent/quality.md` + `agent/logging.md`                                  | 会话结束时注入质量验证 + 日志追踪规范          |
 
 ### 始终生效规则
 
