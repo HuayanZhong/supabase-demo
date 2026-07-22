@@ -1,5 +1,7 @@
 # Step 1: Skills 审计
 
+> **Skill 注入**：开始本步骤前，先调用 `Skill("TRAE-code-review")` 获取审计方法论框架（范围确定+上下文收集），然后按以下逻辑执行。
+
 检查 Skills junction 完整性及 README 同步情况。
 
 ## 执行

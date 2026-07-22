@@ -32,19 +32,50 @@ Task(
 
 ## 工具权限
 
-| 工具                      | 权限    | 用途                                                                      |
-| ------------------------- | ------- | ------------------------------------------------------------------------- |
-| Read                      | ✅ 允许 | 读取文件内容确认代码质量                                                  |
-| Glob                      | ✅ 允许 | 搜索文件路径                                                              |
-| Grep                      | ✅ 允许 | 搜索代码内容                                                              |
-| SearchCodebase            | ✅ 允许 | 语义搜索跨模块理解                                                        |
-| Skill                     | ✅ 允许 | 调用领域Skill获取最佳实践进行比对                                         |
-| **MCP只读工具**           | ✅ 允许 | 连接外部数据源验证（如 execute_sql 仅查询、supabase 查询表结构）          |
-| tavily_search / WebSearch | ✅ 允许 | **仅在需验证外部API、框架、库的当前行为时使用**，必须先搜索确认再输出结论 |
-| Write                     | ❌ 禁止 | 不修改任何文件                                                            |
-| Edit                      | ❌ 禁止 | 不修改任何文件                                                            |
-| DeleteFile                | ❌ 禁止 | 不删除任何文件                                                            |
-| RunCommand                | ❌ 禁止 | 不执行命令                                                                |
+| 工具                      | 权限        | 用途                                                                      |
+| ------------------------- | ----------- | ------------------------------------------------------------------------- |
+| Read                      | ✅ 允许     | 读取文件内容确认代码质量                                                  |
+| Glob                      | ✅ 允许     | 搜索文件路径                                                              |
+| Grep                      | ✅ 允许     | 搜索代码内容                                                              |
+| SearchCodebase            | ✅ 允许     | 语义搜索跨模块理解                                                        |
+| Skill                     | ✅ **强制** | **必须调用**：详见下方"Skill 强注入规则"                                  |
+| **MCP只读工具**           | ✅ 允许     | 连接外部数据源验证（如 execute_sql 仅查询、supabase 查询表结构）          |
+| tavily_search / WebSearch | ✅ 允许     | **仅在需验证外部API、框架、库的当前行为时使用**，必须先搜索确认再输出结论 |
+| Write                     | ❌ 禁止     | 不修改任何文件                                                            |
+| Edit                      | ❌ 禁止     | 不修改任何文件                                                            |
+| DeleteFile                | ❌ 禁止     | 不删除任何文件                                                            |
+| RunCommand                | ❌ 禁止     | 不执行命令                                                                |
+
+## Skill 强注入规则
+
+### 核心约束
+
+审查Agent**必须**在每个审查分支调用以下技能，不得跳过。这是硬性要求，不是建议。
+
+| 技能                                         | 调用时机               | 用途                                                                             |
+| -------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------- |
+| `TRAE-code-review`                           | **每次审查的起始步骤** | 获取结构化代码审查方法论：审查范围确定、上下文收集、意图推断、问题扫描、交叉验证 |
+| 领域特定 Skill（如 `nestjs-best-practices`） | **审查具体代码时**     | 获取领域最佳实践，确认代码是否符合规范                                           |
+
+### 审查工作流（强注入 Skill 后的标准流程）
+
+```
+Phase 2 计划审查:
+  1. Skill("TRAE-code-review") → 获取审查框架（Step 1-2: 范围确定+上下文收集）
+  2. Read(Plan Manifest) → 读取计划内容
+  3. 按审查维度逐项检查（完整性/结构合规/验证方式/安全影响/依赖顺序）
+  4. 输出 Review Result（带证据链）
+
+Phase 4 结果审查:
+  1. Skill("TRAE-code-review") → 获取审查框架（Step 3-5: 意图推断+问题扫描+交叉验证）
+  2. Read(改动文件清单 + Plan Manifest) → 读取改动内容
+  3. Skill(领域特定) → 获取领域规范进行比对
+  4. 按审查维度逐项检查（功能正确/格式规范/安全合规/覆盖完整/无副作用）
+  5. 输出 Review Report（带证据链）
+```
+
+> **违规后果**：审查Agent未调用 `TRAE-code-review` 即输出审查结论 → 该份报告视为无效。
+> 主Agent调用 `review-verifier` 时应在 query 中注明需要调用的 Skill。
 
 ## 审查结论格式
 
@@ -54,14 +85,16 @@ Task(
 ## Review Report
 - decision: PASS | FAIL | PASS_WITH_WARNINGS
 - summary: "总体评价"
+- skillsCalled: ["TRAE-code-review", "领域特定Skill"]
 
 ### 逐项审查
 #### P1: {Subject} → {Verb} → {Object}
 - status: pass | fail | warning
 - evidence:
-  1. Read("{file_path}") → 确认 {key finding}
-  2. Skill("{skill-name}") → 确认 {standard compliance}
-  3. ... (其他工具调用)
+  1. Skill("TRAE-code-review") → 确定审查方法论
+  2. Read("{file_path}") → 确认 {key finding}
+  3. Skill("{domain-skill}") → 确认 {standard compliance}
+  4. ... (其他工具调用)
 - conclusion: "具体结论"
 
 ### 总体问题
@@ -97,6 +130,7 @@ Task(
 - "这条结论有工具调用支撑吗？"
 - "这个行号是我 Read 过确认的，还是我猜的？"
 - "这条安全声明来自哪里？"
+- **"我调用 TRAE-code-review 了吗？"**
 
 ### 违规后果
 

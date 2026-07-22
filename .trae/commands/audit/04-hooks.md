@@ -1,5 +1,7 @@
 # Step 4: Hooks 审计
 
+> **Skill 注入**：开始本步骤前，先调用 `Skill("TRAE-code-review")` 获取审计方法论框架（范围确定+上下文收集），然后按以下逻辑执行。
+
 检查 hooks 存在性、配置合法性及 AGENTS.md 一致性。
 
 ## 4a. 存在性检查

@@ -55,7 +55,7 @@ description: 执行规范，UserPromptSubmit 时注入
 
 ### 双Agent审查循环
 
-当任务触发 `routing.md` 的审查验证规则时，在标准长任务流程中嵌入双Agent审查循环：
+当任务触发 `agent-forced-triggers.md` 的审查验证规则时，在标准长任务流程中嵌入双Agent审查循环：
 
 ```
   ┌─ 标准流程 ─────────────────────────────────────┐
@@ -75,8 +75,50 @@ description: 执行规范，UserPromptSubmit 时注入
 
 - Phase 2/4 通过 `Task(subagent_type=general_purpose_task)` 调用 review-verifier，不额外占用主Agent上下文
 - 审查Agent仅接收结构化的 Plan Manifest 或改动清单，不接触主Agent推理过程
-- 连续 3 轮审查 FAIL → 通过 `AskUserQuestion` 升级到人工介入
+- 审查Agent必须先调用 `Skill("TRAE-code-review")` 获取审查框架
+- 连续 3 轮审查 FAIL → 先触发 `Skill("TRAE-debugger")` 诊断，再决定是否人工介入
 - 详细生命周期和收敛控制见 `dual-agent-loop.md`
+
+### Debugger 自动兜底
+
+当子任务或长任务执行出现连续失败时，**必须**调用 `Skill("TRAE-debugger")` 进入科学调试流程，而非继续盲目重试。
+
+**触发条件：**
+
+| 条件                                      | 动作                     | 说明                       |
+| ----------------------------------------- | ------------------------ | -------------------------- |
+| 同一子任务连续执行失败 3 次               | `Skill("TRAE-debugger")` | 替代继续重试，避免循环错误 |
+| 编译/类型检查（check-types）连续 2 轮失败 | `Skill("TRAE-debugger")` | 可能存在深层类型问题       |
+| lint 检查连续 2 轮失败                    | `Skill("TRAE-debugger")` | 可能存在配置或工具链问题   |
+| 质量验证（quality.md）连续 2 轮未通过     | `Skill("TRAE-debugger")` | 可能存在基础质量问题       |
+
+**Debugger 执行流程（集成到长任务中）：**
+
+```
+子任务第 3 次失败
+  │
+  ▼
+主Agent暂停当前子任务
+  │
+  ▼
+Skill("TRAE-debugger") → 遵循 debugger 完整工作流
+  ├─ 生成 sessionId（如 "user-login-500"）
+  ├─ 创建 debug-{sessionId}.md
+  ├─ 提出 3-5 个可证伪假设
+  ├─ 插桩采集运行时证据
+  ├─ 证据分析 → 根因定位
+  └─ 输出根因分析报告
+  │
+  ▼
+主Agent根据根因报告决定：
+  ├─ 根因明确 → 按建议修复，回到长任务流程
+  └─ 根因不明 → AskUserQuestion 人工介入
+  │
+  ▼
+修复后：Debugger 自动清理插桩代码和调试产物
+```
+
+> 同一子任务连续 2 次触发 Debugger 仍无法定位 → 强制人工介入。
 
 ## 全面检查
 

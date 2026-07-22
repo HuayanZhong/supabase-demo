@@ -24,7 +24,9 @@ rules/
 │   ├── ambiguity.md           # 模糊需求处理与冲突解决规范
 │   ├── learning.md            # 学习优化规范，任务完成后自动记录经验与模式提取
 │   ├── text-response.md       # 纯文本回答规范，无工具调用时自动遵循
-│   └── dual-agent-loop.md     # 双Agent协作循环（主Agent+审查Agent，UserPromptSubmit注入）
+│   ├── dual-agent-loop.md     # 双Agent协作循环（主Agent+审查Agent，UserPromptSubmit注入）
+│   ├── skill-triggers.md      # Skill 触发规则表与示例（从 routing.md 解耦）
+│   └── agent-forced-triggers.md # Agent 强制触发/并行策略/降级条件（从 routing.md 解耦）
 │
 ├── tool/                      # MCP 工具规则（每个工具独立文件）
 │   ├── chrome-devtools.md     # 浏览器自动化（前端验证/UI 调试）
