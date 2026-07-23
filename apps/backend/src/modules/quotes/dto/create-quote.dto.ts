@@ -5,17 +5,17 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
  * 创建名言 DTO
  */
 export class CreateQuoteDto {
-  /** 名言内容（必填，最长 500 字符） */
-  @ApiProperty({ description: "名言内容", example: "知识就是力量", maxLength: 500 })
+  /** 名言内容（必填，最长 30 字符） */
+  @ApiProperty({ description: "名言内容", example: "千里之行，始于足下", maxLength: 30 })
   @IsNotEmpty({ message: "名言内容不能为空" })
   @IsString()
-  @MaxLength(500, { message: "名言内容不能超过 500 字符" })
+  @MaxLength(30, { message: "名言内容不能超过 30 字符" })
   content!: string;
 
-  /** 作者（可选，最长 100 字符） */
-  @ApiPropertyOptional({ description: "作者", example: "培根", maxLength: 100 })
+  /** 作者（可选） */
+  @ApiPropertyOptional({ description: "作者", example: "老子" })
   @IsOptional()
   @IsString()
-  @MaxLength(100, { message: "作者名不能超过 100 字符" })
+  @MaxLength(50, { message: "作者名不能超过 50 字符" })
   author?: string;
 }

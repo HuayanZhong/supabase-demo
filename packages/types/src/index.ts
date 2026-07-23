@@ -32,3 +32,7 @@ export type {
 
 // 天气
 export type { WeatherData } from "./weather/index.ts";
+
+// 每日一句
+export { DailyQuoteSchema } from "./daily-quote/index.ts";
+export type { DailyQuote } from "./daily-quote/index.ts";

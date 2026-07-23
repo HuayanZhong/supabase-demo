@@ -16,10 +16,11 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/ai-models": "workspace:*",
+    "@supabase/types": "workspace:*",
     "langchain": "catalog:ai"
   },
   "devDependencies": {
-    "@supabase/ai-models": "workspace:*",
     "oxfmt": "catalog:dev",
     "oxlint": "catalog:dev",
     "typescript": "catalog:dev"

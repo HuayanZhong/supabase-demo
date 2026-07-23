@@ -423,13 +423,16 @@ importers:
 
   packages/ai-core:
     dependencies:
+      '@supabase/ai-models':
+        specifier: workspace:*
+        version: link:../ai-models
+      '@supabase/types':
+        specifier: workspace:*
+        version: link:../types
       langchain:
         specifier: catalog:ai
         version: 1.5.3(@langchain/core@1.2.3(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0))(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(vue@3.5.39(typescript@6.0.3))(ws@8.21.0)
     devDependencies:
-      '@supabase/ai-models':
-        specifier: workspace:*
-        version: link:../ai-models
       oxfmt:
         specifier: catalog:dev
         version: 0.55.0
