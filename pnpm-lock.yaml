@@ -476,9 +476,6 @@ importers:
 
   packages/config:
     dependencies:
-      dotenv:
-        specifier: ^17.4.2
-        version: 17.4.2
       zod:
         specifier: catalog:dev
         version: 4.4.3
