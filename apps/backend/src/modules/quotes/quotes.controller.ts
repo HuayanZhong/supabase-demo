@@ -2,13 +2,13 @@ import {
   Controller,
   Get,
   Post,
-  Body,
   Patch,
   Param,
   Delete,
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  Body,
 } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import {
@@ -16,7 +16,6 @@ import {
   ApiErrorResponse,
 } from "../../common/decorators/api-data-response.decorator";
 import { QuotesService } from "./quotes.service";
-import { CreateQuoteDto } from "./dto/create-quote.dto";
 import { UpdateQuoteDto } from "./dto/update-quote.dto";
 import { Quote } from "./entities/quote.entity";
 
@@ -27,10 +26,10 @@ export class QuotesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: "创建名言" })
+  @ApiOperation({ summary: "自动生成每日一句" })
   @ApiDataResponse(Quote, { status: HttpStatus.CREATED, description: "创建成功" })
-  create(@Body() createQuoteDto: CreateQuoteDto): Promise<Quote> {
-    return this.quotesService.create(createQuoteDto);
+  create(): Promise<Quote> {
+    return this.quotesService.generate();
   }
 
   @Get()

@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
-import { CreateQuoteDto } from "./dto/create-quote.dto";
+import { generateDailyQuote } from "@supabase/ai-core/daily-quote";
 import { UpdateQuoteDto } from "./dto/update-quote.dto";
-import { Quote } from "./entities/quote.entity";
 import { Logger } from "nestjs-pino";
+import { Quote } from "./entities/quote.entity";
 
 /**
  * 名言服务
- * 提供名言的增删改查功能
+ * 提供名言的 AI 自动生成与 CRUD 功能
  */
 @Injectable()
 export class QuotesService {
@@ -19,13 +19,14 @@ export class QuotesService {
   ) {}
 
   /**
-   * 创建名言
+   * AI 自动生成每日一句并落库
    */
-  async create(createQuoteDto: CreateQuoteDto): Promise<Quote> {
-    this.logger.debug({ content: createQuoteDto.content }, "创建名言");
-    const quote = this.quoteRepo.create(createQuoteDto);
+  async generate(): Promise<Quote> {
+    const { content, author } = await generateDailyQuote();
+    this.logger.debug({ content, author }, "AI 生成每日一句");
+    const quote = this.quoteRepo.create({ content, author: author ?? undefined });
     await this.em.persist(quote).flush();
-    this.logger.debug({ id: quote.id }, "名言创建成功");
+    this.logger.debug({ id: quote.id }, "每日一句落库成功");
     return quote;
   }
 
