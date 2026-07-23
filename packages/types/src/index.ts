@@ -36,3 +36,12 @@ export type { WeatherData } from "./weather/index.ts";
 // 每日一句
 export { DailyQuoteSchema } from "./daily-quote/index.ts";
 export type { DailyQuote } from "./daily-quote/index.ts";
+
+// AI 模型
+export type {
+  DeepSeekConfig,
+  ZhipuConfig,
+  AiRuntimeConfig,
+  ModelName,
+  AgentName,
+} from "./ai-models/index.ts";

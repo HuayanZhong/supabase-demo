@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { EntityManager, EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
-import { generateDailyQuote } from "@supabase/ai-core/daily-quote";
+import { AiRuntimeService } from "../../infra/ai-runtime/ai-runtime.service.ts";
 import { UpdateQuoteDto } from "./dto/update-quote.dto";
 import { Logger } from "nestjs-pino";
 import { Quote } from "./entities/quote.entity";
@@ -15,6 +15,7 @@ export class QuotesService {
   constructor(
     private readonly em: EntityManager,
     @InjectRepository(Quote) private readonly quoteRepo: EntityRepository<Quote>,
+    private readonly aiRuntime: AiRuntimeService,
     private readonly logger: Logger,
   ) {}
 
@@ -22,7 +23,7 @@ export class QuotesService {
    * AI 自动生成每日一句并落库
    */
   async generate(): Promise<Quote> {
-    const { content, author } = await generateDailyQuote();
+    const { content, author } = await this.aiRuntime.generateDailyQuote();
     this.logger.debug({ content, author }, "AI 生成每日一句");
     const quote = this.quoteRepo.create({ content, author: author ?? undefined });
     await this.em.persist(quote).flush();

@@ -1,4 +1,2 @@
-import { llm as deepseekChat } from "./deepseek-chat.ts";
-import { llm as zhipuChat } from "./zhipu-chat.ts";
-
-export { deepseekChat, zhipuChat };
+export { createDeepSeek } from "./deepseek.ts";
+export { createZhipu } from "./zhipu.ts";

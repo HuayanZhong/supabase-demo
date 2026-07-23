@@ -32,7 +32,7 @@
     "@nestjs/platform-express": "catalog:backend",
     "@nestjs/swagger": "catalog:backend",
     "@nestjs/throttler": "catalog:backend",
-    "@supabase/ai-core": "workspace:*",
+    "@supabase/ai-runtime": "workspace:*",
     "@supabase/config": "workspace:*",
     "@supabase/supabase-js": "catalog:dev",
     "cache-manager": "catalog:backend",

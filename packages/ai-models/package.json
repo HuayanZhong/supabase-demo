@@ -19,7 +19,7 @@
     "@langchain/core": "catalog:ai",
     "@langchain/deepseek": "catalog:ai",
     "@langchain/openai": "catalog:ai",
-    "@supabase/config": "workspace:*"
+    "@supabase/types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "catalog:dev",

@@ -1,17 +1,18 @@
-import { zhipuChat } from "@supabase/ai-models";
 import { createAgent } from "langchain";
 import { DailyQuoteSchema } from "@supabase/types/daily-quote";
+import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import type { DailyQuote } from "@supabase/types/daily-quote";
 
 /**
- * 每日一句生成 agent
+ * 创建每日一句生成 agent
  *
- * 基于智谱 GLM 模型，配置结构化输出（DailyQuoteSchema），
- * 由 system prompt 控制生成风格和示例。
+ * @param model - 语言模型实例
+ * @returns agent 实例
  */
-const agent = createAgent({
-  model: zhipuChat,
-  systemPrompt: `你是一个金句生成器。每次生成一句简短的话，要求字数少、有温度。
+export function createDailyQuoteAgent(model: BaseChatModel) {
+  return createAgent({
+    model,
+    systemPrompt: `你是一个金句生成器。每次生成一句简短的话，要求字数少、有温度。
 
 生成示例如下：
 - { "content": "千里之行，始于足下", "author": "老子" }
@@ -22,15 +23,20 @@ const agent = createAgent({
 2）附带合理的作者/出处
 3）不自创作者——除非标注 AI 或佚名
 4）风格偏积极温暖，少用忧郁风格`,
-  responseFormat: DailyQuoteSchema,
-});
+    responseFormat: DailyQuoteSchema,
+  });
+}
+
+/** Agent 工厂类型 */
+export type DailyQuoteAgent = ReturnType<typeof createDailyQuoteAgent>;
 
 /**
  * 生成每日一句
  *
- * 不指定主题，由模型自由发挥。返回符合 DailyQuoteSchema 的结构化结果。
+ * @param agent - 每日一句 agent 实例
+ * @returns 每日一句结果
  */
-export async function generateDailyQuote(): Promise<DailyQuote> {
+export async function generateDailyQuote(agent: DailyQuoteAgent): Promise<DailyQuote> {
   const result = await agent.invoke({
     messages: [
       {

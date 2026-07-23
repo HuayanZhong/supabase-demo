@@ -253,9 +253,9 @@ importers:
       '@nestjs/throttler':
         specifier: catalog:backend
         version: 6.5.0(@nestjs/common@11.1.28(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.28)(reflect-metadata@0.2.2)
-      '@supabase/ai-core':
+      '@supabase/ai-runtime':
         specifier: workspace:*
-        version: link:../../packages/ai-core
+        version: link:../../packages/ai-runtime
       '@supabase/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -426,9 +426,9 @@ importers:
 
   packages/ai-core:
     dependencies:
-      '@supabase/ai-models':
-        specifier: workspace:*
-        version: link:../ai-models
+      '@langchain/core':
+        specifier: catalog:ai
+        version: 1.2.3(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0)
       '@supabase/types':
         specifier: workspace:*
         version: link:../types
@@ -457,13 +457,38 @@ importers:
       '@langchain/openai':
         specifier: catalog:ai
         version: 1.5.5(@langchain/core@1.2.3(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0))(ws@8.21.0)
-      '@supabase/config':
+      '@supabase/types':
         specifier: workspace:*
-        version: link:../config
+        version: link:../types
     devDependencies:
       '@types/node':
         specifier: catalog:dev
         version: 25.9.5
+      oxfmt:
+        specifier: catalog:dev
+        version: 0.55.0
+      oxlint:
+        specifier: catalog:dev
+        version: 1.73.0
+      typescript:
+        specifier: catalog:dev
+        version: 6.0.3
+
+  packages/ai-runtime:
+    dependencies:
+      '@langchain/core':
+        specifier: catalog:ai
+        version: 1.2.3(openai@6.48.0(ws@8.21.0)(zod@4.4.3))(ws@8.21.0)
+      '@supabase/ai-core':
+        specifier: workspace:*
+        version: link:../ai-core
+      '@supabase/ai-models':
+        specifier: workspace:*
+        version: link:../ai-models
+      '@supabase/types':
+        specifier: workspace:*
+        version: link:../types
+    devDependencies:
       oxfmt:
         specifier: catalog:dev
         version: 0.55.0

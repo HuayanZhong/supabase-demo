@@ -10,7 +10,8 @@
     ".": "./src/index.ts",
     "./auth": "./src/auth/index.ts",
     "./weather": "./src/weather/index.ts",
-    "./daily-quote": "./src/daily-quote/index.ts"
+    "./daily-quote": "./src/daily-quote/index.ts",
+    "./ai-models": "./src/ai-models/index.ts"
   },
   "scripts": {
     "lint": "oxlint",

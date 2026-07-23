@@ -1,14 +1,13 @@
 {
-  "name": "@supabase/ai-core",
+  "name": "@supabase/ai-runtime",
   "version": "1.0.0",
-  "description": "AI 核心库（LLM 客户端抽象、多 provider 统一接口、prompt 管理）",
+  "description": "AI Runtime 层，负责模型实例创建、Agent 组装与生命周期管理",
   "keywords": [],
   "license": "ISC",
   "author": "",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts",
-    "./daily-quote": "./src/daily-quote/index.ts"
+    ".": "./src/index.ts"
   },
   "scripts": {
     "lint": "oxlint",
@@ -18,8 +17,9 @@
   },
   "dependencies": {
     "@langchain/core": "catalog:ai",
-    "@supabase/types": "workspace:*",
-    "langchain": "catalog:ai"
+    "@supabase/ai-core": "workspace:*",
+    "@supabase/ai-models": "workspace:*",
+    "@supabase/types": "workspace:*"
   },
   "devDependencies": {
     "oxfmt": "catalog:dev",

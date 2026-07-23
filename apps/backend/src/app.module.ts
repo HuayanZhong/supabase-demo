@@ -11,6 +11,7 @@ import { ConfigModule } from "@nestjs/config";
 import { QWeatherModule } from "./infra/api-clients/qweather/qweather.module";
 import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
 import { APP_GUARD } from "@nestjs/core";
+import { AiRuntimeModule } from "./infra/ai-runtime/ai-runtime.module.ts";
 import { SupabaseModule } from "./infra/database/supabase/supabase.module";
 import { SupabaseGuard } from "./infra/database/supabase/supabase.guard";
 
@@ -25,6 +26,8 @@ import { SupabaseGuard } from "./infra/database/supabase/supabase.guard";
     }),
     // 数据层
     MikroOrmModule.forRoot(config),
+    // Runtime 模块（全局单例）
+    AiRuntimeModule,
     // 基础设施模块
     QWeatherModule,
     // 业务模块
