@@ -30,6 +30,7 @@ description: 执行规范，UserPromptSubmit 时注入
 - 任务包含 **2 个**及以上可独立拆分的子任务（原为 3 个，降低阈值以增加 Subagent 使用率）
 - 需要 2 个及以上不同领域的专业知识
 - 任务涉及 **3 个以上独立文件**的增/删/改
+- **跨包改动**：同时涉及 `packages/*` 和 `apps/*` 中多个包的文件的改动（如将类型从 ai-core 抽离到 types），必须先使用 `Task(subagent_type=search)` 子 Agent 搜索依赖关系再执行
 - 用户主动要求并行处理
 
 **协同流程**：
@@ -211,3 +212,36 @@ Skill("TRAE-debugger") → 遵循 debugger 完整工作流
 - 如果用户同时给出多个方向性反馈，全部接收并在同一批次中执行
 
 > 示例：用户说"不需要提取吧，你先写出来" → AI 应当直接开始实现，而不是继续论证提取的好处。
+
+## 编辑后自检
+
+**每次使用 Edit/Write 工具后，必须执行以下检查：**
+
+1. 如果编辑涉及**重复行或结构变更**（如修改变量声明、函数签名、类定义），编辑后应使用 Read 再读一次该部分代码，确认没有残留或重复行
+2. 如 `old_string` 是短标识符（如变量名、关键字），应扩写上下文以确保唯一匹配，避免误匹配到多处
+3. 编辑完成后，若文件出现格式异常（缩进错乱、空行异常），立即修复
+
+> 典型反例：`old_string: "const agent"` 未带上下文，导致 `const agent` 残留重复行。
+> 正确做法：`old_string: "// 创建每日一句 agent\nconst agent = createAgent({"`
+
+## 注释风格对齐
+
+**当用户要求调整注释风格（如"改成/**这种"、"像这种"、"参考 X 文件"）时，遵循以下流程：\*\*
+
+1. 先读取用户引用的参考文件中的注释片段，理解目标风格
+2. 如果用户未明确指定参考文件，优先读取项目中同类型的公开 API 或 Entity 文件（如 `quote.entity.ts`、`create-quote.dto.ts`）作为风格参考
+3. 一次性完成全部注释风格修改，而不是逐次摸索
+
+> 禁止：在没有参考示例的情况下，仅根据猜测进行多次风格调整。
+
+## Task 调用日志
+
+**每次使用 `Task()` 工具调用子 Agent 后，必须在 `agent-invoke.log` 中记录调用信息。**
+
+记录时机：`Task()` 调用开始后，等待返回结果前执行日志写入。
+
+```powershell
+$null = New-Item -Path ".trae/agents/logs" -ItemType Directory -Force; Add-Content -Path ".trae/agents/logs/agent-invoke.log" -Value "[$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')] {subagent_type} | 用户请求：{关键描述}" -Encoding UTF8
+```
+
+> 此规则适用于所有 `Task()` 调用，包括 `search`、`general_purpose_task` 等系统内置类型，不限于自定义 Agent 文件。自定义 Agent 文件的 Step 0 日志与本书职责重叠，顺次执行即可。
