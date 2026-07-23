@@ -3,16 +3,10 @@ import { AppModule } from "./app.module";
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
 import { parseEnv, envSchema } from "@supabase/config";
-import { config } from "dotenv";
 import { Logger } from "nestjs-pino";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import helmet from "helmet";
-
-// 根据 NODE_ENV 加载对应的 .env 文件（必须放在 parseEnv 之前）
-const nodeEnv = process.env.NODE_ENV || "development";
-config({ path: `.env` });
-config({ path: `.env.${nodeEnv}`, override: true });
 
 async function bootstrap() {
   // 启动时校验环境变量，缺失必填项立即报错
