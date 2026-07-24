@@ -1,4 +1,4 @@
-{
+﻿{
   "openapi": "3.0.0",
   "paths": {
     "/api/v1/locations/search": {
@@ -10,10 +10,7 @@
             "required": true,
             "in": "query",
             "description": "城市名/关键词",
-            "schema": {
-              "example": "北京",
-              "type": "string"
-            }
+            "schema": { "example": "北京", "type": "string" }
           }
         ],
         "responses": {
@@ -24,20 +21,12 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
+                    "code": { "type": "number", "example": 200 },
                     "data": {
                       "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Location"
-                      }
+                      "items": { "$ref": "#/components/schemas/Location" }
                     },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -57,9 +46,7 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateLocationInputDto"
-              }
+              "schema": { "$ref": "#/components/schemas/CreateLocationInputDto" }
             }
           }
         },
@@ -71,17 +58,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 201
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Location"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 201 },
+                    "data": { "$ref": "#/components/schemas/Location" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -95,18 +74,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "经纬度未找到对应城市"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "经纬度未找到对应城市" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -120,18 +90,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 502
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "逆地理编码服务错误"
-                    }
+                    "code": { "type": "number", "example": 502 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "逆地理编码服务错误" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -153,20 +114,12 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
+                    "code": { "type": "number", "example": 200 },
                     "data": {
                       "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Location"
-                      }
+                      "items": { "$ref": "#/components/schemas/Location" }
                     },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -182,14 +135,7 @@
       "get": {
         "operationId": "LocationsController_findOne_v1",
         "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {
@@ -199,17 +145,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Location"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 200 },
+                    "data": { "$ref": "#/components/schemas/Location" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -223,18 +161,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "位置不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "位置不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -248,23 +177,12 @@
       "patch": {
         "operationId": "LocationsController_update_v1",
         "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateLocationDto"
-              }
-            }
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateLocationDto" } }
           }
         },
         "responses": {
@@ -275,17 +193,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Location"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 200 },
+                    "data": { "$ref": "#/components/schemas/Location" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -299,18 +209,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "位置不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "位置不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -324,19 +225,10 @@
       "delete": {
         "operationId": "LocationsController_remove_v1",
         "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
-          "200": {
-            "description": "删除成功"
-          },
+          "200": { "description": "删除成功" },
           "404": {
             "description": "位置不存在",
             "content": {
@@ -344,18 +236,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "位置不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "位置不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -376,10 +259,7 @@
             "required": true,
             "in": "query",
             "description": "和风天气 LocationID",
-            "schema": {
-              "example": "101010100",
-              "type": "string"
-            }
+            "schema": { "example": "101010100", "type": "string" }
           }
         ],
         "responses": {
@@ -390,17 +270,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/WeatherVo"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 200 },
+                    "data": { "$ref": "#/components/schemas/WeatherVo" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -414,18 +286,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 400
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "locationId 参数缺失"
-                    }
+                    "code": { "type": "number", "example": 400 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "locationId 参数缺失" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -439,18 +302,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "位置不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "位置不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -464,18 +318,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 502
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "天气服务错误"
-                    }
+                    "code": { "type": "number", "example": 502 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "天气服务错误" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -499,17 +344,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 201
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Quote"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 201 },
+                    "data": { "$ref": "#/components/schemas/Quote" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -531,20 +368,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Quote"
-                      }
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 200 },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/Quote" } },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -560,14 +386,7 @@
       "get": {
         "operationId": "QuotesController_findOne_v1",
         "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
           "200": {
@@ -577,17 +396,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Quote"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 200 },
+                    "data": { "$ref": "#/components/schemas/Quote" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -601,18 +412,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "名言不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "名言不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -626,23 +428,12 @@
       "patch": {
         "operationId": "QuotesController_update_v1",
         "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateQuoteDto"
-              }
-            }
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpdateQuoteDto" } }
           }
         },
         "responses": {
@@ -653,17 +444,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/Quote"
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "code": { "type": "number", "example": 200 },
+                    "data": { "$ref": "#/components/schemas/Quote" },
+                    "msg": { "type": "string", "example": "success" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -677,18 +460,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "名言不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "名言不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -702,19 +476,10 @@
       "delete": {
         "operationId": "QuotesController_remove_v1",
         "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          }
+          { "name": "id", "required": true, "in": "path", "schema": { "type": "number" } }
         ],
         "responses": {
-          "200": {
-            "description": "删除成功"
-          },
+          "200": { "description": "删除成功" },
           "404": {
             "description": "名言不存在",
             "content": {
@@ -722,18 +487,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 404
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "名言不存在"
-                    }
+                    "code": { "type": "number", "example": 404 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "名言不存在" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -757,36 +513,19 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 200
-                    },
+                    "code": { "type": "number", "example": 200 },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "status": {
-                          "type": "string",
-                          "example": "healthy"
-                        },
-                        "timestamp": {
-                          "type": "string",
-                          "example": "2026-07-18T09:00:00.000Z"
-                        },
+                        "status": { "type": "string", "example": "healthy" },
+                        "timestamp": { "type": "string", "example": "2026-07-18T09:00:00.000Z" },
                         "checks": {
                           "type": "object",
-                          "properties": {
-                            "database": {
-                              "type": "string",
-                              "example": "up"
-                            }
-                          }
+                          "properties": { "database": { "type": "string", "example": "up" } }
                         }
                       }
                     },
-                    "msg": {
-                      "type": "string",
-                      "example": "success"
-                    }
+                    "msg": { "type": "string", "example": "success" }
                   }
                 }
               }
@@ -799,18 +538,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "code": {
-                      "type": "number",
-                      "example": 503
-                    },
-                    "data": {
-                      "type": "null",
-                      "example": null
-                    },
-                    "msg": {
-                      "type": "string",
-                      "example": "服务异常"
-                    }
+                    "code": { "type": "number", "example": 503 },
+                    "data": { "type": "null", "example": null },
+                    "msg": { "type": "string", "example": "服务异常" }
                   },
                   "required": ["code", "data", "msg"]
                 }
@@ -819,8 +549,7 @@
           }
         },
         "summary": "健康检查",
-        "tags": ["健康检查"],
-        "security": []
+        "tags": ["健康检查"]
       }
     },
     "/api/v1/auth/me": {
@@ -835,17 +564,9 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "string",
-                      "example": "uuid"
-                    },
-                    "email": {
-                      "type": "string",
-                      "example": "user@example.com"
-                    },
-                    "created_at": {
-                      "type": "string"
-                    }
+                    "id": { "type": "string", "example": "uuid" },
+                    "email": { "type": "string", "example": "user@example.com" },
+                    "created_at": { "type": "string" }
                   }
                 }
               }
@@ -853,8 +574,7 @@
           }
         },
         "summary": "获取当前登录用户信息",
-        "tags": ["认证"],
-        "security": []
+        "tags": ["认证"]
       }
     }
   },
@@ -871,83 +591,26 @@
       "Location": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "number",
-            "description": "位置 ID"
-          },
+          "id": { "type": "number", "description": "位置 ID" },
           "qweatherId": {
             "type": "string",
             "description": "和风天气 LocationID",
             "example": "101010100"
           },
-          "name": {
-            "type": "string",
-            "description": "位置名称",
-            "example": "东城"
-          },
-          "lat": {
-            "type": "number",
-            "description": "纬度",
-            "example": 39.9163
-          },
-          "lon": {
-            "type": "number",
-            "description": "经度",
-            "example": 116.3972
-          },
-          "adm2": {
-            "type": "string",
-            "description": "上级行政区划",
-            "example": "北京"
-          },
-          "adm1": {
-            "type": "string",
-            "description": "一级行政区域",
-            "example": "北京市"
-          },
-          "country": {
-            "type": "string",
-            "description": "国家",
-            "example": "中国"
-          },
-          "tz": {
-            "type": "string",
-            "description": "时区",
-            "example": "Asia/Shanghai"
-          },
-          "utcOffset": {
-            "type": "string",
-            "description": "UTC 时间偏移",
-            "example": "+08:00"
-          },
-          "isDst": {
-            "type": "boolean",
-            "description": "是否夏令时",
-            "default": false
-          },
-          "type": {
-            "type": "string",
-            "description": "位置类型",
-            "example": "city"
-          },
-          "rank": {
-            "type": "number",
-            "description": "位置评分"
-          },
-          "fxLink": {
-            "type": "string",
-            "description": "天气预报链接"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "创建时间"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "更新时间"
-          }
+          "name": { "type": "string", "description": "位置名称", "example": "东城" },
+          "lat": { "type": "number", "description": "纬度", "example": 39.9163 },
+          "lon": { "type": "number", "description": "经度", "example": 116.3972 },
+          "adm2": { "type": "string", "description": "上级行政区划", "example": "北京" },
+          "adm1": { "type": "string", "description": "一级行政区域", "example": "北京市" },
+          "country": { "type": "string", "description": "国家", "example": "中国" },
+          "tz": { "type": "string", "description": "时区", "example": "Asia/Shanghai" },
+          "utcOffset": { "type": "string", "description": "UTC 时间偏移", "example": "+08:00" },
+          "isDst": { "type": "boolean", "description": "是否夏令时", "default": false },
+          "type": { "type": "string", "description": "位置类型", "example": "city" },
+          "rank": { "type": "number", "description": "位置评分" },
+          "fxLink": { "type": "string", "description": "天气预报链接" },
+          "createdAt": { "format": "date-time", "type": "string", "description": "创建时间" },
+          "updatedAt": { "format": "date-time", "type": "string", "description": "更新时间" }
         },
         "required": ["id", "qweatherId", "name", "lat", "lon", "createdAt", "updatedAt"]
       },
@@ -974,71 +637,23 @@
       "UpdateLocationDto": {
         "type": "object",
         "properties": {
-          "name": {
-            "type": "string",
-            "description": "位置名称",
-            "example": "东城"
-          },
-          "adm2": {
-            "type": "string",
-            "description": "上级行政区划",
-            "example": "北京"
-          },
-          "adm1": {
-            "type": "string",
-            "description": "一级行政区域",
-            "example": "北京市"
-          }
+          "name": { "type": "string", "description": "位置名称", "example": "东城" },
+          "adm2": { "type": "string", "description": "上级行政区划", "example": "北京" },
+          "adm1": { "type": "string", "description": "一级行政区域", "example": "北京市" }
         }
       },
       "WeatherVo": {
         "type": "object",
         "properties": {
-          "city": {
-            "type": "string",
-            "description": "城市名",
-            "example": "北京"
-          },
-          "temp": {
-            "type": "number",
-            "description": "当前温度（摄氏度）",
-            "example": 25
-          },
-          "tempLow": {
-            "type": "number",
-            "description": "最低温度（摄氏度）",
-            "example": 20
-          },
-          "tempHigh": {
-            "type": "number",
-            "description": "最高温度（摄氏度）",
-            "example": 28
-          },
-          "condition": {
-            "type": "string",
-            "description": "天气状况描述",
-            "example": "多云"
-          },
-          "icon": {
-            "type": "string",
-            "description": "图标名",
-            "example": "i-lucide-cloud-sun"
-          },
-          "humidity": {
-            "type": "number",
-            "description": "相对湿度（百分比）",
-            "example": 65
-          },
-          "wind": {
-            "type": "string",
-            "description": "风速描述",
-            "example": "东南风 12km/h"
-          },
-          "uvIndex": {
-            "type": "number",
-            "description": "紫外线指数",
-            "example": 3
-          }
+          "city": { "type": "string", "description": "城市名", "example": "北京" },
+          "temp": { "type": "number", "description": "当前温度（摄氏度）", "example": 25 },
+          "tempLow": { "type": "number", "description": "最低温度（摄氏度）", "example": 20 },
+          "tempHigh": { "type": "number", "description": "最高温度（摄氏度）", "example": 28 },
+          "condition": { "type": "string", "description": "天气状况描述", "example": "多云" },
+          "icon": { "type": "string", "description": "图标名", "example": "i-lucide-cloud-sun" },
+          "humidity": { "type": "number", "description": "相对湿度（百分比）", "example": 65 },
+          "wind": { "type": "string", "description": "风速描述", "example": "东南风 12km/h" },
+          "uvIndex": { "type": "number", "description": "紫外线指数", "example": 3 }
         },
         "required": [
           "city",
@@ -1055,49 +670,15 @@
       "Quote": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "number",
-            "description": "名言 ID"
-          },
-          "content": {
-            "type": "string",
-            "description": "名言内容",
-            "example": "知识就是力量"
-          },
-          "author": {
-            "type": "string",
-            "description": "作者",
-            "example": "培根"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "创建时间"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "更新时间"
-          }
+          "id": { "type": "number", "description": "名言 ID" },
+          "content": { "type": "string", "description": "名言内容", "example": "知识就是力量" },
+          "author": { "type": "string", "description": "作者", "example": "培根" },
+          "createdAt": { "format": "date-time", "type": "string", "description": "创建时间" },
+          "updatedAt": { "format": "date-time", "type": "string", "description": "更新时间" }
         },
         "required": ["id", "content", "createdAt", "updatedAt"]
       },
-      "UpdateQuoteDto": {
-        "type": "object",
-        "properties": {}
-      }
-    },
-    "securitySchemes": {
-      "bearer": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
+      "UpdateQuoteDto": { "type": "object", "properties": {} }
     }
-  },
-  "security": [
-    {
-      "bearer": []
-    }
-  ]
+  }
 }
