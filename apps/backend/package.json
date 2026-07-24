@@ -13,8 +13,7 @@
     "lint": "oxlint",
     "format": "oxfmt --check .",
     "format:fix": "oxfmt .",
-    "check-types": "tsc --noEmit",
-    "generate:openapi": "node -e \"const h=require('http');h.get('http://localhost:4000/api/docs-json',r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>{require('fs').writeFileSync(require('path').resolve(process.cwd(),'../../openapi.json'),d,'utf-8');console.log('OK: openapi.json');process.exit(0)});r.on('error',e=>{console.error(e);process.exit(1)})})\""
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@faker-js/faker": "catalog:backend",
