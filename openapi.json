@@ -1,0 +1,1103 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/locations/search": {
+      "get": {
+        "operationId": "LocationsController_search_v1",
+        "parameters": [
+          {
+            "name": "keyword",
+            "required": true,
+            "in": "query",
+            "description": "城市名/关键词",
+            "schema": {
+              "example": "北京",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "搜索成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Location"
+                      }
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "搜索城市",
+        "tags": ["位置"]
+      }
+    },
+    "/api/v1/locations": {
+      "post": {
+        "operationId": "LocationsController_create_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateLocationInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 201
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Location"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "经纬度未找到对应城市",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "经纬度未找到对应城市"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "逆地理编码服务错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 502
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "逆地理编码服务错误"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "创建位置（经纬度 + 逆地理编码）",
+        "tags": ["位置"]
+      },
+      "get": {
+        "operationId": "LocationsController_findAll_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Location"
+                      }
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "获取所有位置",
+        "tags": ["位置"]
+      }
+    },
+    "/api/v1/locations/{id}": {
+      "get": {
+        "operationId": "LocationsController_findOne_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Location"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "位置不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "位置不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "获取单个位置",
+        "tags": ["位置"]
+      },
+      "patch": {
+        "operationId": "LocationsController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateLocationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Location"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "位置不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "位置不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "更新位置",
+        "tags": ["位置"]
+      },
+      "delete": {
+        "operationId": "LocationsController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功"
+          },
+          "404": {
+            "description": "位置不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "位置不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "删除位置",
+        "tags": ["位置"]
+      }
+    },
+    "/api/v1/weathers": {
+      "get": {
+        "operationId": "WeathersController_getWeather_v1",
+        "parameters": [
+          {
+            "name": "locationId",
+            "required": true,
+            "in": "query",
+            "description": "和风天气 LocationID",
+            "schema": {
+              "example": "101010100",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/WeatherVo"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "locationId 参数缺失",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 400
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "locationId 参数缺失"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "位置不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "位置不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "天气服务错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 502
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "天气服务错误"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "获取实时天气",
+        "tags": ["天气"]
+      }
+    },
+    "/api/v1/quotes": {
+      "post": {
+        "operationId": "QuotesController_create_v1",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "创建成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 201
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Quote"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "自动生成每日一句",
+        "tags": ["名言"]
+      },
+      "get": {
+        "operationId": "QuotesController_findAll_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Quote"
+                      }
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "获取所有名言",
+        "tags": ["名言"]
+      }
+    },
+    "/api/v1/quotes/{id}": {
+      "get": {
+        "operationId": "QuotesController_findOne_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "获取成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Quote"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "名言不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "名言不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "获取单条名言",
+        "tags": ["名言"]
+      },
+      "patch": {
+        "operationId": "QuotesController_update_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateQuoteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "更新成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Quote"
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "名言不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "名言不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "更新名言",
+        "tags": ["名言"]
+      },
+      "delete": {
+        "operationId": "QuotesController_remove_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "删除成功"
+          },
+          "404": {
+            "description": "名言不存在",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 404
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "名言不存在"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "删除名言",
+        "tags": ["名言"]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "服务健康",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "healthy"
+                        },
+                        "timestamp": {
+                          "type": "string",
+                          "example": "2026-07-18T09:00:00.000Z"
+                        },
+                        "checks": {
+                          "type": "object",
+                          "properties": {
+                            "database": {
+                              "type": "string",
+                              "example": "up"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "success"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "服务异常",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number",
+                      "example": 503
+                    },
+                    "data": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "msg": {
+                      "type": "string",
+                      "example": "服务异常"
+                    }
+                  },
+                  "required": ["code", "data", "msg"]
+                }
+              }
+            }
+          }
+        },
+        "summary": "健康检查",
+        "tags": ["健康检查"],
+        "security": []
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_getProfile_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "当前用户信息",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "uuid"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "user@example.com"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "获取当前登录用户信息",
+        "tags": ["认证"],
+        "security": []
+      }
+    }
+  },
+  "info": {
+    "title": "Supabase Demo API",
+    "description": "后端 API 文档",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "Location": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "位置 ID"
+          },
+          "qweatherId": {
+            "type": "string",
+            "description": "和风天气 LocationID",
+            "example": "101010100"
+          },
+          "name": {
+            "type": "string",
+            "description": "位置名称",
+            "example": "东城"
+          },
+          "lat": {
+            "type": "number",
+            "description": "纬度",
+            "example": 39.9163
+          },
+          "lon": {
+            "type": "number",
+            "description": "经度",
+            "example": 116.3972
+          },
+          "adm2": {
+            "type": "string",
+            "description": "上级行政区划",
+            "example": "北京"
+          },
+          "adm1": {
+            "type": "string",
+            "description": "一级行政区域",
+            "example": "北京市"
+          },
+          "country": {
+            "type": "string",
+            "description": "国家",
+            "example": "中国"
+          },
+          "tz": {
+            "type": "string",
+            "description": "时区",
+            "example": "Asia/Shanghai"
+          },
+          "utcOffset": {
+            "type": "string",
+            "description": "UTC 时间偏移",
+            "example": "+08:00"
+          },
+          "isDst": {
+            "type": "boolean",
+            "description": "是否夏令时",
+            "default": false
+          },
+          "type": {
+            "type": "string",
+            "description": "位置类型",
+            "example": "city"
+          },
+          "rank": {
+            "type": "number",
+            "description": "位置评分"
+          },
+          "fxLink": {
+            "type": "string",
+            "description": "天气预报链接"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "创建时间"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "更新时间"
+          }
+        },
+        "required": ["id", "qweatherId", "name", "lat", "lon", "createdAt", "updatedAt"]
+      },
+      "CreateLocationInputDto": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number",
+            "description": "纬度",
+            "example": 39.9163,
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lon": {
+            "type": "number",
+            "description": "经度",
+            "example": 116.3972,
+            "minimum": -180,
+            "maximum": 180
+          }
+        },
+        "required": ["lat", "lon"]
+      },
+      "UpdateLocationDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "位置名称",
+            "example": "东城"
+          },
+          "adm2": {
+            "type": "string",
+            "description": "上级行政区划",
+            "example": "北京"
+          },
+          "adm1": {
+            "type": "string",
+            "description": "一级行政区域",
+            "example": "北京市"
+          }
+        }
+      },
+      "WeatherVo": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string",
+            "description": "城市名",
+            "example": "北京"
+          },
+          "temp": {
+            "type": "number",
+            "description": "当前温度（摄氏度）",
+            "example": 25
+          },
+          "tempLow": {
+            "type": "number",
+            "description": "最低温度（摄氏度）",
+            "example": 20
+          },
+          "tempHigh": {
+            "type": "number",
+            "description": "最高温度（摄氏度）",
+            "example": 28
+          },
+          "condition": {
+            "type": "string",
+            "description": "天气状况描述",
+            "example": "多云"
+          },
+          "icon": {
+            "type": "string",
+            "description": "图标名",
+            "example": "i-lucide-cloud-sun"
+          },
+          "humidity": {
+            "type": "number",
+            "description": "相对湿度（百分比）",
+            "example": 65
+          },
+          "wind": {
+            "type": "string",
+            "description": "风速描述",
+            "example": "东南风 12km/h"
+          },
+          "uvIndex": {
+            "type": "number",
+            "description": "紫外线指数",
+            "example": 3
+          }
+        },
+        "required": [
+          "city",
+          "temp",
+          "tempLow",
+          "tempHigh",
+          "condition",
+          "icon",
+          "humidity",
+          "wind",
+          "uvIndex"
+        ]
+      },
+      "Quote": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "description": "名言 ID"
+          },
+          "content": {
+            "type": "string",
+            "description": "名言内容",
+            "example": "知识就是力量"
+          },
+          "author": {
+            "type": "string",
+            "description": "作者",
+            "example": "培根"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "创建时间"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "更新时间"
+          }
+        },
+        "required": ["id", "content", "createdAt", "updatedAt"]
+      },
+      "UpdateQuoteDto": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}
