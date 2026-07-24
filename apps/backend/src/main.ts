@@ -68,6 +68,7 @@ async function bootstrap() {
     "/locations": "v1",
     "/weathers": "v1",
     "/quotes": "v1",
+    "/auth": "v1",
   };
   const originalPaths = { ...document.paths };
   for (const [path, methods] of Object.entries(originalPaths)) {

@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { WeathersModule } from "./modules/weathers/weathers.module";
 import { QuotesModule } from "./modules/quotes/quotes.module";
+import { AuthModule } from "./modules/auth/auth.module";
 import { LoggerModule } from "nestjs-pino";
 import { pinoConfig } from "./infra/config/pino";
 import { LocationsModule } from "./modules/locations/locations.module";
@@ -31,6 +32,7 @@ import { SupabaseGuard } from "./infra/database/supabase/supabase.guard";
     // 基础设施模块
     QWeatherModule,
     // 业务模块
+    AuthModule,
     LocationsModule,
     WeathersModule,
     QuotesModule,

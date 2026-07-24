@@ -10,11 +10,9 @@ import { createClient } from "@supabase/supabase-js";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EnvVars } from "@supabase/config";
 import { SUPABASE_CLIENT } from "./constants";
-import { AuthController } from "./auth.controller";
-
 @Global()
 @Module({
-  controllers: [AuthController],
+  controllers: [],
   providers: [
     {
       provide: SUPABASE_CLIENT,
